@@ -23,14 +23,10 @@ export const login = async (req, res) => {
              }
          );
 
-         return res.status(200).json({data: {
+         return res.status(200).json({
                userDetails: {
-                  id: user._id,
-                  email: user.email,
                   token: token,
-                  username: user.username,
-               },
-            }
+               }
          });
       }
 

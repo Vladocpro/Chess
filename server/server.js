@@ -19,7 +19,7 @@ socketServer.registerSocketServer(server);
 
 app.use("/api/auth", authRoutes);
 
-mongoose.connect(process.env.MONGO_URI)
+mongoose.connect(process.env.MONGO_URL)
     .then(() => {
        server.listen(PORT, () => {
           console.log(`Server is listening on ${PORT}`);

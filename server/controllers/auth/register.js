@@ -8,11 +8,14 @@ export const register = async (req, res) => {
 
       console.log("user register request came");
       // check if user exists
-      const userExists = await User.exists({ email });
+      const usernameExists = await User.exists({ username });
+      if (usernameExists) {
+         return res.status(409).send({data: {message: "Username already in use."}});
+      }
 
-
-      if (userExists) {
-         return res.status(409).send({data: {message: "E-mail already in use."}});
+      const emailExists = await User.exists({ email });
+      if (emailExists) {
+         return res.status(409).send({data: {message: "Email already in use."}});
       }
 
       // encrypt password
@@ -38,15 +41,11 @@ export const register = async (req, res) => {
           }
       );
 
-      res.status(201).json({data: {
-            userDetails: {
-               id: user._id,
-               email: user.email,
-               token: token,
-               username: user.username,
-            },
+      return res.status(200).json({
+         userDetails: {
+            token: token,
          }
-      });
+      })
    } catch (err) {
       return res.status(500).send(err);
    }
