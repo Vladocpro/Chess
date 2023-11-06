@@ -81,7 +81,7 @@ const RegisterPage = () => {
              </div>
 
              {/*FORM*/}
-             <div className={'flex flex-col text-center w-[20rem] sm:w-[28rem]  md:w-[35rem] border-2 mx-2 border-secondaryDark rounded-lg'}>
+             <div className={'flex flex-col text-center w-[20rem] sm:w-[28rem]  md:w-[35rem] shadow-xl  border-2 mx-2 border-secondaryDark bg-secondaryDark rounded-lg'}>
                 <span className={'text-lg sm:text-xl mt-4 mb-8'}>Sign up Form</span>
                 <FormInput placeholder={'Username'}  isError={usernameError !== ''} errorText={usernameError} onChange={changeUsername}   containerStyles={'mx-5 mb-5'}/>
                 <FormInput placeholder={'Email'}  isError={emailError !== ''} errorText={emailError} onChange={changeEmail}   containerStyles={'mx-5 mb-5'}/>

@@ -8,7 +8,7 @@ import ToastNotification from "./components/ToastNotification.tsx";
 
 function App() {
   return (
-      <div className={'relative'}>
+      <div className={'relative bg-lightDark'}>
          <Routes>
             <Route path="/home" element={<Home />} />
             <Route path="/login" element={<LoginPage />} />

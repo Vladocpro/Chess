@@ -70,19 +70,18 @@ const LoginPage = () => {
              </div>
 
              {/*FORM*/}
-             <div className={'flex flex-col text-center w-[20rem] sm:w-[28rem]  md:w-[35rem] border-2 mx-2 border-secondaryDark rounded-lg'}>
+             <div className={'flex flex-col text-center w-[20rem] sm:w-[28rem]  md:w-[35rem] shadow-xl border-2 mx-2 border-secondaryDark bg-secondaryDark rounded-lg'}>
                 <span className={'text-lg sm:text-xl mt-4 mb-8'}>Sign in Form</span>
 
                 <FormInput placeholder={'Email'}  isError={emailError !== ''} errorText={emailError} onChange={changeEmail}   containerStyles={'mx-5 mb-5'}/>
                 <FormInput placeholder={'Password'} type={'password'} isError={passwordError !== ''} errorText={passwordError} onChange={changePassword}   containerStyles={'mx-5 mb-8'}/>
 
                    <button className={'text-lg sm:text-xl font-extrabold h-10 sm:h-12 w-40 sm:w-60 bg-primaryGreen rounded-md mb-5 mx-auto cursor-pointer'} disabled={isButtonDisabled()} onClick={handleLogin}>Sign in</button>
-                <div className={'flex justify-center items-center text-center bg-secondaryDark  h-10 sm:h-12 w-full rounded-b-md cursor-pointer'} onClick={navigateToRegisterPage}>
+                <div className={'flex justify-center items-center text-center  h-10 sm:h-12 w-full rounded-b-md bg-secondaryDark cursor-pointer'} onClick={navigateToRegisterPage}>
                    <span className={'text-sm sm:text-base text-primaryGreen drop-shadow-2xl rounded-sm w-full'}>New ? Sign Up - and star playing chess!</span>
 
                 </div>
              </div>
-             {/*<ToastNotification/>*/}
           </div>
        </div>
    );

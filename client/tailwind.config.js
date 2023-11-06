@@ -6,8 +6,10 @@ export default {
       colors: {
         'primaryGreen' : '#1ED760',
         'secondaryGreen' : '#0E923C',
-        'primaryDark' : '#242424',
-        'secondaryDark' : '#5B5B5B',
+        'lightDark' : '#41403D',
+        'primaryDark' : '#2F2E2C',
+        'secondaryDark' : '#262523' //,
+
       },
       borderWidth: {
         '1' : '1px',
