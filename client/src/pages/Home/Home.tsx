@@ -1,6 +1,6 @@
 import React, {useEffect} from 'react';
 import {useNavigate} from "react-router-dom";
-import Sidebar from "../../components/Sidebar/Sidebar.tsx";
+import Topbar from "../../components/Topbar/Topbar.tsx";
 
 const Home = () => {
 
@@ -14,7 +14,6 @@ const Home = () => {
 
    return (
        <div>
-         <Sidebar/>
 
        </div>
    );

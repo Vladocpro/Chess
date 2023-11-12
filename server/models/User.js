@@ -1,4 +1,4 @@
-import mongoose from "mongoose";
+import mongoose,{Schema} from "mongoose";
 
 const UserSchema = new mongoose.Schema({
    username: {
@@ -14,6 +14,25 @@ const UserSchema = new mongoose.Schema({
    passwordHash: {
       type: String,
       required: true,
+   },
+   rating: {
+      type: Number,
+      default: 500,
+   },
+   club: {
+      type: String,
+      default: '',
+      ref: 'Club'
+   },
+   friends: {
+      type:
+      [
+          {
+            type: Schema.Types.ObjectId,
+            ref: "User"
+          }
+      ],
+      default: [],
    },
    gameHistory: {
       type: [
