@@ -2,31 +2,31 @@ import User from "../../models/User.js";
 import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
 
-export const login = async (req, res) => {
+export const login = async (req,res) => {
    try {
       console.log("login event came");
-      const { email, password } = req.body;
+      const {email,password} = req.body;
 
       const user = await User.findOne({email});
 
-      if (user && (await bcrypt.compare(password, user.passwordHash))) {
+      if (user && (await bcrypt.compare(password,user.passwordHash))) {
          // send new token
          const token = jwt.sign(
              {
                 userID: user._id,
-                username : user.username,
+                username: user.username,
                 email: user.email,
              },
              process.env.TOKEN_KEY,
              {
-                expiresIn: "3d",
+                expiresIn: "7d",
              }
          );
 
          return res.status(200).json({
-               userDetails: {
-                  token: token,
-               }
+            userDetails: {
+               token: token,
+            }
          });
       }
 

@@ -10,6 +10,7 @@ const userType = {
 }
 
 const GameSchema = new mongoose.Schema({
+   _id: mongoose.Schema.Types.ObjectId,
    user1: userType,
    user2: userType,
    pgn: String,

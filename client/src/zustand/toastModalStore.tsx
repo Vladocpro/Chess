@@ -1,4 +1,5 @@
 import create from 'zustand';
+
 export interface ToastNotificationType {
    visible: boolean;
    duration: number;
@@ -20,9 +21,8 @@ export enum ToastPositions {
 }
 
 export enum ToastType {
-   SUCCESS = 'bg-green-500',
+   SUCCESS = 'bg-primaryGreen',
    ERROR = 'bg-red-500',
-   BLACK = 'bg-secondaryDark',
 }
 
 interface ToastStore {
@@ -36,28 +36,28 @@ interface ToastStore {
 }
 
 const useToast = create<ToastStore>((set) => ({
-      visible: false,
-      message: '',
-      duration: 3000,
-      position: ToastPositions.AUTH,
-      type: ToastType.SUCCESS,
+   visible: false,
+   message: '',
+   duration: 3000,
+   position: ToastPositions.AUTH,
+   type: ToastType.SUCCESS,
 
    openToast: (payload: ToastOnOpen) => {
       let tempDuration = 3000
       if (payload.duration) {
          tempDuration = payload.duration;
       }
-      set( {
-            message: payload.message,
-            position: payload.position,
-            type: payload.type,
-            duration: tempDuration,
-            visible: true
+      set({
+         message: payload.message,
+         position: payload.position,
+         type: payload.type,
+         duration: tempDuration,
+         visible: true
       });
    },
    closeToast: () => {
-      set( {
-            visible: false
+      set({
+         visible: false
       });
    },
 }));
