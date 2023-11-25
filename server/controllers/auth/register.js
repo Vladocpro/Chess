@@ -2,24 +2,24 @@ import User from "../../models/User.js";
 import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
 
-export const register = async (req, res) => {
+export const register = async (req,res) => {
    try {
-      const { username, email, password } = req.body;
+      const {username,email,password} = req.body;
 
       console.log("user register request came");
       // check if user exists
-      const usernameExists = await User.exists({ username });
+      const usernameExists = await User.exists({username});
       if (usernameExists) {
          return res.status(409).send({data: {message: "Username already in use."}});
       }
 
-      const emailExists = await User.exists({ email });
+      const emailExists = await User.exists({email});
       if (emailExists) {
          return res.status(409).send({data: {message: "Email already in use."}});
       }
 
       // encrypt password
-      const encryptedPassword = await bcrypt.hash(password, 10);
+      const encryptedPassword = await bcrypt.hash(password,10);
 
       // create user document and save in database
       const user = await User.create({
@@ -37,7 +37,7 @@ export const register = async (req, res) => {
           },
           process.env.TOKEN_KEY,
           {
-             expiresIn: "3d",
+             expiresIn: "7d",
           }
       );
 

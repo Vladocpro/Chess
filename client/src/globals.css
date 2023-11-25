@@ -1,0 +1,41 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  font-family: Inter, system-ui, Avenir, Helvetica, Arial, sans-serif;
+  line-height: 1.5;
+  font-weight: 400;
+
+  color-scheme: light dark;
+  color: rgba(255, 255, 255, 0.87);
+
+  font-synthesis: none;
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  -webkit-text-size-adjust: 100%;
+}
+
+
+body {
+  min-width: 320px;
+  min-height: 100vh;
+  margin: 0;
+}
+.headerLinks {
+  @apply cursor-pointer relative after:absolute after:bg-primaryGreen after:left-[50%] after:h-[0.150rem] after:w-[10%] after:transition-all after:duration-200  after:-bottom-1 hover:after:-left-1 after:opacity-0 hover:after:opacity-100 hover:after:w-[120%]
+}
+.headerLinkActive {
+  @apply text-primaryGreen
+  /*after:opacity-100 after:w-[100%] after:-left-0*/
+}
+.headerBurgerLine {
+  @apply h-[2px] bg-gray-300 rounded-md transition-all duration-300
+}
+.headerSvg {
+  @apply cursor-pointer relative sm:z-10 z-0  after:transition-opacity after:ease-in-out after:duration-200 after:z-0 after:rounded-full after:opacity-0 hover:after:opacity-10 after:absolute after:h-[150%] after:w-[150%]  after:bg-gray-500 after:-top-[6px] after:-left-[6px]
+}
+.headerBurgerLink {
+  @apply flex items-center cursor-pointer gap-2 border-r-white border-r-2 py-0.5
+}

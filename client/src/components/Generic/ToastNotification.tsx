@@ -1,6 +1,6 @@
 
 import React, {useEffect} from "react";
-import useToast from "../zustand/toastModalStore.tsx";
+import useToast from "../../zustand/toastModalStore.tsx";
 
 
 
