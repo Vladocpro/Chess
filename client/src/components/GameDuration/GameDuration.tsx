@@ -29,7 +29,7 @@ const sizes = {
    },
    lg: {
       iconSize: '3rem',
-      labelSize: '3xl'
+      labelSize: 'lg'
    }
 }
 

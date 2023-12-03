@@ -37,6 +37,7 @@ const ProfileIcon: FC<ProfileIconProps> = ({size, styles, withText}) => {
 
 const sizes = {
    sm: 'h-[2.5rem] w-[2.5rem]',
+   md: 'h-[3rem] w-[3rem] text-xl',
 }
 
 export default ProfileIcon;

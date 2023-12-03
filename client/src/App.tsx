@@ -3,17 +3,20 @@ import {Navigate, Route, Routes, useLocation, useNavigate} from "react-router-do
 import LoginPage from "./pages/LoginPage/LoginPage.tsx";
 import RegisterPage from "./pages/RegisterPage/RegisterPage.tsx";
 import Home from "./pages/Home/Home.tsx";
-import ToastNotification from "./components/Generic/ToastNotification.tsx";
+import ToastNotification from "./components/Modals/ToastNotification.tsx";
 import Header from "./components/Header/Header.tsx";
 import NotFound from "./pages/NotFound/NotFound.tsx";
 import useUser from "./zustand/userStore.tsx";
 import {getFetch} from "./utils/axios/fetcher.ts";
+import CreateGame from "./pages/CreateGame/CreateGame.tsx";
+import useTheme from "./zustand/themeStore.tsx";
 
 
 function App() {
 
    const location = useLocation();
    const user = useUser()
+   const {setTheme} = useTheme()
 
    useEffect(() => {
       if (location.pathname !== '/login' && location.pathname !== '/register') {
@@ -22,6 +25,9 @@ function App() {
          }).catch((error) => {
             console.log(error)
          })
+         console.log('Rerender')
+         // const tempTheme = window.localStorage.getItem('themeSettings')
+         // setTheme(tempTheme)
       }
    }, []);
 
@@ -32,6 +38,7 @@ function App() {
              <Routes>
                 <Route path="/" element={<Navigate to="/home" replace/>}/>
                 <Route path="/home" element={<Home/>}/>
+                <Route path="/create-game" element={<CreateGame/>}/>
                 <Route path="/login" element={<LoginPage/>}/>
                 <Route path="/register" element={<RegisterPage/>}/>
                 <Route path="*" element={<NotFound/>}/>

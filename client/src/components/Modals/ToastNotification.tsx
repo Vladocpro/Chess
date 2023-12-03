@@ -1,7 +1,5 @@
-
-import React, {useEffect} from "react";
+import {useEffect} from "react";
 import useToast from "../../zustand/toastModalStore.tsx";
-
 
 
 function ToastNotification() {
@@ -22,4 +20,5 @@ function ToastNotification() {
        </div>
    );
 }
+
 export default ToastNotification

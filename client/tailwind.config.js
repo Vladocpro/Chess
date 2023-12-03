@@ -20,6 +20,7 @@ export default {
             '1': '1px',
             '3': '3px',
          },
+
       },
    },
    plugins: [],

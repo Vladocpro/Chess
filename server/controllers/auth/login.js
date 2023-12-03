@@ -24,8 +24,13 @@ export const login = async (req,res) => {
          );
 
          return res.status(200).json({
+            token: token,
             userDetails: {
-               token: token,
+               club: user.club,
+               friends: user.friends,
+               rating: user.rating,
+               userID: user._id,
+               username: user.username
             }
          });
       }

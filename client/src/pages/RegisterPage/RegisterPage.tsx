@@ -61,7 +61,7 @@ const RegisterPage = () => {
 
    const handleRegister = async () => {
       postFetch("/auth/register", {username: username, email: email, password: password}).then((response) => {
-         window.localStorage.setItem('token', response.userDetails.token)
+         window.localStorage.setItem('token', response.token)
          user.setUser(response.userDetails)
          openToast({message: 'Authenticated', type: ToastType.SUCCESS, position: ToastPositions.AUTH, duration: 1000})
          navigate('/home')

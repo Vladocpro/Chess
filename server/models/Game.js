@@ -14,6 +14,7 @@ const GameSchema = new mongoose.Schema({
    user1: userType,
    user2: userType,
    pgn: String,
+   durationType: String,
    increment: Number,
    isFinished: Boolean
 },{
