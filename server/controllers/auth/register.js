@@ -17,6 +17,7 @@ export const register = async (req,res) => {
       if (emailExists) {
          return res.status(409).send({data: {message: "Email already in use."}});
       }
+      console.log(JSON.stringify({username, email, password}))
 
       // encrypt password
       const encryptedPassword = await bcrypt.hash(password,10);
@@ -27,6 +28,7 @@ export const register = async (req,res) => {
          email,
          passwordHash: encryptedPassword,
       });
+      console.log(JSON.stringify(user))
 
       // create JWT token
       const token = jwt.sign(
@@ -52,6 +54,7 @@ export const register = async (req,res) => {
          }
       })
    } catch (err) {
+      console.log(err)
       return res.status(500).send(err);
    }
 };

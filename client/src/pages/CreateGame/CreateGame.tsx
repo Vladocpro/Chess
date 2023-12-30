@@ -3,8 +3,6 @@ import useTheme from "../../zustand/themeStore.tsx";
 import ThemeSettingsModal from "../../components/Modals/ThemeSettingsModal.tsx";
 import useUser from "../../zustand/userStore.tsx";
 import Tooltip from "../../components/Generic/Tooltip.tsx";
-import Dropdown from "../../components/Generic/Dropdown.tsx";
-import {gameDurations} from "../../utils/constants/game.ts";
 import {useLocation} from "react-router-dom";
 
 const CreateGame = () => {

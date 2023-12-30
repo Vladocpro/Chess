@@ -7,7 +7,7 @@ export const login = async (req,res) => {
       console.log("login event came");
       const {email,password} = req.body;
 
-      const user = await User.findOne({email});
+      const user = await User.findOne({email}).populate({path: "friends", select: ['-friends', '-gameHistory', '-passwordHash', '-updatedAt',  '-__v']});
 
       if (user && (await bcrypt.compare(password,user.passwordHash))) {
          // send new token

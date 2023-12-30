@@ -37,7 +37,7 @@ const Header = () => {
              </div>
 
              <Link to={'/profile'} className={'hidden sm:block'}>
-                <ProfileIcon size={'sm'}/>
+                <ProfileIcon size={'md'} isMyProfile={true}/>
              </Link>
              <BurgerMenu/>
           </nav>

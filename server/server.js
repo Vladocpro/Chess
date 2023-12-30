@@ -5,6 +5,7 @@ import http from "http";
 import * as socketServer from "./serverSocket.js";
 import {authRoutes} from './routes/authRoutes.js'
 import mongoose from "mongoose";
+import {friendInvitationRoutes} from "./routes/friendInvitationRoutes.js";
 
 const PORT = process.env.PORT || 4444
 const app = express();
@@ -18,6 +19,7 @@ socketServer.registerSocketServer(server);
 
 
 app.use("/api/auth", authRoutes);
+app.use("/api/friend-invitation", friendInvitationRoutes);
 
 mongoose.connect(process.env.MONGO_URL)
     .then(() => {

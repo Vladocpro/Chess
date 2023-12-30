@@ -1,9 +1,10 @@
 import create from "zustand";
+import {UserFriend} from "../components/FriendsPage/FriendType.ts";
 
 interface userData {
    userID: string,
    username: string,
-   friends: string[],
+   friends: UserFriend[],
    club: string,
    rating: number,
 }
@@ -11,7 +12,7 @@ interface userData {
 interface userStore {
    userID: string,
    username: string,
-   friends: string[],
+   friends: UserFriend[],
    club: string,
    rating: number,
    setUser: (data: userData) => void,

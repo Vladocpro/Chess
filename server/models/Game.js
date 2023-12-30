@@ -2,10 +2,11 @@ import mongoose from "mongoose";
 
 const userType = {
    creator: Boolean,
-   winner: Boolean,
+   outcome: String,
    userID: mongoose.Schema.Types.ObjectId,
    username: String,
    color: Boolean,
+   startTurnDate: Date,
    timeLeft: Number
 }
 
@@ -15,6 +16,7 @@ const GameSchema = new mongoose.Schema({
    user2: userType,
    pgn: String,
    durationType: String,
+   totalMoves: Number,
    increment: Number,
    isFinished: Boolean
 },{

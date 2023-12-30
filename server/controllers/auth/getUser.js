@@ -1,12 +1,9 @@
 import User from "../../models/User.js";
-import bcrypt from "bcrypt";
-import jwt from "jsonwebtoken";
 
 export const getUser = async (req,res) => {
    try {
-      console.log("getUser event came");
-      const user = await User.findById(req.user.userID);
-
+      const user = await User.findById(req.user.userID).populate({path: "friends", select: ['-friends', '-gameHistory', '-passwordHash', '-updatedAt',  '-__v']});
+     console.log(user)
       return res.status(200).json({
          userDetails: {
             userID: user._id,

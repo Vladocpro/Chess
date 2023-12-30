@@ -4,16 +4,27 @@ import Divider from "../../components/Generic/Divider.tsx";
 import {Link} from "react-router-dom";
 import BoardPreview from "../../components/Board/BoardPreview.tsx";
 import {gameDurations} from "../../utils/constants/game.ts";
+import useUser from "../../zustand/userStore.tsx";
 
 const Home = () => {
+   const {club} = useUser()
 
    return (
        <div className={'flex justify-between'}>
+          {/*Left Section*/}
           <div className={'flex flex-col'}>
              <span className={'font-mono text-xl mb-7 self-center'}>TOP GAME</span>
-             <BoardPreview width={300} height={300} pgn={''}/>
+             <BoardPreview width={275} height={275} pgn={''}/>
+             <Divider my={'my-10'} color={'red-500'}/>
+             <span className={'font-mono text-xl mb-7 self-center'}>My Club</span>
+             {/*TODO add club url */}
+             <Link to={`/club/${club}`} className={'flex bg-primary py-1.5 px-1.5'}>
+                {/*<ProfileIcon size={'sm'} withText={true}/>*/}
+             </Link>
 
           </div>
+
+          {/*Middle Section*/}
           <div className={'flex flex-col'}>
              <span className={'font-mono text-xl mb-7 self-center'}>QUICK PLAY</span>
              <div className={'flex flex-col gap-5'}>
@@ -32,7 +43,10 @@ const Home = () => {
                 <div className={'flex gap-5'}>
                    {gameDurations.slice(4, 8).map((gameDuration, index) => (
                        <Link
-                           to={{pathname: '/create-game', state: {gameDurationLabel: gameDuration.label, gameDurationType: gameDuration.type}}}
+                           to={{
+                              pathname: '/create-game',
+                              state: {gameDurationLabel: gameDuration.label, gameDurationType: gameDuration.type}
+                           }}
                            className={'flex justify-center items-center bg-primary  w-36 h-32'}
                            key={index}>
                           <GameDuration size={'lg'} type={gameDuration.type} isWithLabel={true} isLabelBottom={true}
@@ -42,12 +56,14 @@ const Home = () => {
                 </div>
              </div>
           </div>
+
+          {/*Right Section*/}
           <div className={'flex flex-col w-48'}>
              <span className={'font-mono text-xl mb-7 self-center'}>
                 PROFILE
              </span>
              <Link to={'/profile'} className={'flex bg-primary py-1.5 px-1.5 mb-5'}>
-                <ProfileIcon size={'sm'} withText={true}/>
+                <ProfileIcon size={'md'} withText={true} isMyProfile={true}/>
              </Link>
              <Divider/>
 
@@ -57,23 +73,23 @@ const Home = () => {
 
              <div className={'flex flex-col'}>
                 <Link to={'/profile'} className={'flex bg-primary py-1.5 px-1.5'}>
-                   <ProfileIcon size={'sm'} withText={true}/>
+                   <ProfileIcon size={'md'} withText={true} isMyProfile={false} textValue={'Sanji'}/>
                 </Link>
                 <Divider color={'red-500'}/>
                 <Link to={'/profile'} className={'flex bg-primary py-1.5 px-1.5'}>
-                   <ProfileIcon size={'sm'} withText={true}/>
+                   <ProfileIcon size={'md'} withText={true} isMyProfile={false} textValue={'Sanji'}/>
                 </Link>
                 <Divider color={'red-500'}/>
                 <Link to={'/profile'} className={'flex bg-primary py-1.5 px-1.5'}>
-                   <ProfileIcon size={'sm'} withText={true}/>
+                   <ProfileIcon size={'md'} withText={true} isMyProfile={false} textValue={'Sanji'}/>
                 </Link>
                 <Divider color={'red-500'}/>
                 <Link to={'/profile'} className={'flex bg-primary py-1.5 px-1.5'}>
-                   <ProfileIcon size={'sm'} withText={true}/>
+                   <ProfileIcon size={'md'} withText={true} isMyProfile={false} textValue={'Sanji'}/>
                 </Link>
                 <Divider color={'red-500'}/>
                 <Link to={'/profile'} className={'flex bg-primary py-1.5 px-1.5'}>
-                   <ProfileIcon size={'sm'} withText={true}/>
+                   <ProfileIcon size={'md'} withText={true} isMyProfile={false} textValue={'Sanji'}/>
                 </Link>
              </div>
 

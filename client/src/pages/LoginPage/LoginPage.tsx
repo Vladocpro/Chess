@@ -61,7 +61,7 @@ const LoginPage = () => {
 
 
    return (
-       <div className={'flex flex-col justify-center items-center h-screen w-screen'}>
+       <div className={'flex flex-col justify-center items-center h-screen w-full'}>
           <div className={'flex flex-col items-center w-full'}>
 
              {/*LOGO*/}
