@@ -1,6 +1,7 @@
 import {FC} from "react";
 import {Link} from "react-router-dom";
 import {FriendInvitation} from "./FriendType.ts";
+import Tooltip from "../Generic/Tooltip.tsx";
 
 interface TopFriendsProps {
    invitations: FriendInvitation[];
@@ -29,12 +30,16 @@ const FriendInvitations: FC<TopFriendsProps> = ({invitations, handleAccept, hand
                  <div className={'flex items-center justify-between text-gray-300 gap-2'}>
                   <Link to={`/profile/${invitation.sender.username}`} className={'max-w-[165px] truncate'}>{invitation.sender.username}</Link>
                     <div className={'flex gap-4'}>
-                       <svg xmlns="http://www.w3.org/2000/svg" fill='none' onClick={() => handleAccept(invitation)}  viewBox="0 0 24 24" strokeWidth={2} className="w-7 h-7 rounded-sm cursor-pointer bg-primaryGreen stroke-white">
-                          <path strokeLinecap="round" strokeLinejoin="round" d="m4.5 12.75 6 6 9-13.5" />
-                       </svg>
-                       <svg xmlns="http://www.w3.org/2000/svg" fill="none" onClick={() => handleReject(invitation)} viewBox="0 0 24 24" strokeWidth={2} stroke="currentColor" className="w-7 h-7 cursor-pointer bg-red-500 stroke-white">
-                          <path strokeLinecap="round" strokeLinejoin="round" d="M6 18 18 6M6 6l12 12" />
-                       </svg>
+                       <Tooltip text={'Accept'} onClick={() => handleAccept(invitation)}>
+                          <svg xmlns="http://www.w3.org/2000/svg" fill='none'  viewBox="0 0 24 24" strokeWidth={2} className="w-7 h-7 rounded-sm cursor-pointer bg-primaryLight stroke-white">
+                             <path strokeLinecap="round" strokeLinejoin="round" d="m4.5 12.75 6 6 9-13.5" />
+                          </svg>
+                       </Tooltip>
+                       <Tooltip text={'Decline'} onClick={() => handleReject(invitation)}>
+                          <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={2} stroke="currentColor" className="w-7 h-7 cursor-pointer bg-primaryLight stroke-white">
+                             <path strokeLinecap="round" strokeLinejoin="round" d="M6 18 18 6M6 6l12 12" />
+                          </svg>
+                       </Tooltip>
                     </div>
 
                  </div>

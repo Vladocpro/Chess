@@ -2,34 +2,34 @@ import express from "express";
 import {verifyToken} from "../middleware/auth.js";
 import {controllers} from "../controllers/friend/friendControllers.js";
 
-export const friendInvitationRoutes = express.Router();
+export const friendRoutes = express.Router();
 
-friendInvitationRoutes.post(
+friendRoutes.post(
     "/invite",
     verifyToken,
     controllers.inviteFriend
 );
-friendInvitationRoutes.post(
+friendRoutes.post(
     "/accept",
     verifyToken,
     controllers.acceptFriend
 );
-friendInvitationRoutes.post(
+friendRoutes.post(
     "/reject",
     verifyToken,
     controllers.rejectFriend
 );
-friendInvitationRoutes.post(
+friendRoutes.post(
     "/find",
     verifyToken,
     controllers.findFriend
 );
-friendInvitationRoutes.post(
+friendRoutes.post(
     "/remove",
     verifyToken,
     controllers.removeFriend
 );
-friendInvitationRoutes.get(
+friendRoutes.get(
     "/getUserInvitations",
     verifyToken,
     controllers.getUserInvitations

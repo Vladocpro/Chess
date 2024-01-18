@@ -22,7 +22,12 @@ function Tooltip({children, text, onClick}: TooltipProps) {
            className="relative inline-flex justify-center"
            onMouseEnter={handleMouseEnter}
            onMouseLeave={handleMouseLeave}
-           onClick={onClick}
+           onClick={() => {
+              setShowTooltip(false)
+              if (onClick) {
+                 onClick()
+              }
+           }}
        >
           {children}
           <span onMouseEnter={handleMouseLeave}

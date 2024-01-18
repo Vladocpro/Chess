@@ -17,7 +17,7 @@ const ThemeSettingsModal = () => {
       let figureTheme = FigureThemes[item.value];
       figureTheme.figuresThemeName = item.label;
       theme.setFigures(figureTheme)
-      openToast({message: 'Pieces Theme Updated Successfully', type: ToastType.BLACK, position: ToastPositions.AUTH, duration: 1500})
+      openToast({message: 'Pieces Theme Updated Successfully', type: ToastType.SUCCESS, position: ToastPositions.AUTH, duration: 1500})
 
    }
    const onBoardChange = (item) => {
@@ -25,7 +25,7 @@ const ThemeSettingsModal = () => {
       let figureTheme = BoardThemes[item.value];
       figureTheme.boardThemeName = item.label;
       theme.setBoard(figureTheme)
-      openToast({message: 'Board Theme Updated Successfully', type: ToastType.BLACK, position: ToastPositions.AUTH, duration: 1500})
+      openToast({message: 'Board Theme Updated Successfully', type: ToastType.SUCCESS, position: ToastPositions.AUTH, duration: 1500})
    }
 
    const boardSize = useMemo(() => {
@@ -72,10 +72,10 @@ const ThemeSettingsModal = () => {
                    <span>Pieces</span>
                    <Dropdown title={theme.figuresThemeName} options={FiguresThemeOptions}
                              onChange={onFiguresChange}
-                             titleStyles={'w-[9rem] hover:bg-secondaryGreen  sm:w-[15rem]'}
+                             titleStyles={'w-[9rem] sm:w-[15rem]'}
                              containerStyles={'bg-[#51504C] px-4 py-2 w-full'}
-                             selectStyles={'bg-[#51504C] hover:bg-secondaryGreen rounded-lg pl-2.5 pr-1.5 py-1'}
-                             itemStyles={'hover:text-primaryGreen'}
+                             selectStyles={'bg-[#51504C] hover:bg-secondaryGreen duration-200 rounded-lg pl-2.5 pr-1.5 py-1'}
+                             itemStyles={'hover:text-primaryGreen duration-200'}
                    />
                 </div>
                 <div className={'flex items-center justify-between'}>
@@ -83,19 +83,19 @@ const ThemeSettingsModal = () => {
                    <Dropdown title={theme.boardThemeName} options={BoardThemeOptions} onChange={onBoardChange}
                              titleStyles={'w-[9rem] sm:w-[15rem]'}
                              containerStyles={'bg-[#51504C] px-4 py-2 w-full'}
-                             selectStyles={'bg-[#51504C] hover:bg-secondaryGreen rounded-lg pl-2.5 pr-1.5 py-1'}
-                             itemStyles={'hover:text-primaryGreen'}
+                             selectStyles={'bg-[#51504C] hover:bg-secondaryGreen duration-200 rounded-lg pl-2.5 pr-1.5 py-1'}
+                             itemStyles={'hover:text-primaryGreen duration-200'}
                    />
                 </div>
                 {/* Footer */}
                 <div className={'flex justify-between mt-3 sm:mt-5'}>
-                   <button className={'bg-primaryLight hover:bg-secondaryGreen px-4 py-2 rounded-lg'} onClick={() => {
+                   <button className={'bg-primaryLight hover:bg-secondaryGreen duration-200 px-4 py-2 rounded-lg'} onClick={() => {
                       theme.resetTheme()
                       openToast({message: 'Theme was successfully reset', type: ToastType.BLACK, position: ToastPositions.AUTH, duration: 1500})
                    }}>Reset
                       Theme
                    </button>
-                   <button className={'bg-primaryLight hover:bg-secondaryGreen px-10 py-2 rounded-lg'}
+                   <button className={'bg-primaryLight hover:bg-secondaryGreen duration-200 px-10 py-2 rounded-lg'}
                            onClick={() => theme.setModal(false)}>Done
                    </button>
 

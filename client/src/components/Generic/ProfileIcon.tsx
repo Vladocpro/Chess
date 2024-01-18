@@ -2,7 +2,7 @@ import {FC} from 'react';
 import useUser from "../../zustand/userStore.tsx";
 
 interface ProfileIconProps {
-   size: 'sm' | 'md' | 'lg',
+   size?: 'sm' | 'md' | 'lg',
    iconStyles?: string,
    textStyles?: string,
    withText?: boolean,

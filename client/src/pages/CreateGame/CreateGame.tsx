@@ -4,6 +4,7 @@ import ThemeSettingsModal from "../../components/Modals/ThemeSettingsModal.tsx";
 import useUser from "../../zustand/userStore.tsx";
 import Tooltip from "../../components/Generic/Tooltip.tsx";
 import {useLocation} from "react-router-dom";
+import CreateGamePanel from "../../components/CreateGamePage/CreateGamePanel.tsx";
 
 const CreateGame = () => {
 
@@ -13,10 +14,13 @@ const CreateGame = () => {
    if (user.username === '') {
       return null
    }
-   // on
    console.log(location.state)
+
+
+
+
    return (
-       <div className={'flex gap-5'}>
+       <div className={'flex justify-center gap-5 mt-10'}>
 
           <div className={'flex'}>
              <div className={'flex flex-col'}>
@@ -56,33 +60,7 @@ const CreateGame = () => {
                 </Tooltip>
 
              </div>
-             <div className={'flex flex-col bg-primary'}>
-                <div className={'text-center'}>
-                   <span>Play</span>
-                </div>
-
-                {/*Game Duration*/}
-                <div>
-                   {/*<Dropdown options={gameDurations} title={location.state.gameDurationLabel}/>*/}
-                   {/*   Custom option*/}
-                </div>
-
-                {/*Opponent from friends*/}
-                <div>
-                   {/*<Dropdown/>*/}
-                </div>
-
-                {/*I play as white or black*/}
-                <div>
-                   {/*<Dropdown/>*/}
-                </div>
-
-                {/*Game Duration*/}
-                <div>
-                   <button className={'bg-primaryGreen'}>Create Game</button>
-                   <button className={'bg-primaryGreen'}>Join by link</button>
-                </div>
-             </div>
+             <CreateGamePanel/>
           </div>
 
 

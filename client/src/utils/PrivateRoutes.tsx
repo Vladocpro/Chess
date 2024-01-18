@@ -9,12 +9,10 @@ const PrivateRoutes = () => {
    useEffect(() => {
       if (window.localStorage.getItem('token') && user.userID === '') {
          getFetch('/auth/getUser').then((response) => {
-            console.log('Response' + JSON.stringify(response))
             user.setUser(response.userDetails)
          }).catch((error) => {
             console.log(error)
          })
-         console.log('Rerender')
       }
    }, []);
    return (

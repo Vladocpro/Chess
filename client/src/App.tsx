@@ -8,6 +8,8 @@ import NotFound from "./pages/NotFound/NotFound.tsx";
 import CreateGame from "./pages/CreateGame/CreateGame.tsx";
 import PrivateRoutes from "./utils/PrivateRoutes.tsx";
 import Friends from "./pages/Friends/Friends.tsx";
+import Clubs from "./pages/Clubs/Clubs.tsx";
+import Club from "./pages/Clubs/Club.tsx";
 
 
 function App() {
@@ -23,6 +25,8 @@ function App() {
                    <Route path="/home" element={<Home/>}/>
                    <Route path="/create-game" element={<CreateGame/>}/>
                    <Route path="/friends" element={<Friends/>}/>
+                   <Route path="/clubs" element={<Clubs/>}/>
+                   <Route path="/club/:id" element={<Club/>}/>
                 </Route>
                 <Route path="/login" element={<LoginPage/>}/>
                 <Route path="/register" element={<RegisterPage/>}/>

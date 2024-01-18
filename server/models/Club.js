@@ -1,16 +1,18 @@
 import mongoose,{Schema} from "mongoose";
 
 const ClubSchema = new mongoose.Schema({
-   _id: mongoose.Schema.Types.ObjectId,
-   name: {
+   clubname: {
       type: String,
       required: true,
       unique: true,
    },
-   totalRating: {
-      type: Number,
+   description: String,
+   creator: {
+      type: Schema.Types.ObjectId,
+      ref: "User",
+      required: true
    },
-   users: {
+   members: {
       type:
           [
              {
@@ -19,7 +21,7 @@ const ClubSchema = new mongoose.Schema({
              }
           ],
       default: [],
-   },
+   }
 },{
    timestamps: true,
 });

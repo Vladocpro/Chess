@@ -1,5 +1,5 @@
 import create from "zustand";
-import {UserFriend} from "../components/FriendsPage/FriendType.ts";
+import {UserClub, UserFriend} from "../types.ts";
 
 interface userData {
    userID: string,
@@ -13,16 +13,18 @@ interface userStore {
    userID: string,
    username: string,
    friends: UserFriend[],
-   club: string,
+   club:   null | UserClub,
    rating: number,
    setUser: (data: userData) => void,
+   setFriends: (data: UserFriend[]) => void,
+   setClub: (data: null | UserClub) => void,
 }
 
 const useUser = create<userStore>((set) => ({
    userID: '',
    username: '',
    friends: [],
-   club: '',
+   club: null,
    rating: 0,
    setUser: (payload: userData) => set({
       userID: payload.userID,
@@ -30,6 +32,12 @@ const useUser = create<userStore>((set) => ({
       friends: payload.friends,
       club: payload.club,
       rating: payload.rating,
+   }),
+   setFriends: (payload) => set({
+      friends: payload,
+   }),
+   setClub: (payload) => set({
+      club: payload,
    })
 }));
 

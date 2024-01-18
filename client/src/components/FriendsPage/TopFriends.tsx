@@ -1,7 +1,7 @@
 import {FC} from "react";
-import {UserFriend} from "./FriendType.ts";
 import ProfileIcon from "../Generic/ProfileIcon.tsx";
 import {Link} from "react-router-dom";
+import {UserFriend} from "../../types.ts";
 
 interface TopFriendsProps {
    friends: UserFriend[]

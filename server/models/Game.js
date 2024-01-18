@@ -5,13 +5,12 @@ const userType = {
    outcome: String,
    userID: mongoose.Schema.Types.ObjectId,
    username: String,
-   color: Boolean,
+   color: String,
    startTurnDate: Date,
    timeLeft: Number
 }
 
 const GameSchema = new mongoose.Schema({
-   _id: mongoose.Schema.Types.ObjectId,
    user1: userType,
    user2: userType,
    pgn: String,

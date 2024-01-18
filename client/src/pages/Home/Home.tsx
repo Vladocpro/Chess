@@ -10,11 +10,11 @@ const Home = () => {
    const {club} = useUser()
 
    return (
-       <div className={'flex justify-between'}>
+       <div className={'flex justify-between mt-10'}>
           {/*Left Section*/}
           <div className={'flex flex-col'}>
              <span className={'font-mono text-xl mb-7 self-center'}>TOP GAME</span>
-             <BoardPreview width={275} height={275} pgn={''}/>
+             <BoardPreview width={225} height={225} pgn={''}/>
              <Divider my={'my-10'} color={'red-500'}/>
              <span className={'font-mono text-xl mb-7 self-center'}>My Club</span>
              {/*TODO add club url */}
@@ -33,7 +33,7 @@ const Home = () => {
                        <Link
                            to={'/create-game'}
                            state={{gameDurationLabel: gameDuration.label, gameDurationType: gameDuration.type}}
-                           className={'flex justify-center items-center bg-primary  w-36 h-32'}
+                           className={'flex justify-center items-center bg-primary hover:bg-primaryLight duration-200  w-36 h-32'}
                            key={index}>
                           <GameDuration size={'lg'} type={gameDuration.type} isWithLabel={true} isLabelBottom={true}
                                         labelText={gameDuration.label}/>
@@ -47,7 +47,7 @@ const Home = () => {
                               pathname: '/create-game',
                               state: {gameDurationLabel: gameDuration.label, gameDurationType: gameDuration.type}
                            }}
-                           className={'flex justify-center items-center bg-primary  w-36 h-32'}
+                           className={'flex justify-center items-center bg-primary hover:bg-primaryLight duration-200  w-36 h-32'}
                            key={index}>
                           <GameDuration size={'lg'} type={gameDuration.type} isWithLabel={true} isLabelBottom={true}
                                         labelText={gameDuration.label}/>

@@ -1,4 +1,4 @@
-import FriendInvitation from "../../models/FriendInvitation.js";
+import FriendInvitation from "../../../models/FriendInvitation.js";
 
 export const rejectFriend = async (req,res) => {
    try {

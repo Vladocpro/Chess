@@ -1,13 +1,36 @@
 import User from "../../models/User.js";
 import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
+import Club from "../../models/Club.js";
+import mongoose from "mongoose";
 
 export const login = async (req,res) => {
    try {
-      console.log("login event came");
       const {email,password} = req.body;
 
       const user = await User.findOne({email}).populate({path: "friends", select: ['-friends', '-gameHistory', '-passwordHash', '-updatedAt',  '-__v']});
+      let userClub = null
+
+      if(user.club !== '' ) {
+         const fetchedClub =  await Club.aggregate([
+            {
+               $match: {
+                  _id: new mongoose.Types.ObjectId(user.club)
+               }
+            },
+            {
+               $project: {
+                  _id: 1,
+                  clubname: 1,
+                  createdAt: 1,
+                  membersCount: { $size: '$members' },
+               }
+            }
+         ]);
+         if(fetchedClub.length > 0) {
+            userClub = fetchedClub[0]
+         }
+      }
 
       if (user && (await bcrypt.compare(password,user.passwordHash))) {
          // send new token
@@ -23,10 +46,11 @@ export const login = async (req,res) => {
              }
          );
 
+
          return res.status(200).json({
             token: token,
             userDetails: {
-               club: user.club,
+               club: userClub,
                friends: user.friends,
                rating: user.rating,
                userID: user._id,

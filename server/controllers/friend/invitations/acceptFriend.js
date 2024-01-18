@@ -1,5 +1,5 @@
-import User from "../../models/User.js";
-import FriendInvitation from "../../models/FriendInvitation.js";
+import User from "../../../models/User.js";
+import FriendInvitation from "../../../models/FriendInvitation.js";
 
 export const acceptFriend = async (req,res) => {
    try {
