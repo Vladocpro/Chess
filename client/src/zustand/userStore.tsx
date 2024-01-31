@@ -1,12 +1,10 @@
-import zustand from 'zustand'
 import create from "zustand";
-
-import {ToastOnOpen, ToastPositions, ToastType} from "./toastModalStore.tsx";
+import {UserClub, UserFriend} from "../types.ts";
 
 interface userData {
    userID: string,
    username: string,
-   friends: string[],
+   friends: UserFriend[],
    club: string,
    rating: number,
 }
@@ -14,17 +12,19 @@ interface userData {
 interface userStore {
    userID: string,
    username: string,
-   friends: string[],
-   club: string,
+   friends: UserFriend[],
+   club:   null | UserClub,
    rating: number,
    setUser: (data: userData) => void,
+   setFriends: (data: UserFriend[]) => void,
+   setClub: (data: null | UserClub) => void,
 }
 
 const useUser = create<userStore>((set) => ({
    userID: '',
    username: '',
    friends: [],
-   club: '',
+   club: null,
    rating: 0,
    setUser: (payload: userData) => set({
       userID: payload.userID,
@@ -32,6 +32,12 @@ const useUser = create<userStore>((set) => ({
       friends: payload.friends,
       club: payload.club,
       rating: payload.rating,
+   }),
+   setFriends: (payload) => set({
+      friends: payload,
+   }),
+   setClub: (payload) => set({
+      club: payload,
    })
 }));
 

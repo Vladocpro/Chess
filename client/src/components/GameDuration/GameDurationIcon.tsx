@@ -1,13 +1,17 @@
-import React, {FC, useMemo} from 'react';
-import {GameDurationIconProps} from "./GameDurationIcon.types.ts";
+import {FC} from 'react';
 
-const GameDurationIcon: FC<GameDurationIconProps> = ({type, size}) => {
+interface GameDurationIconProps {
+   type: 'blitz' | 'bullet' | 'rapid';
+   iconStyles?: string;
+}
+
+const GameDurationIcon: FC<GameDurationIconProps> = ({type, iconStyles}) => {
 
 
    switch (type) {
       case 'bullet': {
          return (
-             <svg xmlns="http://www.w3.org/2000/svg" width={size} height={size}
+             <svg xmlns="http://www.w3.org/2000/svg" className={`${iconStyles}`}
                   viewBox={'0 0 90 90'}>
                 <path
                     d="M16.81 38.64 5 51.61l12.2-8.65c-.28-1.51-.41-2.96-.39-4.32zM27.89 62.33c-.77-.77-1.5-1.57-2.21-2.41L5.1 84.79l24.84-20.56c-.71-.61-1.39-1.24-2.04-1.9h-.01z"
@@ -30,7 +34,7 @@ const GameDurationIcon: FC<GameDurationIconProps> = ({type, size}) => {
       }
       case'blitz': {
          return (
-             <svg xmlns="http://www.w3.org/2000/svg" width={size} height={size}
+             <svg xmlns="http://www.w3.org/2000/svg" className={`${iconStyles}`}
                   viewBox={'0 0 90 90'}>
                 <path
                     d="m67.85 30.08-12.87 2.44L67.94 7.05V3.19L65.74 0 48.56 6.43 19.94 48.36l2.21 3.19h12.33l-8.11 35.26 2.2 3.19H32l38.06-52.87v-3.86l-2.21-3.19z"
@@ -44,7 +48,7 @@ const GameDurationIcon: FC<GameDurationIconProps> = ({type, size}) => {
       }
       default: {
          return (
-             <svg xmlns="http://www.w3.org/2000/svg" width={size} height={size}
+             <svg xmlns="http://www.w3.org/2000/svg" className={`${iconStyles}`}
                   viewBox={'0 0 90 90'}>
                 <path d="M50.42 8.14H39.57v8.36h10.85V8.14z" fill="#5D9948"/>
                 <path

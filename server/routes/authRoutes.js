@@ -1,5 +1,5 @@
 import express from "express";
-import {controllers} from "../controllers/auth/authController.js";
+import {controllers} from "../controllers/auth/authControllers.js";
 import * as validations from "../utils/validations.js";
 import {verifyToken} from "../middleware/auth.js";
 

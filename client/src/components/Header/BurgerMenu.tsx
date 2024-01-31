@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import {useState} from 'react';
 import {Link} from "react-router-dom";
 import {logout} from "../../utils/auth.ts";
 import Logo from "../Generic/Logo.tsx";
@@ -37,7 +37,7 @@ const BurgerMenu = () => {
                    <span className={'font-mono'}>HOME</span>
 
                 </Link>
-                <Link to={"/play"} onClick={() => setBurgerVisible(false)}
+                <Link to={"/create-game"} onClick={() => setBurgerVisible(false)}
                       className="headerBurgerLink mt-3">
                    <Logo styles={'w-7 h-7'} fill={'white'}/>
                    <span className={'font-mono'}>PLAY</span>

@@ -6,7 +6,6 @@ export const register = async (req,res) => {
    try {
       const {username,email,password} = req.body;
 
-      console.log("user register request came");
       // check if user exists
       const usernameExists = await User.exists({username});
       if (usernameExists) {
@@ -42,8 +41,13 @@ export const register = async (req,res) => {
       );
 
       return res.status(200).json({
+         token: token,
          userDetails: {
-            token: token,
+            club: user.club,
+            friends: user.friends,
+            rating: user.rating,
+            userID: user._id,
+            username: user.username
          }
       })
    } catch (err) {

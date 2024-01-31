@@ -9,17 +9,22 @@ export default {
             'lightDark': '#41403D',
             'primaryDark': '#2F2E2C',
             'secondaryDark': '#262523',
-            // True,
+
             'mainBg': '#232527',
             'primary': '#2A3033',
             'primaryLight': '#3A4247',
             'header': '#0B1418',
             'horizontal': '#313537',
+            'input': '#52514E'
          },
          borderWidth: {
             '1': '1px',
             '3': '3px',
          },
+         outlineWidth: {
+            '3': '3px'
+         }
+
       },
    },
    plugins: [],

@@ -1,66 +1,107 @@
 import GameDuration from "../../components/GameDuration/GameDuration.tsx";
 import ProfileIcon from "../../components/Generic/ProfileIcon.tsx";
+import Divider from "../../components/Generic/Divider.tsx";
+import {Link} from "react-router-dom";
+import BoardPreview from "../../components/Board/BoardPreview.tsx";
+import {gameDurations} from "../../utils/constants/game.ts";
+import useUser from "../../zustand/userStore.tsx";
 
 const Home = () => {
-
+   const {club} = useUser()
 
    return (
-       <div className={'flex justify-between'}>
+       <div className={'flex justify-between mt-10'}>
+          {/*Left Section*/}
           <div className={'flex flex-col'}>
-             <span className={'font-mono text-xl'}>TOP GAME</span>
-
+             <span className={'font-mono text-xl mb-7 self-center'}>TOP GAME</span>
+             <BoardPreview width={225} height={225} pgn={''}/>
+             <Divider my={'my-10'} color={'red-500'}/>
+             <span className={'font-mono text-xl mb-7 self-center'}>My Club</span>
+             {/*TODO add club url */}
+             <Link to={`/club/${club}`} className={'flex bg-primary py-1.5 px-1.5'}>
+                {/*<ProfileIcon size={'sm'} withText={true}/>*/}
+             </Link>
 
           </div>
+
+          {/*Middle Section*/}
           <div className={'flex flex-col'}>
-             <span className={'font-mono text-xl mb-10 self-center'}>QUICK PLAY</span>
+             <span className={'font-mono text-xl mb-7 self-center'}>QUICK PLAY</span>
              <div className={'flex flex-col gap-5'}>
                 <div className={'flex gap-5'}>
-                   <div className={'flex justify-center items-center bg-primary  w-36 h-32'}>
-                      <GameDuration size={'lg'} type={'bullet'} isWithLabel={true} isLabelBottom={true}
-                                    labelText={'1 min'}/>
-
-                   </div>
-                   <div className={'flex justify-center items-center bg-primary w-36 h-32'}>
-                      <GameDuration size={'lg'} type={'bullet'} isWithLabel={true} isLabelBottom={true}
-                                    labelText={'2 | 1 mins'}/>
-                   </div>
-                   <div className={'flex justify-center items-center bg-primary w-36 h-32'}>
-                      <GameDuration size={'lg'} type={'blitz'} isWithLabel={true} isLabelBottom={true}
-                                    labelText={'3 mins'}/>
-                   </div>
-                   <div className={'flex justify-center items-center bg-primary w-36 h-32'}>
-                      <GameDuration size={'lg'} type={'blitz'} isWithLabel={true} isLabelBottom={true}
-                                    labelText={'3 | 2 mins'}/>
-                   </div>
+                   {gameDurations.slice(0, 4).map((gameDuration, index) => (
+                       <Link
+                           to={'/create-game'}
+                           state={{gameDuration: gameDuration}}
+                           className={'flex justify-center items-center bg-primary hover:bg-primaryLight duration-200  w-36 h-32'}
+                           key={index}>
+                          <GameDuration
+                              type={gameDuration.type}
+                              isWithLabel={true}
+                              isLabelBottom={true}
+                              labelText={gameDuration.label}
+                              labelStyles={'text-lg'}
+                              iconStyles={'h-[3rem] w-[3rem]'}
+                          />
+                       </Link>
+                   ))}
                 </div>
                 <div className={'flex gap-5'}>
-                   <div className={'flex justify-center items-center bg-primary w-36 h-32'}>
-                      <GameDuration size={'lg'} type={'blitz'} isWithLabel={true} isLabelBottom={true}
-                                    labelText={'5 mins'}/>
-                   </div>
-                   <div className={'flex justify-center items-center bg-primary w-36 h-32'}>
-                      <GameDuration size={'lg'} type={'rapid'} isWithLabel={true} isLabelBottom={true}
-                                    labelText={'10 mins'}/>
-                   </div>
-                   <div className={'flex justify-center items-center bg-primary w-36 h-32'}>
-                      <GameDuration size={'lg'} type={'rapid'} isWithLabel={true} isLabelBottom={true}
-                                    labelText={'10 | 5 mins'}/>
-                   </div>
-                   <div className={'flex justify-center items-center bg-primary w-36 h-32'}>
-                      <GameDuration size={'lg'} type={'rapid'} isWithLabel={true} isLabelBottom={true}
-                                    labelText={'15 mins'}/>
-                   </div>
+                   {gameDurations.slice(4, 8).map((gameDuration, index) => (
+                       <Link
+                           to={'/create-game'}
+                           state={{gameDuration: gameDuration}}
+                           className={'flex justify-center items-center bg-primary hover:bg-primaryLight duration-200  w-36 h-32'}
+                           key={index}>
+                          <GameDuration
+                              type={gameDuration.type}
+                              isWithLabel={true}
+                              isLabelBottom={true}
+                              labelText={gameDuration.label}
+                              labelStyles={'text-lg'}
+                              iconStyles={'h-[3rem] w-[3rem]'}
+                          />
+                       </Link>
+                   ))}
                 </div>
              </div>
           </div>
+
+          {/*Right Section*/}
           <div className={'flex flex-col w-48'}>
-             <span className={'font-mono text-xl mb-10 self-center'}>
+             <span className={'font-mono text-xl mb-7 self-center'}>
                 PROFILE
              </span>
-             <div className={'flex bg-primary py-1.5 px-1.5'}>
-                <ProfileIcon size={'sm'} withText={true}/>
-             </div>
+             <Link to={'/profile'} className={'flex bg-primary py-1.5 px-1.5 mb-5'}>
+                <ProfileIcon size={'md'} withText={true} isMyProfile={true}/>
+             </Link>
+             <Divider/>
 
+             <span className={'font-mono text-xl mt-5 mb-7 self-center'}>
+                Friends
+             </span>
+
+             <div className={'flex flex-col'}>
+                <Link to={'/profile'} className={'flex bg-primary py-1.5 px-1.5'}>
+                   <ProfileIcon size={'md'} withText={true} isMyProfile={false} textValue={'Sanji'}/>
+                </Link>
+                <Divider color={'red-500'}/>
+                <Link to={'/profile'} className={'flex bg-primary py-1.5 px-1.5'}>
+                   <ProfileIcon size={'md'} withText={true} isMyProfile={false} textValue={'Sanji'}/>
+                </Link>
+                <Divider color={'red-500'}/>
+                <Link to={'/profile'} className={'flex bg-primary py-1.5 px-1.5'}>
+                   <ProfileIcon size={'md'} withText={true} isMyProfile={false} textValue={'Sanji'}/>
+                </Link>
+                <Divider color={'red-500'}/>
+                <Link to={'/profile'} className={'flex bg-primary py-1.5 px-1.5'}>
+                   <ProfileIcon size={'md'} withText={true} isMyProfile={false} textValue={'Sanji'}/>
+                </Link>
+                <Divider color={'red-500'}/>
+                <Link to={'/profile'} className={'flex bg-primary py-1.5 px-1.5'}>
+                   <ProfileIcon size={'md'} withText={true} isMyProfile={false} textValue={'Sanji'}/>
+                </Link>
+             </div>
 
           </div>
 

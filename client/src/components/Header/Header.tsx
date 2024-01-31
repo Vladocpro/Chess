@@ -1,15 +1,16 @@
-import React from 'react';
 import {Link, useLocation} from 'react-router-dom'
 import BurgerMenu from "./BurgerMenu.tsx";
 import {logout} from "../../utils/auth.ts";
 import Logo from "../Generic/Logo.tsx";
 import {COLORS} from "../../utils/constants/colors.ts";
 import ProfileIcon from "../Generic/ProfileIcon.tsx";
+import useUser from "../../zustand/userStore.tsx";
 
 
 const Header = () => {
 
    const location = useLocation();
+   const {username} = useUser();
    const isActive = (link: string) => {
       if (link === location.pathname) {
          return 'headerLinkActive'
@@ -22,28 +23,27 @@ const Header = () => {
    }
 
    return (
-       <div className={`sticky top-0 flex items-center  w-full  z-10 bg-header h-20 mb-10`}>
-          <nav className={'flex items-center justify-between w-full ml-2 mr-6'}>
+       <div className={`sticky top-0 flex items-center  w-full  z-10 bg-header`}>
+          <nav className={'flex items-center justify-between w-full py-[18px] ml-2 mr-6'}>
              {/*LOGO*/}
-             <div className={'flex items-center'}>
+             {/*TODO remove logout from logo*/}
+             <div className={'flex items-center'} onClick={logout}>
                 <Logo styles={'w-9 h-9 sm:w-11 sm:h-11'} fill={COLORS.primaryGreen}/>
                 <span className={'text-2xl sm:text-3xl'}>Chess</span>
              </div>
 
              <div className={'hidden sm:flex sm:gap-10 md:gap-16'}>
                 <Link to={'/home'} className={`headerLinks ${isActive('/home')}`}>Home</Link>
-                <Link to={'/play'} className={`headerLinks ${isActive('/play')}`}>Play</Link>
+                <Link to={'/create-game'} className={`headerLinks ${isActive('/create-game')}`}>Play</Link>
                 <Link to={'/friends'} className={`headerLinks ${isActive('/friends')}`}>Friends</Link>
-                <Link to={'/clubs'} className={`headerLinks ${isActive('/clubs')}`} onClick={logout}>Clubs</Link>
+                <Link to={'/clubs'} className={`headerLinks ${isActive('/clubs')}`}>Clubs</Link>
              </div>
 
-             <Link to={'/profile'} className={'hidden sm:block'}>
-                <ProfileIcon size={'sm'} styles={''}/>
+             <Link to={`/profile/${username}`} className={'hidden sm:block'}>
+                <ProfileIcon size={'md'} isMyProfile={true}/>
              </Link>
              <BurgerMenu/>
           </nav>
-
-
        </div>
    );
 };

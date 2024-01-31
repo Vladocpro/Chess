@@ -1,23 +1,22 @@
 import React, {FC, useMemo} from 'react';
-import {GameDurationProps} from "./GameDuration.types.ts";
 import GameDurationIcon from "./GameDurationIcon.tsx";
 
 interface GameDurationProps {
-   type: 'blitz' | 'bullet' | 'rapid' | 'custom';
-   size: 'sm' | 'lg';
+   type: 'blitz' | 'bullet' | 'rapid';
    isWithLabel: boolean;
    isLabelBottom?: boolean;
    labelText?: string;
+   iconStyles?: string;
+   labelStyles?: string;
 }
 
-const GameDuration: FC<GameDurationProps> = ({type, size, isWithLabel, isLabelBottom, labelText}) => {
+const GameDuration: FC<GameDurationProps> = ({type, isWithLabel, isLabelBottom, labelText, labelStyles, iconStyles}) => {
 
-   const defineStyles = sizes[size]
 
    return (
        <div className={`flex items-center ${isLabelBottom && 'flex-col'} gap-2`}>
-          <GameDurationIcon type={type} size={defineStyles.iconSize}/>
-          {isWithLabel && <span className={`text-${defineStyles.labelSize}`}>{labelText}</span>}
+          <GameDurationIcon type={type}  iconStyles={iconStyles}/>
+          {isWithLabel && <span className={`${labelStyles}`}>{labelText}</span>}
        </div>
    )
 };
@@ -27,10 +26,6 @@ const sizes = {
       iconSize: '2rem',
       labelSize: 'lg'
    },
-   lg: {
-      iconSize: '3rem',
-      labelSize: '3xl'
-   }
 }
 
 export default GameDuration;
