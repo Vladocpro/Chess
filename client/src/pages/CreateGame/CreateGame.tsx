@@ -5,6 +5,8 @@ import useUser from "../../zustand/userStore.tsx";
 import Tooltip from "../../components/Generic/Tooltip.tsx";
 import {useLocation} from "react-router-dom";
 import CreateGamePanel from "../../components/CreateGamePage/CreateGamePanel.tsx";
+import {useEffect, useState} from "react";
+import {gameDurationType} from "../../utils/constants/game.ts";
 
 const CreateGame = () => {
 
@@ -14,16 +16,14 @@ const CreateGame = () => {
    if (user.username === '') {
       return null
    }
-   console.log(location.state)
-
 
 
 
    return (
-       <div className={'flex justify-center gap-5 mt-10'}>
+       <div className={'flex justify-center  gap-5 mt-0 md:mt-5 lg:mt-10 border-t-2 border-t-primaryGreen sm:border-t-0'}>
 
           <div className={'flex'}>
-             <div className={'flex flex-col'}>
+             <div className={'hidden xl:flex flex-col'}>
                 {/*Opponent row*/}
                 <div className={'flex items-center gap-3 mb-2 h-[44px]'}>
                    <img src={'opponent.png'} height={'43px'} width={'43px'}/>
@@ -47,7 +47,7 @@ const CreateGame = () => {
                 </div>
 
              </div>
-             <div className={'flex flex-col ml-2 mt-[52px]'}>
+             <div className={'hidden xl:flex flex-col ml-2 mt-[52px]'}>
                 <Tooltip text={'Settings'}>
                    <div className={'cursor-pointer'} onClick={() => setModal(true)}>
                       <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" strokeWidth={1.5}

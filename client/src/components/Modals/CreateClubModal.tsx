@@ -69,7 +69,7 @@ const CreateClubModal:FC<CreateClubModalProps> = ({modalIsOpen, setModalIsOpen})
                 {/* Footer */}
                 <div className={'flex justify-between mt-0 sm:mt-5'}>
                    <button
-                       className={`text-lg sm:text-xl font-extrabold h-10 sm:h-12 w-full mx-1  ${disabled ? 'bg-primaryLight cursor-not-allowed' : 'bg-primaryGreen'} rounded-md mb-5  cursor-pointer`}
+                       className={`text-lg  font-bold h-10 sm:h-12 w-full mx-1  ${disabled ? 'bg-primaryLight cursor-not-allowed' : 'bg-secondaryGreen cursor-pointer'} rounded-md mb-5   transition-all duration-300`}
                        disabled={disabled} onClick={handleCreate}>Create Club
                    </button>
                 </div>

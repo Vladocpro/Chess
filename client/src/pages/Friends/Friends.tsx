@@ -140,7 +140,7 @@ const Friends = () => {
                              </Link>
 
                              <div className={'flex  gap-4'}>
-                                <Tooltip text={'Challenge'} onClick={() => navigate('/create-game',{state: {gameOpponent: friend.username}})}>
+                                <Tooltip text={'Challenge'} onClick={() => navigate('/create-game',{state: {gameOpponent: friend}})}>
                                    <img src={'/chess-invite.png'} alt={'chess-invite'}  className={'cursor-pointer h-7 w-7 sm:h-9 sm:w-9'} />
                                 </Tooltip>
                                 <Tooltip text={'Remove Friend'} onClick={() => handleRemoveFriend(friend)}>
@@ -159,20 +159,20 @@ const Friends = () => {
                          <span className={'bg-input rounded-md text-sm sm:text-base px-1'}>{users.length} </span>
                       </div>
                       <div className={'flex flex-col gap-3'}>
-                         {users?.map((friend) => (
-                             <div className={'flex items-center justify-between gap-5'} key={friend._id}>
-                                <Link className={'flex flex-[1] items-center gap-2 sm:gap-5'} to={`/profile/${friend.username}`}>
-                                   <ProfileIcon  withText={false} textValue={friend.username} isMyProfile={false} iconStyles={'w-[2.25rem] h-[2.25rem] text-lg sm:w-[4rem] sm:h-[4rem] sm:text-3xl'} />
+                         {users?.map((currentUser) => (
+                             <div className={'flex items-center justify-between gap-5'} key={currentUser._id}>
+                                <Link className={'flex flex-[1] items-center gap-2 sm:gap-5'} to={`/profile/${currentUser.username}`}>
+                                   <ProfileIcon  withText={false} textValue={currentUser.username} isMyProfile={false} iconStyles={'w-[2.25rem] h-[2.25rem] text-lg sm:w-[4rem] sm:h-[4rem] sm:text-3xl'} />
                                    <div className={'flex flex-col'}>
-                                      <span>{friend.username}</span>
-                                      <span className={'text-sm hidden sm:inline-block'}>Joined {moment(friend.createdAt).format('ll')}</span>
+                                      <span>{currentUser.username}</span>
+                                      <span className={'text-sm hidden sm:inline-block'}>Joined {moment(currentUser.createdAt).format('ll')}</span>
                                    </div>
                                 </Link>
                                 <div className={'flex gap-3'}>
-                                   <Tooltip text={'Challenge'} onClick={() => navigate('/create-game',{state: {gameOpponent: friend.username}})}>
+                                   <Tooltip text={'Challenge'} onClick={() => navigate('/create-game',{state: {gameOpponent: currentUser}})}>
                                       <img src={'/chess-invite.png'} alt={'chess-invite'}  className={'cursor-pointer h-7 w-7 sm:h-9 sm:w-9'} />
                                    </Tooltip>
-                                   <Tooltip text={'Add Friend'} onClick={() => handleAddFriend(friend)}>
+                                   <Tooltip text={'Add Friend'} onClick={() => handleAddFriend(currentUser)}>
                                       <img src={'/friend-add.png'} alt={'friend-add'}  className={'cursor-pointer h-7 w-7 sm:h-9 sm:w-9'} />
                                    </Tooltip>
                                 </div>

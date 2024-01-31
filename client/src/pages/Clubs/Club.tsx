@@ -39,7 +39,6 @@ const Club = () => {
           .catch((error) => {
              console.log(error)
           })
-
    }
 
    useEffect(() => {
@@ -51,8 +50,6 @@ const Club = () => {
              console.log(error)
           })
    }, []);
-
-   console.log(club.members)
 
 
    return (
@@ -112,18 +109,18 @@ const Club = () => {
                 <span className={'bg-input rounded-md text-sm sm:text-base px-1'}>{club.members?.length} </span>
              </div>
              <div className={'flex flex-col  gap-5 '}>
-                {club.members?.map((friend) => (
-                    <div className={'flex items-center justify-between gap-5'} key={friend._id}>
-                       <Link className={'flex flex-[1] items-center gap-2 sm:gap-5'} to={`/profile/${friend.username}`}>
-                          <ProfileIcon  textValue={friend.username} isMyProfile={false} iconStyles={'w-[2.25rem] h-[2.25rem] text-lg sm:w-[4rem] sm:h-[4rem] sm:text-3xl'}/>
+                {club.members?.map((currentUser) => (
+                    <div className={'flex items-center justify-between gap-5'} key={currentUser._id}>
+                       <Link className={'flex flex-[1] items-center gap-2 sm:gap-5'} to={`/profile/${currentUser.username}`}>
+                          <ProfileIcon  textValue={currentUser.username} isMyProfile={false} iconStyles={'w-[2.25rem] h-[2.25rem] text-lg sm:w-[4rem] sm:h-[4rem] sm:text-3xl'}/>
                           <div className={'flex flex-col'}>
-                             <span>{friend.username}</span>
-                             <span className={'text-sm hidden sm:inline-block'}>Rating: {friend.rating}</span>
+                             <span>{currentUser.username}</span>
+                             <span className={'text-sm hidden sm:inline-block'}>Rating: {currentUser.rating}</span>
                           </div>
                        </Link>
 
                        <div className={'flex  gap-4'}>
-                          <Tooltip text={'Challenge'} onClick={() => navigate('/create-game',{state: {gameOpponent: friend.username}})}>
+                          <Tooltip text={'Challenge'} onClick={() => navigate('/create-game',{state: {gameOpponent: currentUser}})}>
                              <img src={'/chess-invite.png'} alt={'chess-invite'}  className={'cursor-pointer h-7 w-7 sm:h-9 sm:w-9'} />
                           </Tooltip>
                        </div>

@@ -32,25 +32,35 @@ const Home = () => {
                    {gameDurations.slice(0, 4).map((gameDuration, index) => (
                        <Link
                            to={'/create-game'}
-                           state={{gameDurationLabel: gameDuration.label, gameDurationType: gameDuration.type}}
+                           state={{gameDuration: gameDuration}}
                            className={'flex justify-center items-center bg-primary hover:bg-primaryLight duration-200  w-36 h-32'}
                            key={index}>
-                          <GameDuration size={'lg'} type={gameDuration.type} isWithLabel={true} isLabelBottom={true}
-                                        labelText={gameDuration.label}/>
+                          <GameDuration
+                              type={gameDuration.type}
+                              isWithLabel={true}
+                              isLabelBottom={true}
+                              labelText={gameDuration.label}
+                              labelStyles={'text-lg'}
+                              iconStyles={'h-[3rem] w-[3rem]'}
+                          />
                        </Link>
                    ))}
                 </div>
                 <div className={'flex gap-5'}>
                    {gameDurations.slice(4, 8).map((gameDuration, index) => (
                        <Link
-                           to={{
-                              pathname: '/create-game',
-                              state: {gameDurationLabel: gameDuration.label, gameDurationType: gameDuration.type}
-                           }}
+                           to={'/create-game'}
+                           state={{gameDuration: gameDuration}}
                            className={'flex justify-center items-center bg-primary hover:bg-primaryLight duration-200  w-36 h-32'}
                            key={index}>
-                          <GameDuration size={'lg'} type={gameDuration.type} isWithLabel={true} isLabelBottom={true}
-                                        labelText={gameDuration.label}/>
+                          <GameDuration
+                              type={gameDuration.type}
+                              isWithLabel={true}
+                              isLabelBottom={true}
+                              labelText={gameDuration.label}
+                              labelStyles={'text-lg'}
+                              iconStyles={'h-[3rem] w-[3rem]'}
+                          />
                        </Link>
                    ))}
                 </div>

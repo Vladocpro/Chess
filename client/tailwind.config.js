@@ -21,6 +21,9 @@ export default {
             '1': '1px',
             '3': '3px',
          },
+         outlineWidth: {
+            '3': '3px'
+         }
 
       },
    },

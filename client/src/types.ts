@@ -33,10 +33,12 @@ export interface IClub {
 
 export interface IGameInvitation {
    invitationID: string;
-   sender: UserFriend;
+   sender?: UserFriend;
+   receiver?: UserFriend;
    playerColor: string;
    gameDuration: number;
    gameIncrement: number;
+   durationType: string;
 }
 
 

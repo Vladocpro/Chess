@@ -11,20 +11,22 @@ export const defaultCellColors = [
 
 export interface gameDurationType {
    label: string,
-   value: string,
-   type: 'blitz' | 'bullet' | 'rapid' | 'custom'
+   value: {
+      duration: number,
+      increment: number
+   },
+   type: 'blitz' | 'bullet' | 'rapid',
 }
 
 export const gameDurations: gameDurationType[] = [
-   {label: '1 min', value: '1', type: 'bullet'},
-   {label: '2 | 1 mins', value: '2|1', type: 'bullet'},
-   {label: '3 mins', value: '3', type: 'blitz'},
-   {label: '3 | 2 mins', value: '3|2', type: 'blitz'},
-   {label: '5 mins', value: '5', type: 'blitz'},
-   {label: '10 mins', value: '10', type: 'rapid'},
-   {label: '10 | 5 mins', value: '10|5', type: 'rapid'},
-   {label: '15 mins', value: '15', type: 'rapid'},
-   {label: 'Custom', value: 'Custom', type: 'custom'},
+   {label: '1 min', value: {duration: 60, increment: 0}, type: 'bullet'},
+   {label: '2 | 1 mins', value: {duration: 120, increment: 1}, type: 'bullet'},
+   {label: '3 mins', value: {duration: 180, increment: 0}, type: 'blitz'},
+   {label: '3 | 2 mins', value: {duration: 180, increment: 2}, type: 'blitz'},
+   {label: '5 mins', value: {duration: 300, increment: 0}, type: 'blitz'},
+   {label: '10 mins', value: {duration: 600, increment: 0}, type: 'rapid'},
+   {label: '10 | 5 mins', value: {duration: 600, increment: 5}, type: 'rapid'},
+   {label: '15 mins', value: {duration: 900, increment: 0}, type: 'rapid'},
 ]
 
 export const findGameDuration = (label : string) : gameDurationType | undefined => {

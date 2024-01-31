@@ -2,12 +2,13 @@ import {FC} from 'react';
 import useUser from "../../zustand/userStore.tsx";
 
 interface ProfileIconProps {
-   size?: 'sm' | 'md' | 'lg',
-   iconStyles?: string,
-   textStyles?: string,
-   withText?: boolean,
-   textValue?: string,
-   isMyProfile: boolean
+   size?: 'sm' | 'md' | 'lg';
+   iconStyles?: string;
+   textStyles?: string;
+   withText?: boolean;
+   textValue?: string;
+   bgColor?: string;
+   isMyProfile: boolean;
 }
 
 const sizes = {
@@ -18,7 +19,7 @@ const sizes = {
 
 
 
-const ProfileIcon: FC<ProfileIconProps> = ({size, iconStyles, textStyles, withText, textValue, isMyProfile}) => {
+const ProfileIcon: FC<ProfileIconProps> = ({size, iconStyles, textStyles, withText, textValue, isMyProfile, bgColor}) => {
 
    const user = useUser()
    const defineStyles = sizes[size]
@@ -42,7 +43,7 @@ const ProfileIcon: FC<ProfileIconProps> = ({size, iconStyles, textStyles, withTe
    if (withText) {
       return (
           <div className={'flex items-center gap-3'}>
-             <div className={`flex items-center justify-center bg-primaryLight rounded-full ${defineStyles} ${iconStyles}`}>
+             <div className={`flex items-center justify-center bg-primaryLight rounded-full ${defineStyles} ${iconStyles}`} style={{backgroundColor: bgColor}}>
                 {providedText().firstLetter}
              </div>
              <div className={`${textStyles}`}>{providedText().username}</div>
@@ -52,7 +53,7 @@ const ProfileIcon: FC<ProfileIconProps> = ({size, iconStyles, textStyles, withTe
    }
 
    return (
-       <div className={`flex items-center justify-center bg-primaryLight rounded-full ${defineStyles} ${iconStyles}`}>
+       <div className={`flex items-center justify-center bg-primaryLight rounded-full ${defineStyles} ${iconStyles}`} style={{backgroundColor: bgColor}}>
           {providedText().firstLetter}
        </div>
    );

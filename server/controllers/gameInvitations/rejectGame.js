@@ -11,7 +11,10 @@ export const rejectGame = async (req,res) => {
 
       await GameInvitation.findByIdAndDelete(req.body.invitationID);
 
-      return res.status(200).send("Invitation successfully rejected");
+      return res.status(200).json({
+         invitationID: req.body.invitationID,
+         message: "Invitation successfully rejected"
+      });
    } catch (err) {
       return res.status(500).send(err);
    }
