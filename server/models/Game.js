@@ -15,6 +15,7 @@ const GameSchema = new mongoose.Schema({
    user2: userType,
    pgn: String,
    durationType: String,
+   duration: Number,
    totalMoves: Number,
    increment: Number,
    isFinished: Boolean
@@ -23,4 +24,4 @@ const GameSchema = new mongoose.Schema({
 });
 
 
-export default mongoose.model('Game',GameSchema);
+export default mongoose.model('Game', GameSchema);

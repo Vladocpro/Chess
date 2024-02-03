@@ -29,6 +29,3 @@ export const gameDurations: gameDurationType[] = [
    {label: '15 mins', value: {duration: 900, increment: 0}, type: 'rapid'},
 ]
 
-export const findGameDuration = (label : string) : gameDurationType | undefined => {
-   return gameDurations.find((gameDuration: gameDurationType) => gameDuration.label === label)
-}

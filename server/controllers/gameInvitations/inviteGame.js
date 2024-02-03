@@ -3,7 +3,6 @@ import GameInvitation from "../../models/GameInvitation.js";
 
 export const inviteGame = async (req,res) => {
    try {
-      console.log(req.body)
 
       const {userID } = req.user;
 
@@ -68,6 +67,7 @@ export const inviteGame = async (req,res) => {
          senderID: newInvitation.senderID,
          receiver: receiver,
          senderColor: newInvitation.senderColor,
+         playerColor: newInvitation.senderColor,
          receiverID: newInvitation.receiverID,
          gameDuration: newInvitation.gameDuration,
          gameIncrement: newInvitation.gameIncrement,

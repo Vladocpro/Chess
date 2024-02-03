@@ -76,8 +76,8 @@ const InvitationTab:FC<InvitationTabProps> = ({sentInvitations, receivedInvitati
                        </div>
                     </Link>
                     <div className={'hidden sm:flex flex-col items-center'}>
-                       <span>{gameInvitation?.gameDuration / 60} {gameInvitation?.gameDuration === 60 ? 'min' : 'mins'}</span>
-                       <span>Color: {gameInvitation?.playerColor}</span>
+                       <span>{`${gameInvitation?.gameDuration / 60} ${gameInvitation.gameIncrement > 0 ? `| ${gameInvitation.gameIncrement}` : ''} ${gameInvitation?.gameDuration === 60 ? 'min' : 'mins'}`}</span>
+                       <span className={'capitalize'}>Play As {gameInvitation?.playerColor}</span>
                     </div>
                     <div className={'flex gap-5'}>
                        <div className={'w-8 h-8'}>
@@ -105,8 +105,8 @@ const InvitationTab:FC<InvitationTabProps> = ({sentInvitations, receivedInvitati
                               </div>
                            </Link>
                            <div className={'hidden sm:flex flex-col items-center'}>
-                              <span>{gameInvitation?.gameDuration / 60} {gameInvitation?.gameDuration === 60 ? 'min' : 'mins'}</span>
-                              <span>Color: {gameInvitation?.playerColor}</span>
+                              <span>{`${gameInvitation?.gameDuration / 60} ${gameInvitation.gameIncrement > 0 ? `| ${gameInvitation.gameIncrement}`: ''} ${gameInvitation?.gameDuration === 60 ? 'min' : 'mins'}`}</span>
+                              <span className={'capitalize'}>Play As {gameInvitation?.playerColor}</span>
 
                            </div>
 

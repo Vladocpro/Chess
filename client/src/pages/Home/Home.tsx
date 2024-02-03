@@ -27,7 +27,7 @@ const Home = () => {
           {/*Middle Section*/}
           <div className={'flex flex-col'}>
              <span className={'font-mono text-xl mb-7 self-center'}>QUICK PLAY</span>
-             <div className={'flex flex-col gap-5'}>
+             <div className={'flex flex-col gap-5 mb-7'}>
                 <div className={'flex gap-5'}>
                    {gameDurations.slice(0, 4).map((gameDuration, index) => (
                        <Link
@@ -65,6 +65,12 @@ const Home = () => {
                    ))}
                 </div>
              </div>
+             <span className={'font-mono text-xl mb-7 self-center'}>QUICK PLAY</span>
+             <div className={'flex mb-7'}>
+
+
+             </div>
+
           </div>
 
           {/*Right Section*/}

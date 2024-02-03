@@ -73,6 +73,7 @@ export const acceptGame = async (req,res) => {
          },
          pgn: '',
          durationType: invitation.durationType,
+         duration: invitation.gameDuration,
          totalMoves: 0,
          increment: invitation.gameIncrement,
          isFinished: false

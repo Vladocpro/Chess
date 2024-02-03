@@ -6,34 +6,44 @@ import {IGameInvitation, UserFriend} from "../../../../types.ts";
 import {gameDurations, gameDurationType} from "../../../../utils/constants/game.ts";
 import useToast, {ToastPositions, ToastType} from "../../../../zustand/toastModalStore.tsx";
 import {postFetch} from "../../../../utils/axios/fetcher.ts";
-import {useLocation} from "react-router-dom";
+import {useLocation, useNavigate} from "react-router-dom";
 
 interface CreateGameTab {
    setCurrentTab: (tab: 'create game' | 'waiting' | 'invitations') => void;
-   setWaitingInvitation: (invitation : IGameInvitation) => void;
+   setWaitingInvitation: (invitation: IGameInvitation) => void;
    sentInvitations: IGameInvitation[];
-   setSentInvitations: (invitations : IGameInvitation[]) => void;
+   setSentInvitations: (invitations: IGameInvitation[]) => void;
 }
 
-const CreateGameTab:FC<CreateGameTab> = ({setCurrentTab, setWaitingInvitation, sentInvitations, setSentInvitations}) => {
+const CreateGameTab: FC<CreateGameTab> = ({
+                                             setCurrentTab,
+                                             setWaitingInvitation,
+                                             sentInvitations,
+                                             setSentInvitations
+                                          }) => {
    const [chosenOpponent, setChosenOpponent] = useState<UserFriend | null>(null)
    const [selectedGameDuration, setSelectedGameDuration] = useState<gameDurationType>(gameDurations[0])
    const [chosenColor, setChosenColor] = useState<string>('random')
    const {openToast} = useToast();
    const location = useLocation()
-
-   const gameDurationOnChange = (option : gameDurationType) => {
+   const navigate = useNavigate()
+   const gameDurationOnChange = (option: gameDurationType) => {
       setSelectedGameDuration(option)
    }
    const handleSendGameInvitation = () => {
-      if(chosenOpponent === null) {
-         openToast({message: 'Please choose your opponent', type: ToastType.ERROR, position: ToastPositions.AUTH, duration: 3000})
+      if (chosenOpponent === null) {
+         openToast({
+            message: 'Please choose your opponent',
+            type: ToastType.ERROR,
+            position: ToastPositions.AUTH,
+            duration: 3000
+         })
          return
       }
 
       let userColor = '';
-      if(chosenColor === 'random') {
-         userColor = Math.floor(Math.random() * (1 + 1)) === 0 ? 'white' : 'black'
+      if (chosenColor === 'random') {
+         userColor = Math.random() <= 0.5 ? 'white' : 'black'
       } else {
          userColor = chosenColor
       }
@@ -46,7 +56,12 @@ const CreateGameTab:FC<CreateGameTab> = ({setCurrentTab, setWaitingInvitation, s
       }
 
       postFetch('/game-invitation/invite', requestData).then((data) => {
-         openToast({message: 'Game invitation has been sent', type: ToastType.SUCCESS, position: ToastPositions.AUTH, duration: 1800})
+         openToast({
+            message: 'Game invitation has been sent',
+            type: ToastType.SUCCESS,
+            position: ToastPositions.AUTH,
+            duration: 1800
+         })
          setWaitingInvitation(data)
          setSentInvitations([...sentInvitations, data])
          setCurrentTab('waiting')
@@ -58,7 +73,7 @@ const CreateGameTab:FC<CreateGameTab> = ({setCurrentTab, setWaitingInvitation, s
 
 
    useEffect(() => {
-      if(location.state?.gameDuration ?? false) {
+      if (location.state?.gameDuration ?? false) {
          setSelectedGameDuration(location.state?.gameDuration)
       }
    }, []);
@@ -83,24 +98,31 @@ const CreateGameTab:FC<CreateGameTab> = ({setCurrentTab, setWaitingInvitation, s
                 <span className={'text-base sm:text-lg font-semibold sm:font-bold'}>Choose Your Color</span>
                 <div className={'flex gap-3'}>
                    <Tooltip text={'White'} onClick={() => setChosenColor('white')}>
-                      <div className={`h-[2.25rem] w-[2.25rem] bg-white rounded-full cursor-pointer hover:outline hover:outline-3 ${chosenColor === 'white' ? 'outline outline-3 outline-primaryGreen' : 'outline-0'} hover:outline-primaryGreen`}/>
+                      <div
+                          className={`h-[2.25rem] w-[2.25rem] bg-white rounded-full cursor-pointer hover:outline hover:outline-3 ${chosenColor === 'white' ? 'outline outline-3 outline-primaryGreen' : 'outline-0'} hover:outline-primaryGreen`}/>
                    </Tooltip>
                    <Tooltip text={'Random'} onClick={() => setChosenColor('random')}>
-                      <div className={`flex rounded-full cursor-pointer hover:outline hover:outline-3 ${chosenColor === 'random' ? 'outline outline-3 outline-primaryGreen' : 'outline-0'} hover:outline-primaryGreen`}>
+                      <div
+                          className={`flex rounded-full cursor-pointer hover:outline hover:outline-3 ${chosenColor === 'random' ? 'outline outline-3 outline-primaryGreen' : 'outline-0'} hover:outline-primaryGreen`}>
                          <div className={`h-[2.25rem] w-[1.125rem] bg-white rounded-l-full`}/>
                          <div className={`h-[2.25rem] w-[1.125rem] bg-black rounded-r-full`}/>
                       </div>
                    </Tooltip>
                    <Tooltip text={'Black'} onClick={() => setChosenColor('black')}>
-                      <div className={`h-[2.25rem] w-[2.25rem] bg-black rounded-full cursor-pointer hover:outline hover:outline-3 ${chosenColor === 'black' ? 'outline outline-3 outline-primaryGreen' : 'outline-0'} hover:outline-primaryGreen`}/>
+                      <div
+                          className={`h-[2.25rem] w-[2.25rem] bg-black rounded-full cursor-pointer hover:outline hover:outline-3 ${chosenColor === 'black' ? 'outline outline-3 outline-primaryGreen' : 'outline-0'} hover:outline-primaryGreen`}/>
                    </Tooltip>
                 </div>
              </div>
 
           </div>
           <div className={'flex flex-col  gap-4 px-3.5 sm:px-5 mt-auto mb-6'}>
-             <button onClick={handleSendGameInvitation} className={'bg-secondaryGreen py-2 sm:py-3 px-5 w-full rounded-lg'}>Create Game</button>
-             <button className={'bg-yellow-600 py-2 sm:py-3 px-5 w-full  rounded-lg'}>Training</button>
+             <button onClick={handleSendGameInvitation}
+                     className={'bg-secondaryGreen py-2 sm:py-3 px-5 w-full rounded-lg'}>Create Game
+             </button>
+             <button onClick={() => navigate('/training')}
+                     className={'bg-yellow-600 py-2 sm:py-3 px-5 w-full  rounded-lg'}>Training
+             </button>
           </div>
        </>
    );
