@@ -6,16 +6,16 @@ import Game from "../../models/Game.js";
 export const getUser = async (req,res) => {
    try {
       const user = await User.findById(req.user.userID)
-          .populate({path: "friends", select: ['-friends', '-gameHistory', '-passwordHash', '-updatedAt',  '-__v']});
+          .populate({path: "friends",select: ['-friends','-gameHistory','-passwordHash','-updatedAt','-__v']});
 
       let userGames = [];
-      if(user.gameHistory.length > 0)  {
-         userGames = await Game.find({_id: { $in: user.gameHistory}})
+      if (user.gameHistory.length > 0) {
+         userGames = await Game.find({_id: {$in: user.gameHistory}}).sort({createdAt: 'desc'})
       }
-
+      // console.log()
       let userClub = null
-      if(user.club !== '' ) {
-         const fetchedClub =  await Club.aggregate([
+      if (user.club !== '') {
+         const fetchedClub = await Club.aggregate([
             {
                $match: {
                   _id: new mongoose.Types.ObjectId(user.club)
@@ -26,11 +26,11 @@ export const getUser = async (req,res) => {
                   _id: 1,
                   clubname: 1,
                   createdAt: 1,
-                  membersCount: { $size: '$members' },
+                  membersCount: {$size: '$members'},
                }
             }
          ]);
-         if(fetchedClub.length > 0) {
+         if (fetchedClub.length > 0) {
             userClub = fetchedClub[0]
          }
       }

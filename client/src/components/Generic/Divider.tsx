@@ -1,13 +1,12 @@
 import {FC} from "react";
 
 interface DividerProps {
-   my?: string;
-   color?: string;
+   styles?: string;
 }
 
-const Divider: FC<DividerProps> = ({my, color}) => {
+const Divider: FC<DividerProps> = ({styles}) => {
    return (
-       <div className={`h-[3px] w-full bg-${color ? color : 'horizontal'}`}/>
+       <div className={` w-full ${styles}`}/>
    );
 };
 

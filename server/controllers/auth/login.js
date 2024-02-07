@@ -3,36 +3,48 @@ import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
 import Club from "../../models/Club.js";
 import mongoose from "mongoose";
+import Game from "../../models/Game.js";
 
 export const login = async (req,res) => {
    try {
       const {email,password} = req.body;
 
-      const user = await User.findOne({email}).populate({path: "friends", select: ['-friends', '-gameHistory', '-passwordHash', '-updatedAt',  '-__v']});
-      let userClub = null
+      const user = await User.findOne({email}).populate({
+         path: "friends",
+         select: ['-friends','-gameHistory','-passwordHash','-updatedAt','-__v']
+      });
 
-      if(user.club !== '' ) {
-         const fetchedClub =  await Club.aggregate([
-            {
-               $match: {
-                  _id: new mongoose.Types.ObjectId(user.club)
-               }
-            },
-            {
-               $project: {
-                  _id: 1,
-                  clubname: 1,
-                  createdAt: 1,
-                  membersCount: { $size: '$members' },
-               }
-            }
-         ]);
-         if(fetchedClub.length > 0) {
-            userClub = fetchedClub[0]
-         }
-      }
 
       if (user && (await bcrypt.compare(password,user.passwordHash))) {
+
+         let userGames = [];
+         if (user.gameHistory.length > 0) {
+            userGames = await Game.find({_id: {$in: user.gameHistory}}).sort({createdAt: 'desc'})
+         }
+
+         let userClub = null
+         if (user.club !== '') {
+            const fetchedClub = await Club.aggregate([
+               {
+                  $match: {
+                     _id: new mongoose.Types.ObjectId(user.club)
+                  }
+               },
+               {
+                  $project: {
+                     _id: 1,
+                     clubname: 1,
+                     createdAt: 1,
+                     membersCount: {$size: '$members'},
+                  }
+               }
+            ]);
+            if (fetchedClub.length > 0) {
+               userClub = fetchedClub[0]
+            }
+         }
+
+
          // send new token
          const token = jwt.sign(
              {
@@ -54,7 +66,8 @@ export const login = async (req,res) => {
                friends: user.friends,
                rating: user.rating,
                userID: user._id,
-               username: user.username
+               username: user.username,
+               gameHistory: userGames,
             }
          });
       }

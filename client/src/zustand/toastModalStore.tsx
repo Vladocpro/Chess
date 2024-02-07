@@ -23,7 +23,7 @@ export enum ToastPositions {
 export enum ToastType {
    SUCCESS = 'bg-secondaryGreen',
    WARNING = 'bg-yellow-600',
-   ERROR = 'bg-red-500',
+   ERROR = 'bg-red-700',
    BLACK = 'bg-black',
 }
 

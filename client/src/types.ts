@@ -41,4 +41,27 @@ export interface IGameInvitation {
    durationType: string;
 }
 
+interface IGameUser {
+   creator: boolean;
+   outcome: string;
+   userID: string;
+   username: string;
+   rating: number;
+   color: string;
+   startTurnDate: Date;
+   timeLeft: number;
+}
+
+export interface IGame {
+   user1: IGameUser;
+   user2: IGameUser;
+   _id: string;
+   pgn: string;
+   durationType: string;
+   duration: number;
+   totalMoves: number;
+   increment: number;
+   isFinished: boolean;
+}
+
 

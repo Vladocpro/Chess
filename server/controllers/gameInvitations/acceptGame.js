@@ -6,7 +6,6 @@ export const acceptGame = async (req,res) => {
    try {
 
 
-
       const invitation = await GameInvitation.findById(req.body.invitationID);
 
       if (!invitation) {
@@ -18,7 +17,7 @@ export const acceptGame = async (req,res) => {
 
       let receiver
 
-      if(invitation.receiverID !== null && invitation.receiverID !== undefined) {
+      if (invitation.receiverID !== null && invitation.receiverID !== undefined) {
          receiver = await User.findById(invitation.receiverID);
       } else {
          receiver = await User.findById(req.user.userID);
@@ -42,8 +41,8 @@ export const acceptGame = async (req,res) => {
             break;
          }
          case 'black': {
-            user1Color =   'black';
-            user2Color =  'white';
+            user1Color = 'black';
+            user2Color = 'white';
             break;
          }
          default: {
@@ -58,6 +57,7 @@ export const acceptGame = async (req,res) => {
             outcome: 'going',
             userID: sender._id,
             username: sender.username,
+            rating: sender.rating,
             color: user1Color,
             startTurnDate: gameStartDate,
             timeLeft: invitation.gameDuration
@@ -67,6 +67,7 @@ export const acceptGame = async (req,res) => {
             outcome: 'going',
             userID: receiver._id,
             username: receiver.username,
+            rating: receiver.rating,
             color: user2Color,
             startTurnDate: gameStartDate,
             timeLeft: invitation.gameDuration
@@ -80,14 +81,12 @@ export const acceptGame = async (req,res) => {
       })
 
 
-
       // add game to history of both users
-      sender.gameHistory = [...sender.gameHistory, newGame._id];
-      receiver.gameHistory = [...receiver.gameHistory, newGame._id];
+      sender.gameHistory = [...sender.gameHistory,newGame._id];
+      receiver.gameHistory = [...receiver.gameHistory,newGame._id];
 
       await sender.save();
       await receiver.save();
-
 
 
       // delete invitation

@@ -5,6 +5,7 @@ const userType = {
    outcome: String,
    userID: mongoose.Schema.Types.ObjectId,
    username: String,
+   rating: Number,
    color: String,
    startTurnDate: Date,
    timeLeft: Number
@@ -24,4 +25,4 @@ const GameSchema = new mongoose.Schema({
 });
 
 
-export default mongoose.model('Game', GameSchema);
+export default mongoose.model('Game',GameSchema);

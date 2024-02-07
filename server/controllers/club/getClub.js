@@ -1,48 +1,13 @@
-import Club from "../../models/Club.js";
-import mongoose from "mongoose";
+import {getClubByID} from "../../utils/clubUtils.js";
 
 export const getClub = async (req,res) => {
    try {
-      const club = await Club.aggregate([
-         {
-            $match: {
-               _id: new mongoose.Types.ObjectId(req.params.id)
-            }
-         },
-         {
-            $lookup: {
-               from: 'users', // Assuming the collection name is 'users'
-               localField: 'members',
-               foreignField: '_id',
-               as: 'members'
-            }
-         },
-
-         {
-            $project: {
-               _id: 1,
-               clubname: 1,
-               description: 1,
-               createdAt: 1,
-               membersCount: { $size: '$members' },
-               members: {
-                  $map: {
-                     input: '$members',
-                     as: 'member',
-                     in: {
-                        _id: '$$member._id',
-                        username: '$$member.username',
-                        email: '$$member.email',
-                        rating: '$$member.rating',
-                     }
-                  }
-               }
-            }
-         }
-
-      ]);
+      const club = await getClubByID(req.params.id)
+      if (club.isError) {
+         return res.status(club.status).send(club.message);
+      }
       return res.status(200).json({
-         club: club[0]
+         club: club
       });
    } catch (err) {
       return res.status(500).send(err);
