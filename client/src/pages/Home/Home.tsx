@@ -79,14 +79,14 @@ const Home = () => {
           <div className={'hidden lg:flex flex-col w-56'}>
              <span
                  className={'text-base sm:text-xl self-center mb-7 uppercase  font-semibold sm:font-bold'}>Profile</span>
-             <Link to={'/profile'}
+             <Link to={`/profile/${user.userID}`}
                    className={'flex bg-primary py-1.5 px-1.5 mb-7 rounded-md'}>
                 <ProfileIcon size={'md'} withText={true} isMyProfile={true}/>
              </Link>
 
              <div className={'flex flex-col bg-primary px-1 py-3.5 rounded-md'}>
                 <span
-                    className={'text-base sm:text-xl py-0.5 pl-3 mb-2 uppercase font-semibold sm:font-bold'}>Friends</span>
+                    className={'text-base sm:text-xl py-0.5 pl-3 mb-2  uppercase font-semibold sm:font-bold'}>Friends</span>
                 <FriendList friends={user.friends}/>
              </div>
 

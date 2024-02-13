@@ -7,6 +7,16 @@ export interface UserFriend {
    createdAt: Date | string,
 }
 
+export interface IProfileUser {
+   userID: string,
+   username: string,
+   friends: string[],
+   gameHistory: IGame[],
+   rating: number,
+   club: string,
+   createdAt: Date | string,
+}
+
 export interface FriendInvitation {
    _id: string,
    sender: UserFriend,
@@ -62,6 +72,7 @@ export interface IGame {
    totalMoves: number;
    increment: number;
    isFinished: boolean;
+   createdAt: Date;
 }
 
 

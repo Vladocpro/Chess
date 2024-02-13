@@ -3,7 +3,6 @@ import mongoose from "mongoose";
 
 export const getClubByID = async (paramID) => {
    try {
-      console.log(paramID)
       const club = await Club.aggregate([
          {
             $match: {
@@ -42,8 +41,6 @@ export const getClubByID = async (paramID) => {
          }
 
       ]);
-
-      console.log(club)
 
       if (club.length > 0) {
          return club[0]

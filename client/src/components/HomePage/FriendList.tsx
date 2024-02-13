@@ -22,7 +22,7 @@ const FriendList: FC<FriendListProps> = ({friends}) => {
       return (
           <div className={'flex flex-col rounded-md'}>
              <Link to={`/profile/${friends[0]._id}`}
-                   className={`flex bg-primary pl-3`}>
+                   className={`flex bg-primary  pl-3`}>
                 <ProfileIcon size={'md'} withText={true} isMyProfile={false}
                              textValue={friends[0].username}/>
              </Link>
@@ -48,7 +48,7 @@ const FriendList: FC<FriendListProps> = ({friends}) => {
                        </Link>
                        {
                           index === friends.length - 1 ? null : (
-                              <Divider styles={'h-[2px] w-[188px] bg-primaryGreen ml-1.5 '}/>
+                              <Divider styles={'h-[2px] w-full bg-primaryGreen'}/>
                           )
                        }
                     </div>

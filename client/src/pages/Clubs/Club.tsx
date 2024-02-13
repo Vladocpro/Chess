@@ -10,7 +10,9 @@ import Tooltip from "../../components/Generic/Tooltip.tsx";
 
 const Club = () => {
 
-   const [club, setClub] = useState<IClub>({})
+   const [club, setClub] = useState<IClub>()
+   const [waiting, setWaiting] = useState<boolean>(true)
+   const [clubDoesNotExist, setClubDoesNotExist] = useState<boolean>(false)
    const user = userStore()
    const {openToast} = useToast()
    const {id} = useParams()
@@ -51,30 +53,45 @@ const Club = () => {
           })
    }
 
-   console.log(user)
-   console.log(id)
-
    useEffect(() => {
       getFetch(`/clubs/get/${id}`)
           .then((response) => {
              setClub(response.club)
+             setWaiting(false)
+             setClubDoesNotExist(false)
           })
           .catch((error) => {
+             console.log(error)
              openToast({
-                message: error.response.data,
+                message: error.response?.data,
                 type: ToastType.ERROR,
                 position: ToastPositions.AUTH,
-                duration: 2400
+                duration: 3500
              })
-             console.log(error)
+             setWaiting(false)
+             setClubDoesNotExist(true)
           })
    }, []);
 
+   if (waiting) {
+      return null
+   }
+
+   if (!waiting && clubDoesNotExist) {
+      return (
+          <div className={'flex justify-center items-center mt-[20%]'}>
+             <div className={'flex items-center gap-3 md:gap-5 '}>
+                <span className={'text-2xl md:text-5xl text-primaryGreen'}>404 </span>
+                <span className={'text-lg md:text-3xl'}>Club does not exist</span>
+             </div>
+          </div>
+      )
+   }
 
    return (
        <div className={'flex flex-col gap-6 items-center mt-0 sm:mt-10'}>
           {/* Club Info */}
-          <div className={'bg-primary py-5 px-5 rounded-md gap-5 flex-[2] max-w-[900px]'}>
+          <div className={'bg-primary p-5 rounded-md gap-5 flex-[2] max-w-[900px]'}>
              <div className={'flex flex-col'}>
                 <div className={'flex gap-5'}>
                    <img className={'w-[2.25rem] h-[2.25rem] sm:w-[5rem] sm:h-[5rem] '} src={'/club.png'}
@@ -109,17 +126,18 @@ const Club = () => {
                 <span className={'text-justify mt-4'}>{club?.description}</span>
 
                 <div className={'mt-4'}>
-                   {/* TODO show red leave button if user is member of this club, otherwise green join club */}
                    {
                       user.club?._id?.toString() === id ?
                           (
                               <button onClick={handleLeaveClub}
                                       className={'text-sm sm:text-base bg-primaryLight hover:bg-red-700 duration-200 rounded-md py-2 sm:py-3 px-4 sm:px-7 min-w-[145px] w-1/3'}>Leave
-                                 Club</button>
+                                 Club
+                              </button>
                           ) : (
                               <button onClick={handleJoinClub}
                                       className={'text-sm sm:text-base bg-primaryLight hover:bg-secondaryGreen duration-200 rounded-md py-2 sm:py-3 px-4 sm:px-7 min-w-[145px] w-1/3'}>Join
-                                 Club</button>
+                                 Club
+                              </button>
 
                           )
                    }
@@ -136,13 +154,13 @@ const Club = () => {
           <div className={'bg-primary py-5 px-5 rounded-md max-w-[900px] w-full'}>
              <div className={'flex items-center gap-3 sm:gap-5 mb-1 '}>
                 <span className={'font-bold text-base sm:text-xl py-2'}>Members</span>
-                <span className={'bg-input rounded-md text-sm sm:text-base px-1'}>{club.members?.length} </span>
+                <span className={'bg-input rounded-md text-sm sm:text-base px-1'}>{club?.members?.length} </span>
              </div>
              <div className={'flex flex-col  gap-5 '}>
-                {club.members?.map((currentUser) => (
+                {club?.members?.map((currentUser) => (
                     <div className={'flex items-center justify-between gap-5'} key={currentUser._id}>
                        <Link className={'flex flex-[1] items-center gap-2 sm:gap-5'}
-                             to={`/profile/${currentUser.username}`}>
+                             to={`/profile/${currentUser._id}`}>
                           <ProfileIcon textValue={currentUser.username} isMyProfile={false}
                                        iconStyles={'w-[2.25rem] h-[2.25rem] text-lg sm:w-[4rem] sm:h-[4rem] sm:text-3xl'}/>
                           <div className={'flex flex-col'}>

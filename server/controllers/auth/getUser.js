@@ -2,17 +2,16 @@ import User from "../../models/User.js";
 import Club from "../../models/Club.js";
 import mongoose from "mongoose";
 import Game from "../../models/Game.js";
+import {getUserGames} from "../../utils/userUtils.js";
 
 export const getUser = async (req,res) => {
    try {
       const user = await User.findById(req.user.userID)
           .populate({path: "friends",select: ['-friends','-gameHistory','-passwordHash','-updatedAt','-__v']});
 
-      let userGames = [];
-      if (user.gameHistory.length > 0) {
-         userGames = await Game.find({_id: {$in: user.gameHistory}}).sort({createdAt: 'desc'})
-      }
-      // console.log()
+      const userGames = await getUserGames(user.gameHistory)
+
+
       let userClub = null
       if (user.club !== '') {
          const fetchedClub = await Club.aggregate([
@@ -46,7 +45,6 @@ export const getUser = async (req,res) => {
          }
       });
    } catch (err) {
-      console.log(err)
       return res.status(500).send(err);
    }
 };

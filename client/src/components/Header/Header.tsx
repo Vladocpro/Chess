@@ -10,7 +10,7 @@ import useUser from "../../zustand/userStore.tsx";
 const Header = () => {
 
    const location = useLocation();
-   const {username} = useUser();
+   const {userID} = useUser();
    const isActive = (link: string) => {
       if (link === location.pathname) {
          return 'headerLinkActive'
@@ -39,7 +39,7 @@ const Header = () => {
                 <Link to={'/clubs'} className={`headerLinks ${isActive('/clubs')}`}>Clubs</Link>
              </div>
 
-             <Link to={`/profile/${username}`} className={'hidden sm:block'}>
+             <Link to={`/profile/${userID}`} className={'hidden sm:block'}>
                 <ProfileIcon size={'md'} isMyProfile={true}/>
              </Link>
              <BurgerMenu/>

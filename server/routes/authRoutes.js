@@ -21,4 +21,9 @@ authRoutes.get(
     verifyToken,
     controllers.getUser
 );
+authRoutes.get(
+    "/getUserProfile/:id",
+    controllers.getUserProfile
+);
+
 

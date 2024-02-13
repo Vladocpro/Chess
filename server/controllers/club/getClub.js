@@ -10,6 +10,9 @@ export const getClub = async (req,res) => {
          club: club
       });
    } catch (err) {
+      if (err.message.toString() === 'BSONError: Argument passed in must be a string of 12 bytes or a string of 24 hex characters or an integer') {
+         return res.status(500).send('Club does not exist!');
+      }
       return res.status(500).send(err);
    }
 };

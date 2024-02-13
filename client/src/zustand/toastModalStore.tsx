@@ -45,6 +45,9 @@ const useToast = create<ToastStore>((set) => ({
    type: ToastType.SUCCESS,
 
    openToast: (payload: ToastOnOpen) => {
+      if (typeof payload.message !== 'string') {
+         return;
+      }
       let tempDuration = 3000
       if (payload.duration) {
          tempDuration = payload.duration;

@@ -1,8 +1,11 @@
-import FriendInvitation from "../../models/FriendInvitation.js";
+import FriendInvitation from "../../../models/FriendInvitation.js";
 
 export const getUserInvitations = async (req,res) => {
    try {
-      let invitations = await FriendInvitation.find({receiverID: req.user.userID}).populate({path: "senderID", select: ['-friends', '-gameHistory', '-passwordHash', '-updatedAt',  '-__v']});
+      let invitations = await FriendInvitation.find({receiverID: req.user.userID}).populate({
+         path: "senderID",
+         select: ['-friends','-gameHistory','-passwordHash','-updatedAt','-__v']
+      });
       const convertedInvitations = invitations.map((invitation) => {
          return {
             _id: invitation._id,

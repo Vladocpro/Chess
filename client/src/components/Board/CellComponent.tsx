@@ -1,4 +1,4 @@
-import {FC, useEffect, useMemo} from 'react'
+import {FC, useMemo} from 'react'
 import {CellComponentProps} from "./GameTypes.ts";
 import useTheme from "../../zustand/themeStore.tsx";
 

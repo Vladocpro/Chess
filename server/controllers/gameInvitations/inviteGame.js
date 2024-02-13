@@ -62,7 +62,7 @@ export const inviteGame = async (req,res) => {
       // send pending invitations update to specific user
       // friendsUpdates.updateFriendsPendingInvitations(targetUser._id.toString());
 
-      return res.status(201).json({
+      return res.status(200).json({
          invitationID: newInvitation._id,
          senderID: newInvitation.senderID,
          receiver: receiver,

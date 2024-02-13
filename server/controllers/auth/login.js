@@ -4,6 +4,7 @@ import jwt from "jsonwebtoken";
 import Club from "../../models/Club.js";
 import mongoose from "mongoose";
 import Game from "../../models/Game.js";
+import {getUserGames} from "../../utils/userUtils.js";
 
 export const login = async (req,res) => {
    try {
@@ -17,10 +18,7 @@ export const login = async (req,res) => {
 
       if (user && (await bcrypt.compare(password,user.passwordHash))) {
 
-         let userGames = [];
-         if (user.gameHistory.length > 0) {
-            userGames = await Game.find({_id: {$in: user.gameHistory}}).sort({createdAt: 'desc'})
-         }
+         const userGames = await getUserGames(user.gameHistory)
 
          let userClub = null
          if (user.club !== '') {
