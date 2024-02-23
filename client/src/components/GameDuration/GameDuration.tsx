@@ -10,12 +10,19 @@ interface GameDurationProps {
    labelStyles?: string;
 }
 
-const GameDuration: FC<GameDurationProps> = ({type, isWithLabel, isLabelBottom, labelText, labelStyles, iconStyles}) => {
+const GameDuration: FC<GameDurationProps> = ({
+                                                type,
+                                                isWithLabel,
+                                                isLabelBottom,
+                                                labelText,
+                                                labelStyles,
+                                                iconStyles
+                                             }) => {
 
 
    return (
        <div className={`flex items-center ${isLabelBottom && 'flex-col'} gap-2`}>
-          <GameDurationIcon type={type}  iconStyles={iconStyles}/>
+          <GameDurationIcon type={type} iconStyles={iconStyles}/>
           {isWithLabel && <span className={`${labelStyles}`}>{labelText}</span>}
        </div>
    )
@@ -23,7 +30,7 @@ const GameDuration: FC<GameDurationProps> = ({type, isWithLabel, isLabelBottom, 
 
 const sizes = {
    sm: {
-      iconSize: '2rem',
+      iconSize: '32px',
       labelSize: 'lg'
    },
 }

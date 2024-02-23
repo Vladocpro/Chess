@@ -5,7 +5,7 @@ const MyClub = () => {
 
    const {club} = userStore()
    console.log(club)
-   if(club === null) {
+   if (club === null) {
       return null
    }
 
@@ -18,7 +18,7 @@ const MyClub = () => {
           <div className={'flex flex-col gap-3'}>
              <div className={'flex items-center justify-between gap-5'} key={club._id}>
                 <Link className={'flex flex-[1] items-center gap-2 sm:gap-5'} to={`/club/${club._id}`}>
-                   <img  className={'w-[2.25rem] h-[2.25rem] sm:w-[4rem] sm:h-[4rem] '} src={'club.png'} alt={'chess club'}/>
+                   <img className={'w-[36px] h-[36px] sm:w-[64px] sm:h-[64px] '} src={'club.png'} alt={'chess club'}/>
                    <div className={'flex flex-col'}>
                       <span>{club.clubname}</span>
                       <span className={'text-sm hidden sm:inline-block'}>{club.membersCount} Members</span>

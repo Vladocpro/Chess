@@ -1,15 +1,12 @@
-export interface CellComponentProps {
-   key: string;
-   cell: Cell;
-   selected: boolean;
+export interface Cell {
+   square: string;
+   type: string;
+   color: string;
    cellColor: string;
-   height: number;
-   width: number;
-   click: (cell: Cell) => void;
 }
 
-export interface Cell {
-   square: 'a8';
-   type: 'r';
-   color: 'b';
+export interface IGameHistory {
+   turn: string;
+   whiteMove: string;
+   blackMove: string;
 }

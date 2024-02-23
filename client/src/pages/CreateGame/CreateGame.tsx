@@ -3,51 +3,51 @@ import useTheme from "../../zustand/themeStore.tsx";
 import ThemeSettingsModal from "../../components/Modals/ThemeSettingsModal.tsx";
 import useUser from "../../zustand/userStore.tsx";
 import Tooltip from "../../components/Generic/Tooltip.tsx";
-import {useLocation} from "react-router-dom";
 import CreateGamePanel from "../../components/CreateGamePage/CreateGamePanel.tsx";
-import {useEffect, useState} from "react";
-import {gameDurationType} from "../../utils/constants/game.ts";
+import {useState} from "react";
+import BoardTraining from "../../components/Board/BoardTraining.tsx";
+import BoardCreateGame from "../../components/Board/BoardCreateGame.tsx";
 
 const CreateGame = () => {
+   const [inverted, setInverted] = useState<boolean>(false)
 
    const {setModal} = useTheme()
    const user = useUser()
-   const location = useLocation()
    if (user.username === '') {
       return null
    }
 
 
-
    return (
-       <div className={'flex justify-center  gap-5 mt-0 md:mt-5 lg:mt-10 border-t-2 border-t-primaryGreen sm:border-t-0'}>
+       <div
+           className={'flex justify-center  gap-5 mt-0 md:mt-5 lg:mt-7 border-t-2 border-t-primaryGreen sm:border-t-0'}>
 
           <div className={'flex'}>
              <div className={'hidden xl:flex flex-col'}>
                 {/*Opponent row*/}
                 <div className={'flex items-center gap-3 mb-2 h-[44px]'}>
-                   <img src={'opponent.png'} height={'43px'} width={'43px'}/>
+                   <img src={'opponent.png'} height={'43px'} width={'43px'} className={'rounded-full'}/>
                    <div className={'flex  w-full gap-5 justify-between'}>
                       <span>Opponent</span>
                    </div>
                 </div>
 
-                <Board height={600} width={600}/>
+                <BoardCreateGame height={600} width={600} pgn={''} inverted={inverted}/>
 
                 {/* User row  */}
                 <div className={'flex items-center gap-3 mt-2 h-[44px]'}>
                    <div
-                       className={`flex items-center justify-center bg-primaryLight rounded-full h-[2.75rem] w-[3rem] text-lg`}>
-                      {user.username[0].toUpperCase()}
+                       className={`flex items-center justify-center uppercase bg-primaryLight rounded-full h-[44px] w-[48px] text-lg`}>
+                      {user.username[0]}
                    </div>
                    <div className={'flex  w-full gap-5 justify-between'}>
                       <span>{user.username}</span>
                       <span className={'text-primaryGreen'}>{user.rating} elo</span>
                    </div>
                 </div>
-
              </div>
-             <div className={'hidden xl:flex flex-col ml-2 mt-[52px]'}>
+
+             <div className={'hidden xl:flex flex-col gap-2 ml-2 mt-[52px]'}>
                 <Tooltip text={'Settings'}>
                    <div className={'cursor-pointer'} onClick={() => setModal(true)}>
                       <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" strokeWidth={1.5}
@@ -58,7 +58,15 @@ const CreateGame = () => {
                       </svg>
                    </div>
                 </Tooltip>
-
+                <Tooltip text={'Rotate the board'}>
+                   <div className={'cursor-pointer'} onClick={() => setInverted(!inverted)}>
+                      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" strokeWidth={1.5}
+                           className="w-8 h-8 fill-primaryLight stroke-white">
+                         <path strokeLinecap="round" strokeLinejoin="round"
+                               d="M19.5 12c0-1.232-.046-2.453-.138-3.662a4.006 4.006 0 0 0-3.7-3.7 48.678 48.678 0 0 0-7.324 0 4.006 4.006 0 0 0-3.7 3.7c-.017.22-.032.441-.046.662M19.5 12l3-3m-3 3-3-3m-12 3c0 1.232.046 2.453.138 3.662a4.006 4.006 0 0 0 3.7 3.7 48.656 48.656 0 0 0 7.324 0 4.006 4.006 0 0 0 3.7-3.7c.017-.22.032-.441.046-.662M4.5 12l3 3m-3-3-3 3"/>
+                      </svg>
+                   </div>
+                </Tooltip>
              </div>
              <CreateGamePanel/>
           </div>

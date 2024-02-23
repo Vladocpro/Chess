@@ -75,7 +75,7 @@ const InvitationTab: FC<InvitationTabProps> = ({
                     <Link className={'flex items-center gap-2 sm:gap-3'}
                           to={`/profile/${gameInvitation?.receiver?._id}`}>
                        <ProfileIcon textValue={gameInvitation?.receiver?.username} isMyProfile={false}
-                                    iconStyles={'w-[2.25rem] h-[2.25rem] text-lg sm:w-[2.5rem] sm:h-[2.5rem] sm:text-xl'}/>
+                                    iconStyles={'w-[36px] h-[36px] text-lg sm:w-[40px] sm:h-[40px] sm:text-xl'}/>
                        <div className={'flex flex-col'}>
                           <span className={'w-[120px] truncate'}>{gameInvitation?.receiver?.username}</span>
                           <span
@@ -108,7 +108,7 @@ const InvitationTab: FC<InvitationTabProps> = ({
                  <div className={'flex items-center justify-between gap-3 '} key={gameInvitation?.invitationID}>
                     <Link className={'flex items-center gap-2 sm:gap-3'} to={`/profile/${gameInvitation?.sender?._id}`}>
                        <ProfileIcon textValue={gameInvitation?.sender?.username} isMyProfile={false}
-                                    iconStyles={'w-[2.25rem] h-[2.25rem] text-lg sm:w-[2.5rem] sm:h-[2.5rem] sm:text-xl'}/>
+                                    iconStyles={'h-[36px] h-[36px] text-lg sm:w-[40px] sm:h-[40px] sm:text-xl'}/>
                        <div className={'flex flex-col'}>
                           <span className={'w-[120px] truncate'}>{gameInvitation?.sender?.username}</span>
                           <span className={'text-sm hidden sm:inline-block'}>{gameInvitation?.sender?.rating} Elo</span>

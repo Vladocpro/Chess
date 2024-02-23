@@ -35,7 +35,7 @@ const Home = () => {
                               isLabelBottom={true}
                               labelText={gameDuration.label}
                               labelStyles={'text-lg'}
-                              iconStyles={'h-[3rem] w-[3rem]'}
+                              iconStyles={'h-[48px] w-[48px]'}
                           />
                        </Link>
                    ))}
@@ -53,7 +53,7 @@ const Home = () => {
                               isLabelBottom={true}
                               labelText={gameDuration.label}
                               labelStyles={'text-lg'}
-                              iconStyles={'h-[3rem] w-[3rem]'}
+                              iconStyles={'h-[48px] w-[48px]'}
                           />
                        </Link>
                    ))}

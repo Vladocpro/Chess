@@ -23,12 +23,13 @@ export const getUserProfile = async (req,res) => {
             username: user.username,
             friends: user.friends,
             gameHistory: userGames,
-            club: userClub.clubname,
+            club: userClub?.clubname,
             rating: user.rating,
             createdAt: user.createdAt
          }
       });
    } catch (err) {
+      console.log(err)
       return res.status(500).send(err);
    }
 };

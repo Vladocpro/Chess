@@ -99,18 +99,18 @@ const CreateGameTab: FC<CreateGameTab> = ({
                 <div className={'flex gap-3'}>
                    <Tooltip text={'White'} onClick={() => setChosenColor('white')}>
                       <div
-                          className={`h-[2.25rem] w-[2.25rem] bg-white rounded-full cursor-pointer hover:outline hover:outline-3 ${chosenColor === 'white' ? 'outline outline-3 outline-primaryGreen' : 'outline-0'} hover:outline-primaryGreen`}/>
+                          className={`h-[36px] w-[36px] bg-white rounded-full cursor-pointer hover:outline hover:outline-3 ${chosenColor === 'white' ? 'outline outline-3 outline-primaryGreen' : 'outline-0'} hover:outline-primaryGreen`}/>
                    </Tooltip>
                    <Tooltip text={'Random'} onClick={() => setChosenColor('random')}>
                       <div
                           className={`flex rounded-full cursor-pointer hover:outline hover:outline-3 ${chosenColor === 'random' ? 'outline outline-3 outline-primaryGreen' : 'outline-0'} hover:outline-primaryGreen`}>
-                         <div className={`h-[2.25rem] w-[1.125rem] bg-white rounded-l-full`}/>
-                         <div className={`h-[2.25rem] w-[1.125rem] bg-black rounded-r-full`}/>
+                         <div className={`h-[36px] w-[18px] bg-white rounded-l-full`}/>
+                         <div className={`h-[36px] w-[18px] bg-black rounded-r-full`}/>
                       </div>
                    </Tooltip>
                    <Tooltip text={'Black'} onClick={() => setChosenColor('black')}>
                       <div
-                          className={`h-[2.25rem] w-[2.25rem] bg-black rounded-full cursor-pointer hover:outline hover:outline-3 ${chosenColor === 'black' ? 'outline outline-3 outline-primaryGreen' : 'outline-0'} hover:outline-primaryGreen`}/>
+                          className={`h-[36px] w-[36px] bg-black rounded-full cursor-pointer hover:outline hover:outline-3 ${chosenColor === 'black' ? 'outline outline-3 outline-primaryGreen' : 'outline-0'} hover:outline-primaryGreen`}/>
                    </Tooltip>
                 </div>
              </div>
@@ -120,9 +120,13 @@ const CreateGameTab: FC<CreateGameTab> = ({
              <button onClick={handleSendGameInvitation}
                      className={'bg-secondaryGreen py-2 sm:py-3 px-5 w-full rounded-lg'}>Create Game
              </button>
-             <button onClick={() => navigate('/training')}
-                     className={'bg-yellow-600 py-2 sm:py-3 px-5 w-full  rounded-lg'}>Training
-             </button>
+             <Tooltip text={'Train and compete against your own strategic moves.'}
+                      onClick={() => navigate('/training')}>
+                <button
+                    className={'bg-yellow-600 py-2 sm:py-3 px-5 w-full rounded-lg'}>Training
+                </button>
+             </Tooltip>
+
           </div>
        </>
    );

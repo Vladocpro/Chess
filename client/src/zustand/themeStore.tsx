@@ -105,45 +105,52 @@ export const BoardThemes = {
    GREEN: {
       cellBlack: '#779954',
       cellWhite: '#E9EDCC',
-      cellHighlight: '#BBCC44'
+      cellHighlight: '#BBCC44',
+      cellAvailable: '#1c1a1a33'
    },
    DARKWOOD: {
       cellBlack: '#835835',
       cellWhite: '#C19E68',
-      cellHighlight: '#CCA658'
+      cellHighlight: '#CCA658',
+      cellAvailable: '#1c1a1a33'
    },
    GLASS: {
       cellBlack: '#242B37',
       cellWhite: '#6C7585',
-      cellHighlight: '#405E75'
+      cellHighlight: '#405E75',
+      cellAvailable: '#ffffff59'
    },
    BROWN: {
       cellBlack: '#B88762',
       cellWhite: '#EDD6B0',
-      cellHighlight: '#DCC34B'
+      cellHighlight: '#DCC34B',
+      cellAvailable: '#1c1a1a33'
    },
    ICYSEA: {
       cellBlack: '#6E91A6',
       cellWhite: '#D4DFE5',
-      cellHighlight: '#6DBBD2'
+      cellHighlight: '#6DBBD2',
+      cellAvailable: '#1c1a1a33'
    },
    OVERLAY: {
       cellBlack: '#7C7B79',
       cellWhite: '#9E9D9B',
-      cellHighlight: '#7F9AAA'
+      cellHighlight: '#7F9AAA',
+      cellAvailable: '#ffffff59'
    },
    CHECKERS: {
       cellBlack: '#303030',
       cellWhite: '#C74C51',
-      cellHighlight: '#95895D'
+      cellHighlight: '#95895D',
+      cellAvailable: '#ffffff59'
    },
 }
-
 
 export interface BoardPayload {
    cellBlack: string;
    cellWhite: string;
    cellHighlight: string;
+   cellAvailable: string;
    boardThemeName: string;
 }
 
@@ -164,10 +171,11 @@ export interface FiguresPayload {
 }
 
 interface ThemeStore {
-   themeSettingsOpen: boolean,
-   cellBlack: string,
-   cellWhite: string,
-   cellHighlight: string,
+   themeSettingsOpen: boolean;
+   cellBlack: string;
+   cellWhite: string;
+   cellHighlight: string;
+   cellAvailable: string;
    boardThemeName: string;
    bb: string;
    bk: string;
@@ -182,6 +190,8 @@ interface ThemeStore {
    wr: string;
    wp: string;
    figuresThemeName: string;
+   pawnPromotion: string;
+   setPawnPromotion: (payload: string) => void;
    setBoard: (payload: BoardPayload) => void;
    setFigures: (payload: FiguresPayload) => void;
    setModal: (payload: boolean) => void;
@@ -195,6 +205,8 @@ const useTheme = create<ThemeStore>(persist((set) => ({
    cellBlack: '#779952',
    cellWhite: '#edeed1',
    cellHighlight: '#ffff33',
+   cellAvailable: '#1c1a1a33',
+   pawnPromotion: 'q',
    boardThemeName: 'Green',
    bb: '/themes/pieces/Neo/bb.png',
    bk: '/themes/pieces/Neo/bk.png',
@@ -219,6 +231,7 @@ const useTheme = create<ThemeStore>(persist((set) => ({
          cellBlack: payload.cellBlack,
          cellWhite: payload.cellWhite,
          cellHighlight: payload.cellHighlight,
+         cellAvailable: payload.cellAvailable,
          boardThemeName: payload.boardThemeName,
       });
    },
@@ -239,11 +252,18 @@ const useTheme = create<ThemeStore>(persist((set) => ({
          figuresThemeName: payload.figuresThemeName,
       });
    },
+   setPawnPromotion: (payload: string) => {
+      set({
+         pawnPromotion: payload,
+      });
+   },
    resetTheme: () => {
       set({
          cellBlack: BoardThemes.GREEN.cellBlack,
          cellWhite: BoardThemes.GREEN.cellWhite,
          cellHighlight: BoardThemes.GREEN.cellHighlight,
+         cellAvailable: BoardThemes.GREEN.cellAvailable,
+         pawnPromotion: 'q',
          boardThemeName: 'Green',
          bb: FigureThemes.NEO.bb,
          bk: FigureThemes.NEO.bk,

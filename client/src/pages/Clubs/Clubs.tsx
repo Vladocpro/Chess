@@ -88,7 +88,7 @@ const Clubs = () => {
                                      <div className={'flex items-center justify-between gap-5'} key={club._id}>
                                         <Link className={'flex flex-[1] items-center gap-2 sm:gap-5'}
                                               to={`/club/${club._id}`}>
-                                           <img className={'w-[2.25rem] h-[2.25rem] sm:w-[3.75rem] sm:h-[3.75rem] '}
+                                           <img className={'w-[36px] h-[36px] sm:w-[60px] sm:h-[60px] '}
                                                 src={'club.png'} alt={'chess club'}/>
                                            <div className={'flex flex-col'}>
                                               <span>{club.clubname}</span>
@@ -114,7 +114,7 @@ const Clubs = () => {
                                      <div className={'flex items-center justify-between gap-5'} key={club._id}>
                                         <Link className={'flex flex-[1] items-center gap-2 sm:gap-5'}
                                               to={`/club/${club._id}`}>
-                                           <img className={'w-[2.25rem] h-[2.25rem] sm:w-[3.75rem] sm:h-[3.75rem] '}
+                                           <img className={'w-[36px] h-[36px] sm:w-[60px] sm:h-[60px36px] '}
                                                 src={'club.png'} alt={'chess club'}/>
                                            <div className={'flex flex-col'}>
                                               <span>{club.clubname}</span>

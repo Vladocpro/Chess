@@ -55,12 +55,14 @@ const BoardPreview: FC<BoardPreviewProps> = ({height, width, game, enableTranspa
                style={{height: height + 'px', width: width + 'px'}}>
              {board.map((cell, index) =>
                  <CellComponent
-                     // click={click}
+                     // click={null}
                      cell={cell}
                      cellColor={defaultCellColors[index]}
                      key={index}
                      width={width / 8}
                      height={height / 8}
+                     showNotations={false}
+                     available={false}
                      // selected={cell.x === selectedCell?.x && cell.y === selectedCell?.y}
                  />
              )}

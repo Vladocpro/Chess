@@ -42,7 +42,7 @@ const Header = () => {
              <Link to={`/profile/${userID}`} className={'hidden sm:block'}>
                 <ProfileIcon size={'md'} isMyProfile={true}/>
              </Link>
-             <BurgerMenu/>
+             <BurgerMenu userID={userID}/>
           </nav>
        </div>
    );

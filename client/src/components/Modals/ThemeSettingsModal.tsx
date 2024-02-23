@@ -1,6 +1,11 @@
 import useTheme, {BoardThemes, FigureThemes} from "../../zustand/themeStore.tsx";
 import Dropdown from "../Generic/Dropdown.tsx";
-import {boardPreviewCells, BoardThemeOptions, FiguresThemeOptions} from "../../utils/constants/themes.ts";
+import {
+   boardPreviewCells,
+   BoardThemeOptions,
+   FiguresThemeOptions, PawnPromotionsLabels,
+   PawnPromotionsOptions
+} from "../../utils/constants/themes.ts";
 import CellComponent from "../Board/CellComponent.tsx";
 import useWindowSize from "../../hooks/useWindowSize.tsx";
 import {useMemo} from "react";
@@ -27,11 +32,21 @@ const ThemeSettingsModal = () => {
    }
    const onBoardChange = (item) => {
       // @ts-ignore
-      let figureTheme = BoardThemes[item.value];
-      figureTheme.boardThemeName = item.label;
-      theme.setBoard(figureTheme)
+      let boardTheme = BoardThemes[item.value];
+      boardTheme.boardThemeName = item.label;
+      theme.setBoard(boardTheme)
       openToast({
          message: 'Board Theme Updated Successfully',
+         type: ToastType.SUCCESS,
+         position: ToastPositions.AUTH,
+         duration: 1500
+      })
+
+   }
+   const onPawnPromotionChange = (item) => {
+      theme.setPawnPromotion(item.value)
+      openToast({
+         message: 'Pawn Promotion Updated Successfully',
          type: ToastType.SUCCESS,
          position: ToastPositions.AUTH,
          duration: 1500
@@ -41,8 +56,8 @@ const ThemeSettingsModal = () => {
    const boardSize = useMemo(() => {
       if (windowSize === 'xs') {
          return {
-            width: 300,
-            height: 80
+            width: 328,
+            height: 85
          }
       }
       return {
@@ -64,7 +79,7 @@ const ThemeSettingsModal = () => {
 
              {/* Body */}
              <div className={'flex flex-col gap-3'}>
-                <div className='grid grid-cols-8 grid-rows-2 mb-2'
+                <div className='grid grid-cols-8 grid-rows-2 mb-2 rounded-sm overflow-hidden'
                      style={{height: boardSize.height + 'px', width: boardSize.width + 'px'}}>
                    {boardPreviewCells.map((cell, index) =>
                        <CellComponent
@@ -74,45 +89,59 @@ const ThemeSettingsModal = () => {
                            key={index}
                            width={boardSize.width / 8}
                            height={boardSize.height / 2}
+                           showNotations={false}
                            // selected={cell.x === selectedCell?.x && cell.y === selectedCell?.y}
                        />
                    )}
                 </div>
                 <div className={'flex items-center justify-between'}>
-                   <span>Pieces</span>
+                   <span className={'text-sm sm:text-base'}>Pieces</span>
                    <Dropdown title={theme.figuresThemeName} options={FiguresThemeOptions}
                              onChange={onFiguresChange}
-                             titleStyles={'w-[9rem] sm:w-[15rem]'}
+                             titleStyles={'w-[135px] sm:w-[240px]'}
                              containerStyles={'bg-[#51504C] pt-2 w-full'}
-                             selectStyles={'bg-[#51504C] hover:bg-secondaryGreen duration-200  pl-3 pr-1.5 py-1'}
-                             itemStyles={' hover:bg-secondaryGreen px-3 py-1.5 transition-all duration-200'}
+                             selectStyles={'bg-[#51504C] text-sm sm:text-base hover:bg-secondaryGreen duration-200 pl-3 pr-1.5 py-0.5 sm:py-1'}
+                             itemStyles={' hover:bg-secondaryGreen text-sm sm:text-base px-3 py-1 sm:py-1.5 transition-all duration-200'}
                    />
                 </div>
                 <div className={'flex items-center justify-between'}>
-                   <span>Board</span>
+                   <span className={'text-sm sm:text-base'}>Board</span>
                    <Dropdown title={theme.boardThemeName} options={BoardThemeOptions} onChange={onBoardChange}
-                             titleStyles={'w-[9rem] sm:w-[15rem]'}
+                             titleStyles={'w-[135px] sm:w-[240px]'}
                              containerStyles={'bg-[#51504C] pt-2 w-full'}
-                             selectStyles={'bg-[#51504C] hover:bg-secondaryGreen duration-200 pl-3 pr-1.5 py-1'}
-                             itemStyles={' hover:bg-secondaryGreen px-3 py-1.5 transition-all duration-200'}
+                             selectStyles={'bg-[#51504C] text-sm sm:text-base hover:bg-secondaryGreen duration-200 pl-3 pr-1.5 py-0.5 sm:py-1'}
+                             itemStyles={' hover:bg-secondaryGreen text-sm sm:text-base px-3 py-1 sm:py-1.5 transition-all duration-200'}
+                   />
+                </div>
+                <div className={'flex items-center justify-between'}>
+                   <span className={'text-sm sm:text-base'}>Pawn Promotion</span>
+                   <Dropdown title={PawnPromotionsLabels[theme.pawnPromotion]}
+                             options={PawnPromotionsOptions}
+                             onChange={onPawnPromotionChange}
+                             titleStyles={'w-[135px] sm:w-[240px]'}
+                             containerStyles={'bg-[#51504C] pt-2 w-full'}
+                             selectStyles={'bg-[#51504C] text-sm sm:text-base hover:bg-secondaryGreen duration-200 pl-3 pr-1.5 py-0.5 sm:py-1'}
+                             itemStyles={' hover:bg-secondaryGreen text-sm sm:text-base px-3 py-1 sm:py-1.5 transition-all duration-200'}
                    />
                 </div>
                 {/* Footer */}
                 <div className={'flex justify-between mt-3 sm:mt-5'}>
-                   <button className={'bg-primaryLight hover:bg-secondaryGreen duration-200 px-4 py-2 rounded-lg'}
-                           onClick={() => {
-                              theme.resetTheme()
-                              openToast({
-                                 message: 'Theme was successfully reset',
-                                 type: ToastType.BLACK,
-                                 position: ToastPositions.AUTH,
-                                 duration: 1500
-                              })
-                           }}>Reset
+                   <button
+                       className={'bg-primaryLight hover:bg-secondaryGreen duration-200 text-sm px-4 py-2 rounded-lg sm:text-base'}
+                       onClick={() => {
+                          theme.resetTheme()
+                          openToast({
+                             message: 'Theme was successfully reset',
+                             type: ToastType.BLACK,
+                             position: ToastPositions.AUTH,
+                             duration: 1500
+                          })
+                       }}>Reset
                       Theme
                    </button>
-                   <button className={'bg-primaryLight hover:bg-secondaryGreen duration-200 px-10 py-2 rounded-lg'}
-                           onClick={() => theme.setModal(false)}>Done
+                   <button
+                       className={'bg-primaryLight hover:bg-secondaryGreen duration-200 text-sm px-10 py-2 rounded-lg sm:text-base'}
+                       onClick={() => theme.setModal(false)}>Done
                    </button>
 
                 </div>

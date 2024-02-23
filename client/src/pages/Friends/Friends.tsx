@@ -154,7 +154,7 @@ const Friends = () => {
                              <Link className={'flex flex-[1] items-center gap-2 sm:gap-5'}
                                    to={`/profile/${friend._id}`}>
                                 <ProfileIcon textValue={friend.username} isMyProfile={false}
-                                             iconStyles={'w-[2.25rem] h-[2.25rem] text-lg sm:w-[4rem] sm:h-[4rem] sm:text-3xl'}/>
+                                             iconStyles={'w-[36px] h-[36px] text-lg sm:w-[64px] sm:h-[64px] sm:text-3xl'}/>
                                 <div className={'flex flex-col'}>
                                    <span>{friend.username}</span>
                                    <span
@@ -190,7 +190,7 @@ const Friends = () => {
                              <Link className={'flex flex-[1] items-center gap-2 sm:gap-5'}
                                    to={`/profile/${currentUser._id}`}>
                                 <ProfileIcon withText={false} textValue={currentUser.username} isMyProfile={false}
-                                             iconStyles={'w-[2.25rem] h-[2.25rem] text-lg sm:w-[4rem] sm:h-[4rem] sm:text-3xl'}/>
+                                             iconStyles={'w-[36px] h-[36px] text-lg sm:w-[64px] sm:h-[64px] sm:text-3xl'}/>
                                 <div className={'flex flex-col'}>
                                    <span>{currentUser.username}</span>
                                    <span

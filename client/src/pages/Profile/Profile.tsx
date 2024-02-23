@@ -1,10 +1,11 @@
 import {useParams} from "react-router-dom";
 import moment from "moment";
 import {useEffect, useState} from "react";
-import {getFetch} from "../../utils/axios/fetcher.ts";
+import {getFetch, postFetch} from "../../utils/axios/fetcher.ts";
 import useToast, {ToastPositions, ToastType} from "../../zustand/toastModalStore.tsx";
-import {IGame, IProfileUser} from "../../types.ts";
+import {IGame, IProfileUser, UserFriend} from "../../types.ts";
 import GameRow from "../../components/ProfilePage/GameRow.tsx";
+import useUser from "../../zustand/userStore.tsx";
 
 const Profile = () => {
    const [profileUser, setProfileUser] = useState<IProfileUser>()
@@ -12,6 +13,39 @@ const Profile = () => {
    const [userDoesNotExist, setUserDoesNotExist] = useState<boolean>(false)
    const {openToast} = useToast()
    const {id} = useParams()
+   const user = useUser();
+
+
+   const handleAddFriend = (user: UserFriend) => {
+      postFetch('/friend-invitation/invite', {receiverID: profileUser?.userID})
+          .then((response) => {
+             openToast({message: response, type: ToastType.SUCCESS, position: ToastPositions.AUTH, duration: 3000})
+          })
+          .catch((error) => {
+             openToast({
+                message: error.response.data,
+                type: ToastType.WARNING,
+                position: ToastPositions.AUTH,
+                duration: 3000
+             })
+          })
+   }
+
+   const handleRemoveFriend = (paramUser: UserFriend) => {
+      postFetch('/friend-invitation/remove', {friendID: paramUser._id})
+          .then((response) => {
+             user.setFriends(user.friends.filter((friend) => friend._id !== paramUser._id))
+             openToast({message: response, type: ToastType.SUCCESS, position: ToastPositions.AUTH, duration: 3000})
+          })
+          .catch((error) => {
+             openToast({
+                message: error.response.data,
+                type: ToastType.WARNING,
+                position: ToastPositions.AUTH,
+                duration: 3000
+             })
+          })
+   }
 
    useEffect(() => {
       getFetch(`/auth/getUserProfile/${id}`).then((response) => {
@@ -25,6 +59,7 @@ const Profile = () => {
       })
    }, []);
 
+   console.log(profileUser?.club)
 
    if (waiting) {
       return null
@@ -84,20 +119,33 @@ const Profile = () => {
                    <img className={'w-6 md:w-8 h-6 md:h-8 '} src={'/club.png'}
                         alt={'chess club'}/>
                    <div
-                       className={'text-sm md:text-base'}>{profileUser?.club !== '' ? profileUser?.club : 'No Club'}</div>
+                       className={'text-sm md:text-base'}>{profileUser?.club !== undefined ? profileUser?.club : 'No Club'}</div>
                 </div>
              </div>
 
              {/* Buttons */}
              <div className={'flex gap-5'}>
+                {
+                   user.friends.some(friend => friend._id === profileUser?.userID) ? (
+                       <div
+                           className={'flex gap-3 w-full bg-primaryLight hover:bg-red-700 transition-all duration-300 py-3 px-4 cursor-pointer rounded-lg'}>
+                          <img src={'/friend-remove.png'} alt={'friend-remove'}
+                               className={'h-5 w-5 md:h-7 md:w-7'}/>
+                          <button className={'text-sm md:text-lg'}>Remove Friend</button>
+                       </div>
+
+                   ) : (
+                       <div
+                           className={'flex gap-3 w-full bg-primaryLight hover:bg-secondaryGreen transition-all duration-300 py-3 px-4 cursor-pointer rounded-lg'}>
+                          <img src={'/friend-add.png'} alt={'friend-add'} className={'h-5 w-5 md:h-7 md:w-7'}/>
+                          <button className={'text-sm md:text-lg'}>Add Friend</button>
+                       </div>
+                   )
+                }
+
                 <div
-                    className={'flex gap-3 w-full bg-primaryLight hover:bg-secondaryGreen transition-all duration-300 py-3 px-4 cursor-pointer rounded-lg'}>
-                   <img src={'/friend-add-refactor.png'} alt={'friend-add'}
-                        className={'h-5 w-5 md:h-7 md:w-7'}/>
-                   <button className={'text-sm md:text-lg'}>Add Friend</button>
-                </div>
-                <div
-                    className={'flex gap-3 w-full bg-primaryLight hover:bg-secondaryGreen transition-all duration-300 py-3 px-4 cursor-pointer rounded-lg'}>
+                    className={'flex gap-3 w-full bg-primaryLight hover:bg-secondaryGreen transition-all duration-300 py-3 px-4 cursor-pointer rounded-lg'}
+                    onClick={() => navigate('/create-game', {state: {gameOpponent: friend}})}>
                    <img src={'/chess-invite.png'} alt={'chess-invite'}
                         className={'h-5 w-5 md:h-7 md:w-7'}/>
                    <button className={'text-sm md:text-lg'}>Challenge</button>

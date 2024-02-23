@@ -58,7 +58,7 @@ const Dropdown: FC<DropDownProps> = ({
           </div>
           {/*Dropdown Options*/}
           <div
-              className={`${isOpen ? "translate-y-0  opacity-100 visible" : "-translate-y-5 opacity-0 invisible pt-4"} ${containerStyles} transition-all duration-300  rounded-b-lg select-none  absolute z-10 right-0`}>
+              className={`${isOpen ? "translate-y-0  opacity-100 visible pointer-events-auto" : "-translate-y-5 opacity-0 invisible pt-4 pointer-events-none"} ${containerStyles} transition-all duration-300  rounded-b-lg select-none  absolute z-10 right-0`}>
              {options.map((item, index) => (
                  <div key={index}
                       className={` cursor-pointer ${itemStyles}`}

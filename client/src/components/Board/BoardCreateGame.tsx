@@ -5,14 +5,14 @@ import {defaultBoard} from "../../utils/constants/game.ts";
 import {Cell} from "./GameTypes.ts";
 import useTheme from "../../zustand/themeStore.tsx";
 
-interface BoardTrainingProps {
+interface BoardCreateGameProps {
    height: number;
    width: number;
    pgn: string;
    inverted: boolean;
 }
 
-const BoardTraining: FC<BoardTrainingProps> = ({height, width, pgn, inverted,}) => {
+const BoardCreateGame: FC<BoardCreateGameProps> = ({height, width, pgn, inverted}) => {
    const [board, setBoard] = useState([]);
    const [chess, setChess] = useState(new Chess());
    const [selectedCell, setSelectedCell] = useState<Cell | undefined>(undefined)
@@ -74,7 +74,9 @@ const BoardTraining: FC<BoardTrainingProps> = ({height, width, pgn, inverted,}) 
       }
 
    }
+
    useEffect(() => {
+      chess.loadPgn(pgn)
       updateChess()
    }, []);
 
@@ -121,4 +123,4 @@ const BoardTraining: FC<BoardTrainingProps> = ({height, width, pgn, inverted,}) 
    );
 };
 
-export default BoardTraining;
+export default BoardCreateGame;

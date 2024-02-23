@@ -12,22 +12,29 @@ interface ProfileIconProps {
 }
 
 const sizes = {
-   sm: 'h-[1.75rem] w-[1.75rem] text-sm',
-   md: 'h-[2.5rem] w-[2.5rem] text-lg',
-   lg: 'h-[4rem] w-[4rem] text-3xl',
+   sm: 'h-[28px] w-[28px] text-sm',
+   md: 'h-[40px] w-[40px] text-lg',
+   lg: 'h-[64px] w-[64px] text-3xl',
 }
 
 
-
-const ProfileIcon: FC<ProfileIconProps> = ({size, iconStyles, textStyles, withText, textValue, isMyProfile, bgColor}) => {
+const ProfileIcon: FC<ProfileIconProps> = ({
+                                              size,
+                                              iconStyles,
+                                              textStyles,
+                                              withText,
+                                              textValue,
+                                              isMyProfile,
+                                              bgColor
+                                           }) => {
 
    const user = useUser()
    const defineStyles = sizes[size]
    const providedText = () => {
-      if(isMyProfile) {
+      if (isMyProfile) {
          return {
             firstLetter: user.username[0].toUpperCase(),
-            username:user.username
+            username: user.username
          }
       }
       return {
@@ -43,7 +50,9 @@ const ProfileIcon: FC<ProfileIconProps> = ({size, iconStyles, textStyles, withTe
    if (withText) {
       return (
           <div className={'flex items-center gap-3'}>
-             <div className={`flex items-center justify-center bg-primaryLight rounded-full ${defineStyles} ${iconStyles}`} style={{backgroundColor: bgColor}}>
+             <div
+                 className={`flex items-center justify-center bg-primaryLight rounded-full ${defineStyles} ${iconStyles}`}
+                 style={{backgroundColor: bgColor}}>
                 {providedText().firstLetter}
              </div>
              <div className={`${textStyles}`}>{providedText().username}</div>
@@ -53,12 +62,12 @@ const ProfileIcon: FC<ProfileIconProps> = ({size, iconStyles, textStyles, withTe
    }
 
    return (
-       <div className={`flex items-center justify-center bg-primaryLight rounded-full ${defineStyles} ${iconStyles}`} style={{backgroundColor: bgColor}}>
+       <div className={`flex items-center justify-center bg-primaryLight rounded-full ${defineStyles} ${iconStyles}`}
+            style={{backgroundColor: bgColor}}>
           {providedText().firstLetter}
        </div>
    );
 };
-
 
 
 export default ProfileIcon;

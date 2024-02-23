@@ -38,7 +38,7 @@ const WaitingTab: FC<WaitingTabProps> = ({
        <div
            className={'flex flex-col self-center w-60 sm:w-80 justify-center my-auto bg-[rgba(0,0,0,0.9)] pt-6 mt-16 sm:mt-auto mb-12 sm:mb-auto animate-pulse hover:animate-none rounded-lg'}>
           <GameDuration type={waitingInvitation?.durationType}
-                        iconStyles={'h-[2.75rem] sm:h-[3.75rem] w-[2.75rem] sm:w-[3.75rem]'}
+                        iconStyles={'h-[44px] sm:h-[60px] w-[44px] sm:w-[60px]'}
                         labelStyles={'text-base sm:text-lg'} isWithLabel={true} isLabelBottom={true}
                         labelText={`${waitingInvitation?.gameDuration / 60} ${waitingInvitation.gameIncrement > 0 ? `| ${waitingInvitation.gameIncrement}` : ''} ${waitingInvitation?.gameDuration === 60 ? 'min' : 'mins'}`}/>
           <div className={'text-center whitespace-pre-wrap mt-3 text-sm sm:text-base'}>Waiting for opponent{'\n'}to

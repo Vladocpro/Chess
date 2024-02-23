@@ -94,7 +94,7 @@ const Club = () => {
           <div className={'bg-primary p-5 rounded-md gap-5 flex-[2] max-w-[900px]'}>
              <div className={'flex flex-col'}>
                 <div className={'flex gap-5'}>
-                   <img className={'w-[2.25rem] h-[2.25rem] sm:w-[5rem] sm:h-[5rem] '} src={'/club.png'}
+                   <img className={'w-[36px] h-[36px] sm:w-[80px] sm:h-[80px] '} src={'/club.png'}
                         alt={'chess club'}/>
                    <div>
                       <span className={'text-2xl'}>{club?.clubname}</span>
@@ -162,7 +162,7 @@ const Club = () => {
                        <Link className={'flex flex-[1] items-center gap-2 sm:gap-5'}
                              to={`/profile/${currentUser._id}`}>
                           <ProfileIcon textValue={currentUser.username} isMyProfile={false}
-                                       iconStyles={'w-[2.25rem] h-[2.25rem] text-lg sm:w-[4rem] sm:h-[4rem] sm:text-3xl'}/>
+                                       iconStyles={'w-[36px] h-[36px] text-lg sm:w-[64px] sm:h-[64px] sm:text-3xl'}/>
                           <div className={'flex flex-col'}>
                              <span>{currentUser.username}</span>
                              <span className={'text-sm hidden sm:inline-block'}>Rating: {currentUser.rating}</span>

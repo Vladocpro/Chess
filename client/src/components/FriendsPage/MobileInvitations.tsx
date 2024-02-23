@@ -30,7 +30,7 @@ const MobileInvitations: FC<MobileInvitationsProps> = ({invitations, handleAccep
                     <Link className={'flex flex-[1] items-center gap-2 sm:gap-5'}
                           to={`/profile/${invitation.sender._id}`}>
                        <ProfileIcon size={'lg'} textValue={invitation.sender.username} isMyProfile={false}
-                                    iconStyles={'w-[2.25rem] h-[2.25rem] text-lg sm:w-[4rem] sm:h-[4rem] sm:text-3xl'}/>
+                                    iconStyles={'w-[36px] h-[36px] text-lg sm:w-[64px] sm:h-[64px] sm:text-3xl'}/>
                        <div className={'flex flex-col'}>
                           <span>{invitation.sender.username}</span>
                           <span
