@@ -43,7 +43,6 @@ const useToast = create<ToastStore>((set) => ({
    duration: 3000,
    position: ToastPositions.AUTH,
    type: ToastType.SUCCESS,
-
    openToast: (payload: ToastOnOpen) => {
       if (typeof payload.message !== 'string') {
          return;

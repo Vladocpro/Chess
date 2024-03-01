@@ -1,9 +1,9 @@
-import {useParams} from "react-router-dom";
+import {useNavigate, useParams} from "react-router-dom";
 import moment from "moment";
 import {useEffect, useState} from "react";
 import {getFetch, postFetch} from "../../utils/axios/fetcher.ts";
 import useToast, {ToastPositions, ToastType} from "../../zustand/toastModalStore.tsx";
-import {IGame, IProfileUser, UserFriend} from "../../types.ts";
+import {IGame, IProfileUser} from "../../types.ts";
 import GameRow from "../../components/ProfilePage/GameRow.tsx";
 import useUser from "../../zustand/userStore.tsx";
 
@@ -14,9 +14,10 @@ const Profile = () => {
    const {openToast} = useToast()
    const {id} = useParams()
    const user = useUser();
+   const navigate = useNavigate()
 
 
-   const handleAddFriend = (user: UserFriend) => {
+   const handleAddFriend = () => {
       postFetch('/friend-invitation/invite', {receiverID: profileUser?.userID})
           .then((response) => {
              openToast({message: response, type: ToastType.SUCCESS, position: ToastPositions.AUTH, duration: 3000})
@@ -31,10 +32,14 @@ const Profile = () => {
           })
    }
 
-   const handleRemoveFriend = (paramUser: UserFriend) => {
-      postFetch('/friend-invitation/remove', {friendID: paramUser._id})
+   const handleRemoveFriend = () => {
+      postFetch('/friend-invitation/remove', {friendID: profileUser?.userID})
           .then((response) => {
-             user.setFriends(user.friends.filter((friend) => friend._id !== paramUser._id))
+             setProfileUser({
+                ...profileUser,
+                friends: profileUser?.friends.filter((friend) => friend !== user?.userID)
+             })
+             user.setFriends(user?.friends.filter((friend) => friend._id !== profileUser?.userID))
              openToast({message: response, type: ToastType.SUCCESS, position: ToastPositions.AUTH, duration: 3000})
           })
           .catch((error) => {
@@ -127,16 +132,16 @@ const Profile = () => {
              <div className={'flex gap-5'}>
                 {
                    user.friends.some(friend => friend._id === profileUser?.userID) ? (
-                       <div
-                           className={'flex gap-3 w-full bg-primaryLight hover:bg-red-700 transition-all duration-300 py-3 px-4 cursor-pointer rounded-lg'}>
+                       <div onClick={handleRemoveFriend}
+                            className={'flex gap-3 w-full bg-primaryLight hover:bg-red-700 transition-all duration-300 py-3 px-4 cursor-pointer rounded-lg'}>
                           <img src={'/friend-remove.png'} alt={'friend-remove'}
                                className={'h-5 w-5 md:h-7 md:w-7'}/>
                           <button className={'text-sm md:text-lg'}>Remove Friend</button>
                        </div>
 
                    ) : (
-                       <div
-                           className={'flex gap-3 w-full bg-primaryLight hover:bg-secondaryGreen transition-all duration-300 py-3 px-4 cursor-pointer rounded-lg'}>
+                       <div onClick={handleAddFriend}
+                            className={'flex gap-3 w-full bg-primaryLight hover:bg-secondaryGreen transition-all duration-300 py-3 px-4 cursor-pointer rounded-lg'}>
                           <img src={'/friend-add.png'} alt={'friend-add'} className={'h-5 w-5 md:h-7 md:w-7'}/>
                           <button className={'text-sm md:text-lg'}>Add Friend</button>
                        </div>
@@ -145,7 +150,7 @@ const Profile = () => {
 
                 <div
                     className={'flex gap-3 w-full bg-primaryLight hover:bg-secondaryGreen transition-all duration-300 py-3 px-4 cursor-pointer rounded-lg'}
-                    onClick={() => navigate('/create-game', {state: {gameOpponent: friend}})}>
+                    onClick={() => navigate('/create-game', {state: {gameOpponent: profileUser}})}>
                    <img src={'/chess-invite.png'} alt={'chess-invite'}
                         className={'h-5 w-5 md:h-7 md:w-7'}/>
                    <button className={'text-sm md:text-lg'}>Challenge</button>

@@ -13,10 +13,25 @@ import Club from "./pages/Clubs/Club.tsx";
 import Training from "./pages/Training/Training.tsx";
 import Play from "./pages/Play/Play.tsx";
 import Profile from "./pages/Profile/Profile.tsx";
+import {io} from "socket.io-client";
+import {useEffect} from "react";
+import {connectWithSocketServer} from "./websockets/socketConnection.ts";
 
+
+const socket = io("localhost:4444", {
+   auth: {
+      token: 'asda'
+   }
+});
 
 function App() {
 
+   useEffect(() => {
+      const token = localStorage.getItem('token')
+      if (token !== undefined && token !== '') {
+         connectWithSocketServer(token)
+      }
+   }, []);
 
    return (
        <div className={'flex flex-col h-screen w-full overflow-x-hidden bg-mainBg'}>

@@ -177,6 +177,7 @@ interface ThemeStore {
    cellHighlight: string;
    cellAvailable: string;
    boardThemeName: string;
+   playSounds: boolean;
    bb: string;
    bk: string;
    bn: string;
@@ -191,6 +192,7 @@ interface ThemeStore {
    wp: string;
    figuresThemeName: string;
    pawnPromotion: string;
+   setPlaySounds: (payload: boolean) => void;
    setPawnPromotion: (payload: string) => void;
    setBoard: (payload: BoardPayload) => void;
    setFigures: (payload: FiguresPayload) => void;
@@ -208,6 +210,7 @@ const useTheme = create<ThemeStore>(persist((set) => ({
    cellAvailable: '#1c1a1a33',
    pawnPromotion: 'q',
    boardThemeName: 'Green',
+   playSounds: true,
    bb: '/themes/pieces/Neo/bb.png',
    bk: '/themes/pieces/Neo/bk.png',
    bn: '/themes/pieces/Neo/bn.png',
@@ -257,6 +260,11 @@ const useTheme = create<ThemeStore>(persist((set) => ({
          pawnPromotion: payload,
       });
    },
+   setPlaySounds: (payload: boolean) => {
+      set({
+         playSounds: payload,
+      });
+   },
    resetTheme: () => {
       set({
          cellBlack: BoardThemes.GREEN.cellBlack,
@@ -265,6 +273,7 @@ const useTheme = create<ThemeStore>(persist((set) => ({
          cellAvailable: BoardThemes.GREEN.cellAvailable,
          pawnPromotion: 'q',
          boardThemeName: 'Green',
+         playSounds: true,
          bb: FigureThemes.NEO.bb,
          bk: FigureThemes.NEO.bk,
          bn: FigureThemes.NEO.bn,

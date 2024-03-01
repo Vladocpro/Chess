@@ -61,7 +61,7 @@ const OpponentSearch: FC<OpponentSearchProps> = ({chosenOpponent, setChosenOppon
 
    useEffect(() => {
       setUsers(user.friends)
-      if (location.state?.gameOpponent ?? false) {
+      if (location.state?.gameOpponent !== null && location.state?.gameOpponent !== undefined) {
          setChosenOpponent(location.state?.gameOpponent)
       }
    }, []);

@@ -74,7 +74,7 @@ const ThemeSettingsModal = () => {
               onClick={() => theme.setModal(false)}/>
 
           <div
-              className={`relative z-30  py-4 px-3 sm:p-6 bg-primary rounded-lg  transition-all  duration-300 ${theme.themeSettingsOpen ? "translate-y-0" : "-translate-y-32 opacity-0"}`}>
+              className={`relative z-30  py-4 px-3 sm:p-6 bg-primary rounded-lg  transition-all   ${theme.themeSettingsOpen ? "translate-y-0 scale-100 duration-300 pointer-events-auto" : "-translate-y-32 scale-50 opacity-0 duration-200 pointer-events-none"}`}>
 
 
              {/* Body */}
@@ -124,6 +124,15 @@ const ThemeSettingsModal = () => {
                              itemStyles={' hover:bg-secondaryGreen text-sm sm:text-base px-3 py-1 sm:py-1.5 transition-all duration-200'}
                    />
                 </div>
+                <div className={'flex items-center mt-1 justify-between'}>
+                   <span className={'text-sm sm:text-base'}>Play Sounds</span>
+                   <label className="inline-flex items-center cursor-pointer">
+                      <input type="checkbox" checked={theme.playSounds} className="sr-only peer "
+                             onChange={(e) => theme.setPlaySounds(e.target.checked)}/>
+                      <div
+                          className="relative w-12 h-6 bg-gray-700 rounded-full peer peer-focus:ring-1 peer-focus:ring-secondaryGreen  peer-checked:after:translate-x-full rtl:peer-checked:after:-translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[1px] after:start-[1px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-6 after:w-6 after:transition-all peer-checked:bg-secondaryGreen"></div>
+                   </label>
+                </div>
                 {/* Footer */}
                 <div className={'flex justify-between mt-3 sm:mt-5'}>
                    <button
@@ -136,8 +145,8 @@ const ThemeSettingsModal = () => {
                              position: ToastPositions.AUTH,
                              duration: 1500
                           })
-                       }}>Reset
-                      Theme
+                       }}>
+                      Reset Configuration
                    </button>
                    <button
                        className={'bg-primaryLight hover:bg-secondaryGreen duration-200 text-sm px-10 py-2 rounded-lg sm:text-base'}

@@ -2,6 +2,7 @@ import {FC} from "react";
 import {Link} from "react-router-dom";
 import Tooltip from "../Generic/Tooltip.tsx";
 import {FriendInvitation} from "../../types.ts";
+import ProfileIcon from "../Generic/ProfileIcon.tsx";
 
 interface TopFriendsProps {
    invitations: FriendInvitation[];
@@ -29,8 +30,15 @@ const FriendInvitations: FC<TopFriendsProps> = ({invitations, handleAccept, hand
              {invitations.map((invitation) => (
                  <div className={'flex items-center justify-between text-gray-300 gap-2'}>
                     <Link to={`/profile/${invitation.sender._id}`}
-                          className={'max-w-[165px] truncate'}>{invitation.sender.username}</Link>
-                    <div className={'flex gap-4'}>
+                          className={'flex items-center gap-2'}>
+                       <ProfileIcon isMyProfile={false} textValue={invitation.sender.username}
+                                    iconStyles={'w-7 h-7'}
+                                    withText={false}/>
+                       <span className={'max-w-[144px] truncate'}>
+                       {invitation.sender.username}
+                       </span>
+                    </Link>
+                    <div className={'flex gap-3'}>
                        <Tooltip text={'Accept'} onClick={() => handleAccept(invitation)}>
                           <svg xmlns="http://www.w3.org/2000/svg" fill='none' viewBox="0 0 24 24" strokeWidth={2}
                                className="w-7 h-7 rounded-sm cursor-pointer bg-primaryLight stroke-white">

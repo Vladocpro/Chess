@@ -1,3 +1,5 @@
+import {IGameHistory} from "../../components/Board/GameTypes.ts";
+
 export const defaultCellColors = [
    'w', 'b', 'w', 'b', 'w', 'b', 'w', 'b',
    'b', 'w', 'b', 'w', 'b', 'w', 'b', 'w',
@@ -96,21 +98,4 @@ export const defaultBoard = [
    {square: "h1", cellColor: "w"},
 ];
 
-export const parseGameHistory = (movesArray) => {
-   const parsedMoves = [];
-
-   for (let i = 0; i < movesArray.length; i += 2) {
-      const turn = Math.ceil((i + 1) / 2);
-      const whiteMove = movesArray[i];
-      const blackMove = movesArray[i + 1] || '';
-
-      parsedMoves.push({
-         turn,
-         whiteMove,
-         blackMove,
-      });
-   }
-
-   return parsedMoves;
-}
 

@@ -1,15 +1,22 @@
-import Board from "../../components/Board/Board.tsx";
 import useTheme from "../../zustand/themeStore.tsx";
 import ThemeSettingsModal from "../../components/Modals/ThemeSettingsModal.tsx";
 import useUser from "../../zustand/userStore.tsx";
 import Tooltip from "../../components/Generic/Tooltip.tsx";
 import CreateGamePanel from "../../components/CreateGamePage/CreateGamePanel.tsx";
 import {useState} from "react";
-import BoardTraining from "../../components/Board/BoardTraining.tsx";
 import BoardCreateGame from "../../components/Board/BoardCreateGame.tsx";
+import UserRow from "../../components/Board/UserRow.tsx";
+import {ICapturedPieces} from "../../components/Board/GameTypes.ts";
+
+
+const capturedPieces = {
+   w: {p: 0, n: 0, b: 0, r: 0, q: 0},
+   b: {p: 0, n: 0, b: 0, r: 0, q: 0}
+}
 
 const CreateGame = () => {
    const [inverted, setInverted] = useState<boolean>(false)
+
 
    const {setModal} = useTheme()
    const user = useUser()
@@ -24,27 +31,26 @@ const CreateGame = () => {
 
           <div className={'flex'}>
              <div className={'hidden xl:flex flex-col'}>
-                {/*Opponent row*/}
-                <div className={'flex items-center gap-3 mb-2 h-[44px]'}>
-                   <img src={'opponent.png'} height={'43px'} width={'43px'} className={'rounded-full'}/>
-                   <div className={'flex  w-full gap-5 justify-between'}>
-                      <span>Opponent</span>
-                   </div>
-                </div>
+                <UserRow
+                    isTraining={!inverted}
+                    username={inverted ? user.username : 'Opponent'}
+                    rating={inverted ? user.rating : undefined}
+                    pieceColor={inverted ? 'b' : 'w'}
+                    capturedPoints={0}
+                    capturedPieces={inverted ? capturedPieces.b : capturedPieces.w}
+                />
 
                 <BoardCreateGame height={600} width={600} pgn={''} inverted={inverted}/>
 
                 {/* User row  */}
-                <div className={'flex items-center gap-3 mt-2 h-[44px]'}>
-                   <div
-                       className={`flex items-center justify-center uppercase bg-primaryLight rounded-full h-[44px] w-[48px] text-lg`}>
-                      {user.username[0]}
-                   </div>
-                   <div className={'flex  w-full gap-5 justify-between'}>
-                      <span>{user.username}</span>
-                      <span className={'text-primaryGreen'}>{user.rating} elo</span>
-                   </div>
-                </div>
+                <UserRow
+                    isTraining={inverted}
+                    username={inverted ? 'Opponent' : user.username}
+                    rating={inverted ? undefined : user.rating}
+                    pieceColor={inverted ? 'w' : 'b'}
+                    capturedPoints={0}
+                    capturedPieces={inverted ? capturedPieces.w : capturedPieces.b}
+                />
              </div>
 
              <div className={'hidden xl:flex flex-col gap-2 ml-2 mt-[52px]'}>

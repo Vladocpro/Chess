@@ -14,6 +14,7 @@ interface CellComponentProps {
    showNotations: boolean;
    available: boolean;
    attacked: boolean;
+   inCheck: boolean
 }
 
 const CellComponent: FC<CellComponentProps> = ({
@@ -27,10 +28,14 @@ const CellComponent: FC<CellComponentProps> = ({
                                                   inverted,
                                                   showNotations,
                                                   available,
-                                                  attacked
+                                                  attacked,
+                                                  inCheck
                                                }) => {
    const theme = useTheme()
    const calculatedCellColor = useMemo(() => {
+      if (inCheck) {
+         return '#dc2626'
+      }
       if (selected) {
          return theme.cellHighlight;
       }
@@ -41,13 +46,14 @@ const CellComponent: FC<CellComponentProps> = ({
          return theme.cellWhite;
       }
       return '';
-   }, [theme, cellColor, selected])
+   }, [theme, cellColor, selected, inCheck])
 
 
    return (
-       <div className={`relative flex justify-center items-center select-none ${inverted ? 'rotate-180' : 'rotate-0'}`}
-            style={{backgroundColor: calculatedCellColor, width: width + 'px', height: height + 'px'}}
-            onClick={() => click(cell)} key={key}>
+       <div
+           className={`relative flex justify-center items-center  select-none`}
+           style={{backgroundColor: calculatedCellColor, width: width + 'px', height: height + 'px'}}
+           onClick={() => click(cell)} key={key}>
 
           {/* Available cell to move */}
           {available && !cell?.type && <div className={`absolute z-10 rounded-full h-4 w-4 sm:h-[22px] sm:w-[22px]`}
@@ -63,13 +69,14 @@ const CellComponent: FC<CellComponentProps> = ({
 
           {/* Piece Icon */}
           {cell?.color !== undefined &&
-              <img src={theme[`${cell?.color}${cell.type}`]} className={'h-full w-full pointer-events-none select-none'}
+              <img src={theme[`${cell?.color}${cell.type}`]}
+                   className={`h-full w-full pointer-events-none select-none ${inverted ? 'rotate-180' : 'rotate-0'}`}
                    alt=""/>}
 
           {/* Notation Letter */}
           {showNotations && cell.square[0] === 'a' && (
               <span
-                  className={`absolute z-10 font-bold text-sm lg:text-base select-none ${inverted ? 'right-[4%] bottom-[3%]' : 'left-[4%] top-[3%]'}`}
+                  className={`absolute z-10 font-bold text-sm lg:text-base select-none left-[4%] top-[3%] ${inverted ? 'rotate-180' : 'rotate-0'}`}
                   style={{color: cellColor === 'w' ? theme.cellBlack : theme.cellWhite}}>
             {cell.square[1]}
           </span>
@@ -78,7 +85,7 @@ const CellComponent: FC<CellComponentProps> = ({
           {/* Notation Number */}
           {showNotations && cell.square[1] === '1' && (
               <span
-                  className={`absolute z-10 font-bold text-sm lg:text-base select-none ${inverted ? 'right-[4%] top-[2%]' : 'left-[4%] bottom-[2%]'} `}
+                  className={`absolute z-10 font-bold text-sm lg:text-base select-none left-[4%] bottom-[2%] ${inverted ? 'rotate-180' : 'rotate-0'} `}
                   style={{color: cellColor === 'w' ? theme.cellBlack : theme.cellWhite}}>
             {cell.square[0]}
           </span>

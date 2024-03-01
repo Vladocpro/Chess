@@ -4,6 +4,7 @@ import {Chess} from "chess.js";
 import {defaultBoard} from "../../utils/constants/game.ts";
 import {Cell} from "./GameTypes.ts";
 import useTheme from "../../zustand/themeStore.tsx";
+import {playSound} from "../../utils/chess.ts";
 
 interface BoardCreateGameProps {
    height: number;
@@ -17,7 +18,8 @@ const BoardCreateGame: FC<BoardCreateGameProps> = ({height, width, pgn, inverted
    const [chess, setChess] = useState(new Chess());
    const [selectedCell, setSelectedCell] = useState<Cell | undefined>(undefined)
    const [availableMoves, setAvailableMoves] = useState<string[]>([])
-   const {pawnPromotion} = useTheme()
+   const [gameIsFinished, setGameIsFinished] = useState(false)
+   const {pawnPromotion, playSounds} = useTheme()
 
    const updateChess = () => {
       let tempChess = new Chess()
@@ -46,6 +48,8 @@ const BoardCreateGame: FC<BoardCreateGameProps> = ({height, width, pgn, inverted
 
    const handleClick = (cell) => {
 
+      if (gameIsFinished) return;
+
       // If it's illegal move
       if (selectedCell === undefined && cell?.type === undefined) return
 
@@ -67,9 +71,11 @@ const BoardCreateGame: FC<BoardCreateGameProps> = ({height, width, pgn, inverted
       }
       // If there is selectedCell and current cell is legal move for a selectedCell piece move a piece
       if (selectedCell !== undefined && validateMove(cell)) {
-         chess.move({from: selectedCell.square, to: cell.square, promotion: pawnPromotion})
+         const currentMove = chess.move({from: selectedCell.square, to: cell.square, promotion: pawnPromotion})
+         if (playSounds && !chess.isGameOver()) playSound({move: currentMove})
          setSelectedCell(undefined)
          setAvailableMoves([])
+         setGameIsFinished(true)
          updateChess()
       }
 

@@ -73,7 +73,7 @@ const CreateGameTab: FC<CreateGameTab> = ({
 
 
    useEffect(() => {
-      if (location.state?.gameDuration ?? false) {
+      if (location.state?.gameDuration !== null && location.state?.gameDuration !== undefined) {
          setSelectedGameDuration(location.state?.gameDuration)
       }
    }, []);
@@ -118,12 +118,13 @@ const CreateGameTab: FC<CreateGameTab> = ({
           </div>
           <div className={'flex flex-col  gap-4 px-3.5 sm:px-5 mt-auto mb-6'}>
              <button onClick={handleSendGameInvitation}
-                     className={'bg-secondaryGreen py-2 sm:py-3 px-5 w-full rounded-lg'}>Create Game
+                     className={'bg-secondaryGreen py-2 text-base px-5 w-full rounded-lg sm:py-2.5 sm:text-lg font-semibold'}>Create
+                Game
              </button>
              <Tooltip text={'Train and compete against your own strategic moves.'}
                       onClick={() => navigate('/training')}>
                 <button
-                    className={'bg-yellow-600 py-2 sm:py-3 px-5 w-full rounded-lg'}>Training
+                    className={'bg-yellow-600 py-2 text-base px-5 w-full rounded-lg sm:py-2.5 sm:text-lg font-semibold'}>Training
                 </button>
              </Tooltip>
 

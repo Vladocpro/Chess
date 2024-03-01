@@ -24,10 +24,10 @@ const CustomDurationDropdown = ({selectedGameDuration, onChange}) => {
           </div>
           {/*Dropdown Options*/}
           <div
-              className={`${isOpen ? "translate-y-0  opacity-100 visible" : "-translate-y-5 opacity-0 invisible "}  transition-all duration-300  rounded-b-lg select-none  absolute z-10 right-0 w-full bg-primaryLight pt-4 space-y-1`}>
+              className={`${isOpen ? "translate-y-0  opacity-100 visible duration-300 pointer-events-auto" : "-translate-y-5 opacity-0 invisible pointer-events-none duration-150"}  transition-all rounded-b-lg select-none  absolute z-10 right-0 w-full bg-primaryLight pt-4 space-y-1`}>
              {gameDurations.map((item, index) => (
                  <div
-                     className={'cursor-pointer hover:bg-secondaryGreen rounded-sm py-1.5 sm:py-2 px-2.5 sm:px-3'}
+                     className={'cursor-pointer hover:bg-secondaryGreen rounded-sm  py-1.5 sm:py-2 px-2.5 sm:px-3'}
                      onClick={() => {
                         setIsOpen(!isOpen)
                         onChange(item)

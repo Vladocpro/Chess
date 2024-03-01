@@ -111,13 +111,18 @@ const Friends = () => {
 
 
    useEffect(() => {
-      setFilteredFriends(user.friends)
       if (user.userID !== '') {
          setFilteredFriends(user.friends)
       }
    }, [user.friends]);
 
+   // console.log(user)
    useEffect(() => {
+      getFetch('/auth/getUser').then((response) => {
+         user.setUser(response.userDetails)
+      }).catch((error) => {
+         console.log(error)
+      })
       getFetch('/friend-invitation/getUserInvitations')
           .then((response) => {
              setInvitations(response.convertedInvitations)
@@ -163,13 +168,13 @@ const Friends = () => {
                              </Link>
 
                              <div className={'flex  gap-4'}>
+                                <Tooltip text={'Remove Friend'} onClick={() => handleRemoveFriend(friend)}>
+                                   <img src={'/friend-remove.png'} alt={'friend-remove'}
+                                        className={'cursor-pointer h-7 w-7 sm:h-9 sm:w-9'}/>
+                                </Tooltip>
                                 <Tooltip text={'Challenge'}
                                          onClick={() => navigate('/create-game', {state: {gameOpponent: friend}})}>
                                    <img src={'/chess-invite.png'} alt={'chess-invite'}
-                                        className={'cursor-pointer h-7 w-7 sm:h-9 sm:w-9'}/>
-                                </Tooltip>
-                                <Tooltip text={'Remove Friend'} onClick={() => handleRemoveFriend(friend)}>
-                                   <img src={'/friend-remove.png'} alt={'friend-remove'}
                                         className={'cursor-pointer h-7 w-7 sm:h-9 sm:w-9'}/>
                                 </Tooltip>
                              </div>
@@ -198,15 +203,16 @@ const Friends = () => {
                                 </div>
                              </Link>
                              <div className={'flex gap-3'}>
+                                <Tooltip text={'Add Friend'} onClick={() => handleAddFriend(currentUser)}>
+                                   <img src={'/friend-add.png'} alt={'friend-add'}
+                                        className={'cursor-pointer h-7 w-7 sm:h-9 sm:w-9'}/>
+                                </Tooltip>
                                 <Tooltip text={'Challenge'}
                                          onClick={() => navigate('/create-game', {state: {gameOpponent: currentUser}})}>
                                    <img src={'/chess-invite.png'} alt={'chess-invite'}
                                         className={'cursor-pointer h-7 w-7 sm:h-9 sm:w-9'}/>
                                 </Tooltip>
-                                <Tooltip text={'Add Friend'} onClick={() => handleAddFriend(currentUser)}>
-                                   <img src={'/friend-add.png'} alt={'friend-add'}
-                                        className={'cursor-pointer h-7 w-7 sm:h-9 sm:w-9'}/>
-                                </Tooltip>
+
                              </div>
                           </div>
                       ))}
