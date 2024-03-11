@@ -5,12 +5,21 @@ interface UserRowProps {
    isTraining: boolean;
    username: string;
    rating?: number;
+   timer?: number;
    pieceColor: string;
    capturedPoints: number;
    capturedPieces: userCapturedPieces;
 }
 
-const UserRow: FC<UserRowProps> = ({isTraining, username, rating, pieceColor, capturedPoints, capturedPieces}) => {
+const UserRow: FC<UserRowProps> = ({
+                                      isTraining,
+                                      username,
+                                      rating,
+                                      timer,
+                                      pieceColor,
+                                      capturedPoints,
+                                      capturedPieces
+                                   }) => {
 
 
    return (
@@ -101,7 +110,12 @@ const UserRow: FC<UserRowProps> = ({isTraining, username, rating, pieceColor, ca
                 }
              </div>
           </div>
-
+          {timer !== undefined && (
+              <div
+                  className={'flex items-center justify-center font-bold h-full ml-auto bg-primaryDark border-[1.5px] px-4 border-primaryGreen rounded-lg'}>
+                 10:22
+              </div>
+          )}
        </div>
    );
 };

@@ -3,6 +3,7 @@ import {Link} from "react-router-dom";
 import {FC, useRef, useState} from "react";
 import useClickOutside from "../../hooks/useClickOutside.tsx";
 import {logout} from "../../utils/auth.ts";
+import debounce from "lodash.debounce";
 
 interface ProfileDropdownProps {
    userID: string;
@@ -15,17 +16,23 @@ const ProfileDropdown: FC<ProfileDropdownProps> = ({userID}) => {
    useClickOutside(dropdownRef, () => {
       setIsOpen(false);
    });
+   const debouncedState = debounce((state) => {
+      setIsOpen(state);
+   }, 380);
 
    return (
        <div className={'hidden sm:block relative'} ref={dropdownRef}>
-          <div className={'cursor-pointer'} onClick={() => setIsOpen(!isOpen)}>
+          <div className={'cursor-pointer'} onClick={() => setIsOpen(true)} onMouseEnter={() => debouncedState(true)}
+               onMouseLeave={() => debouncedState(false)}>
              <ProfileIcon size={'md'} isMyProfile={true}/>
           </div>
 
           {/* Dropdown options */}
 
           <div
-              className={`${isOpen ? "translate-y-3  opacity-100 visible duration-300 pointer-events-auto" : "-translate-y-5 opacity-0 invisible pt-4 pointer-events-none duration-150"} py-1.5 w-32 transition-all bg-primary rounded-lg select-none absolute z-10 right-0`}>
+              onMouseEnter={() => debouncedState(true)}
+              onMouseLeave={() => debouncedState(false)}
+              className={`${isOpen ? "translate-y-3  opacity-100 visible duration-300 pointer-events-auto" : "-translate-y-5 opacity-0 invisible pt-4 pointer-events-none duration-150"} cursor-pointer py-1.5 w-32 transition-all bg-primary rounded-lg select-none absolute z-10 right-0`}>
              <Link to={`/profile/${userID}`} onClick={() => setIsOpen(!isOpen)}
                    className={'flex items-center gap-2.5 cursor-pointer transition-all pl-2.5 pr-3 py-1.5 rounded-sm duration-300 hover:bg-secondaryGreen'}>
                 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="white"

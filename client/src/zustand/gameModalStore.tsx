@@ -2,17 +2,17 @@ import create from 'zustand';
 import {IModalPlayerInfo} from "../components/Board/GameTypes.ts";
 
 export interface IGameModalOnOpen {
-   isOnline: boolean;
-   leftPlayer: IModalPlayerInfo;
-   rightPlayer: IModalPlayerInfo;
+   type: 'draw' | 'rematch' | 'regular' | 'training',
+   leftPlayer?: IModalPlayerInfo;
+   rightPlayer?: IModalPlayerInfo;
    outcomeText: string;
 }
 
 interface GameModalStore {
-   isOpen: boolean;
-   isOnline: boolean;
-   leftPlayer: IModalPlayerInfo;
-   rightPlayer: IModalPlayerInfo;
+   isOpen: boolean,
+   type: 'draw' | 'rematch' | 'regular' | 'training',
+   leftPlayer?: IModalPlayerInfo;
+   rightPlayer?: IModalPlayerInfo;
    outcomeText: string;
    openModal: (payload: IGameModalOnOpen) => void;
    closeModal: () => void;
@@ -20,7 +20,7 @@ interface GameModalStore {
 
 const useGameModal = create<GameModalStore>((set) => ({
    isOpen: false,
-   isOnline: false,
+   type: 'regular',
    leftPlayer: {
       username: '',
       outcome: '',
@@ -33,7 +33,7 @@ const useGameModal = create<GameModalStore>((set) => ({
    openModal: (payload: IGameModalOnOpen) => {
       set({
          isOpen: true,
-         isOnline: payload.isOnline,
+         type: payload.type,
          leftPlayer: payload.leftPlayer,
          rightPlayer: payload.rightPlayer,
          outcomeText: payload.outcomeText,

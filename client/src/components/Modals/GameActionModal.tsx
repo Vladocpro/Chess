@@ -1,14 +1,145 @@
 import useGameModal from "../../zustand/gameModalStore.tsx";
-import {FC} from "react";
+import {FC, useState} from "react";
 
 interface GameActionModalProps {
    restartGame?: () => void
    newGame?: () => void
-   rematch?: () => void
+   offerDraw?: () => void
+   acceptDraw?: () => void;
+   declineDraw?: () => void;
+   offerRematch?: () => void
+   acceptRematch?: () => void;
+   declineRematch?: () => void;
 }
 
-const GameActionModal: FC<GameActionModalProps> = ({restartGame, newGame, rematch}) => {
+const GameActionModal: FC<GameActionModalProps> = ({
+                                                      restartGame,
+                                                      newGame,
+                                                      offerDraw,
+                                                      acceptDraw,
+                                                      declineDraw,
+                                                      offerRematch,
+                                                      acceptRematch,
+                                                      declineRematch
+                                                   }) => {
    const modal = useGameModal()
+   const [rematchIsOffered, setRematchIsOffered] = useState<boolean>(false)
+   if (modal.leftPlayer?.username === '') return null
+   const ModalFooter = () => {
+      switch (modal.type) {
+         case "rematch": {
+            return (
+                <>
+                   <button
+                       className={'bg-primaryLight hover:bg-red-600 duration-200 text-sm w-full py-2 rounded-lg font-medium sm:text-base'}
+                       onClick={() => {
+                          modal.closeModal()
+                          if (declineRematch) {
+                             declineRematch()
+                          }
+                       }}>
+                      Decline offer
+                   </button>
+                   <button
+                       className={'bg-primaryLight hover:bg-secondaryGreen duration-200 text-sm w-full py-2 rounded-lg font-medium sm:text-base'}
+                       onClick={() => {
+                          modal.closeModal()
+                          if (acceptRematch) {
+                             acceptRematch()
+                          }
+                       }}>
+                      Accept offer
+                   </button>
+
+                </>
+            )
+         }
+         case "draw": {
+            return (
+                <>
+                   <button
+                       className={'bg-primaryLight hover:bg-red-600 duration-200 text-sm w-full py-2 rounded-lg font-medium sm:text-base'}
+                       onClick={() => {
+                          modal.closeModal()
+                          if (declineDraw) {
+                             declineDraw()
+                          }
+                       }}>
+                      Decline draw
+                   </button>
+                   <button
+                       className={'bg-primaryLight hover:bg-secondaryGreen duration-200 text-sm w-full py-2 rounded-lg font-medium sm:text-base'}
+                       onClick={() => {
+                          modal.closeModal()
+                          if (acceptDraw) {
+                             acceptDraw()
+                          }
+                       }}>
+                      Accept draw
+                   </button>
+
+                </>
+            )
+         }
+         case "regular": {
+            return (
+                <>
+                   {
+                      rematchIsOffered ? (
+                          <button
+                              className={'bg-primaryLight hover:bg-secondaryGreen duration-200 text-sm w-full py-2 rounded-lg font-medium sm:text-base'}
+                              onClick={() => {
+                                 modal.closeModal()
+                                 if (declineRematch) {
+                                    declineRematch()
+                                 }
+                              }}>
+                             Cancel Rematch
+                          </button>
+                      ) : (
+                          <button
+                              className={'bg-primaryLight hover:bg-secondaryGreen duration-200 text-sm w-full py-2 rounded-lg font-medium sm:text-base'}
+                              onClick={() => {
+                                 modal.closeModal()
+                                 if (offerRematch) {
+                                    offerRematch()
+                                 }
+                              }}>
+                             Rematch
+                          </button>
+                      )
+                   }
+                   <button
+                       className={'bg-primaryLight hover:bg-secondaryGreen duration-200 text-sm w-full py-2 rounded-lg font-medium sm:text-base'}
+                       onClick={() => {
+                          modal.closeModal()
+                          if (newGame) {
+                             newGame()
+                          }
+                       }}>
+                      {'New Game'}
+                   </button>
+                </>
+            )
+
+         }
+         case "training": {
+            return (
+                <button
+                    className={'bg-primaryLight hover:bg-secondaryGreen duration-200 text-sm w-full py-2 rounded-lg font-medium sm:text-base'}
+                    onClick={() => {
+                       modal.closeModal()
+                       if (restartGame) {
+                          restartGame()
+                       }
+                    }}>
+                   {'Restart Game'}
+                </button>
+            )
+         }
+      }
+   }
+
 
    return (
        <div
@@ -33,79 +164,56 @@ const GameActionModal: FC<GameActionModalProps> = ({restartGame, newGame, rematc
                 <div className={'text-center text-xl font-bold break-words mb-2.5 line-clamp-2'}>{modal.outcomeText}
                 </div>
                 <div className={'flex justify-center items-center'}>
-                   <div className={'flex flex-col w-[102px] '}>
-                      <div
-                          className={`flex relative items-center justify-center self-center uppercase bg-primaryLight rounded-xl border-2  ${modal.leftPlayer.outcome === 'w' ? 'border-primaryGreen' : 'border-primaryLight'} text-base sm:text-lg  h-[76px] w-[76px]`}>
-                         <span className={'text-lg font-medium uppercase'}>{modal.leftPlayer.username[0]}</span>
-                         {
-                            modal.leftPlayer.outcome === 'w' ? (
+                   {
+                      modal.type === 'regular' || modal.type === 'training' ? (
+                          <>
+                             <div className={'flex flex-col w-[102px] '}>
                                 <div
-                                    className={'absolute flex items-center justify-center h-7 w-7 -right-0.5 bottom-0 bg-primaryGreen rounded-xl'}>
-                                   <img src={'/victory.png'} className={'h-5 w-5'} alt={''}/>
+                                    className={`flex relative items-center justify-center self-center uppercase bg-primaryLight rounded-xl border-2  ${modal.leftPlayer?.outcome === 'w' ? 'border-primaryGreen' : 'border-primaryLight'} text-base sm:text-lg  h-[76px] w-[76px]`}>
+                                   <span
+                                       className={'text-lg font-medium uppercase'}>{modal.leftPlayer?.username[0]}</span>
+                                   {
+                                      modal.leftPlayer?.outcome === 'w' ? (
+                                          <div
+                                              className={'absolute flex items-center justify-center h-7 w-7 -right-0.5 bottom-0 bg-primaryGreen rounded-xl'}>
+                                             <img src={'/victory.png'} className={'h-5 w-5'} alt={''}/>
+                                          </div>
+                                      ) : null
+                                   }
                                 </div>
-                            ) : null
-                         }
-                      </div>
-                      <span
-                          className={'mt-1 text-sm text-center break-words truncate'}>{modal.leftPlayer.username}</span>
-                   </div>
-
-                   <span className={'text-lg font-semibold mx-1.5 mb-4'}>vs</span>
-                   {/*<img src={'/swords.png'} className={'h-10 w-10 mx-4'}/>*/}
-                   <div className={'flex flex-col  w-[102px] '}>
-                      <div
-                          className={`flex relative items-center justify-center  self-center  uppercase bg-primaryLight rounded-xl border-2 ${modal.rightPlayer.outcome === 'w' ? 'border-primaryGreen' : 'border-primaryLight'} text-base sm:text-lg  h-[76px] w-[76px]`}>
-                         <span className={'text-lg font-medium uppercase'}>{modal.rightPlayer.username[0]}</span>
-                         {
-                            modal.rightPlayer.outcome === 'w' ? (
+                                <span
+                                    className={'mt-1 text-sm text-center break-words truncate'}>{modal.leftPlayer?.username}</span>
+                             </div>
+                             <span className={'text-lg font-semibold mx-1.5 mb-4'}>vs</span>
+                             <div className={'flex flex-col  w-[102px] '}>
                                 <div
-                                    className={'absolute flex items-center justify-center h-7 w-7 -right-0.5 bottom-0 bg-primaryGreen rounded-xl'}>
-                                   <img src={'/victory.png'} className={'h-5 w-5'} alt={''}/>
-                                </div>
-                            ) : null
-                         }
+                                    className={`flex relative items-center justify-center  self-center  uppercase bg-primaryLight rounded-xl border-2 ${modal.rightPlayer?.outcome === 'w' ? 'border-primaryGreen' : 'border-primaryLight'} text-base sm:text-lg  h-[76px] w-[76px]`}>
+                                   <span
+                                       className={'text-lg font-medium uppercase'}>{modal.rightPlayer?.username[0]}</span>
+                                   {
+                                      modal.rightPlayer?.outcome === 'w' ? (
+                                          <div
+                                              className={'absolute flex items-center justify-center h-7 w-7 -right-0.5 bottom-0 bg-primaryGreen rounded-xl'}>
+                                             <img src={'/victory.png'} className={'h-5 w-5'} alt={''}/>
+                                          </div>
+                                      ) : null
+                                   }
 
-                      </div>
-                      <span
-                          className={'mt-1 text-sm text-center break-words truncate'}>{modal.rightPlayer.username}</span>
-                   </div>
+                                </div>
+                                <span
+                                    className={'mt-1 text-sm text-center break-words truncate'}>{modal.rightPlayer?.username}</span>
+                             </div>
+                          </>
+                      ) : null
+                   }
+
 
                 </div>
 
                 {/* Footer */}
                 <div className={'flex justify-between mt-3 sm:mt-3.5 gap-3'}>
-                   {
-                      modal.isOnline
-                          ? (
-                              <button
-                                  className={'bg-primaryLight hover:bg-secondaryGreen duration-200 text-sm w-full py-2 rounded-lg font-medium sm:text-base'}
-                                  onClick={() => {
-                                     modal.closeModal()
-                                     if (rematch) {
-                                        rematch()
-                                     }
-                                  }}>
-                                 Rematch
-                              </button>
-                          ) : null
-                   }
-                   <button
-                       className={'bg-primaryLight hover:bg-secondaryGreen duration-200 text-sm w-full py-2 rounded-lg font-medium sm:text-base'}
-                       onClick={() => {
-                          if (modal.isOnline) {
-                             modal.closeModal()
-                             if (newGame) {
-                                newGame()
-                             }
-                          } else {
-                             modal.closeModal()
-                             if (restartGame) {
-                                restartGame()
-                             }
-                          }
-                       }}>
-                      {modal.isOnline ? 'New Game' : 'Restart Game'}
-                   </button>
+
+                   <ModalFooter/>
 
                 </div>
              </div>

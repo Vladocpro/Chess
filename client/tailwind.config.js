@@ -26,6 +26,9 @@ export default {
          },
          outlineWidth: {
             '3': '3px'
+         },
+         strokeWidth: {
+            '1.5': '1.5px'
          }
 
       },

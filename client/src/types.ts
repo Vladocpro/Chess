@@ -75,4 +75,32 @@ export interface IGame {
    createdAt: Date;
 }
 
+export interface IOnlineActionsPayload {
+   gameID: string;
+   user: {
+      userID: string;
+      username: string;
+      playerTimeLeft?: number;
+      moveDate?: Date;
+   },
+   opponent: {
+      userID: string;
+      username: string;
+      playerTimeLeft?: number;
+   },
+   pgn: string;
+   error?: string;
+}
+
+export interface ISetGameOverPayload {
+   gameID: string,
+   winner: string,
+   loser: string,
+}
+
+export interface InvitationInfo {
+   opponentID: string;
+   gameID: string;
+}
+
 

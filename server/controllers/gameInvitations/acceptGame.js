@@ -24,7 +24,7 @@ export const acceptGame = async (req,res) => {
          newGame = await Game.create({
             user1: {
                creator: true,
-               outcome: 'going',
+               outcome: 'g',
                userID: sender._id,
                username: sender.username,
                rating: sender.rating,
@@ -34,7 +34,7 @@ export const acceptGame = async (req,res) => {
             },
             user2: {
                creator: false,
-               outcome: 'going',
+               outcome: 'g',
                userID: receiver._id,
                username: receiver.username,
                rating: receiver.rating,

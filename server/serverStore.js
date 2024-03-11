@@ -21,38 +21,30 @@ export const getOnlineUsers = () => {
    return onlineUsers;
 };
 
+export const getUserByID = (userID) => {
+   for (const [key,user] of connectedUsers) {
+      if (userID === user.userID) {
+         return key
+      }
+   }
+};
+
 export const addNewConnectedUser = ({socketID,userID}) => {
 
    // const lastOccurrences = new Map();
 
-   // for (const [key,user] of connectedUsers) {
-   //    if (userID === user.userID) {
-   //       connectedUsers.delete(key);
-   //    }
-   // lastOccurrences.set(user.userID,key);
-   // }
+   for (const [key,user] of connectedUsers) {
+      if (userID === user.userID) {
+         connectedUsers.delete(key);
+      }
+   }
    connectedUsers.set(socketID,{userID});
-
-   // for (const [key,user] of connectedUsers) {
-   //    if (key !== lastOccurrences.get(user.userID)) {
-   //       userMap.delete(key);
-   //    }
-   // }
-   // connectedUsers.set(socketID,{userID});
    console.log("new connected users");
    console.log(connectedUsers);
 };
 
 export const removeConnectedUser = (socketID) => {
-   // console.log(socketID)
-   for (const [key,user] of connectedUsers) {
-      if (socketID === key) {
-         connectedUsers.delete(key);
-         console.log('REmoved this user')
-         console.log(`${key} + ${socketID}`)
-      }
-      // lastOccurrences.set(user.userID,key);
-   }
+   connectedUsers.delete(socketID)
 }
 
 

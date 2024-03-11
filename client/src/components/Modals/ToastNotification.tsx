@@ -50,7 +50,7 @@ function ToastNotification() {
            onClick={() => toast.closeToast()}
        >
           <ToastIcon/>
-          <p className="inline-block font-medium">{toast.message}</p>
+          <p className="inline-block font-medium">{typeof toast.message === "string" ? toast.message : 'Error'}</p>
        </div>
    );
 }

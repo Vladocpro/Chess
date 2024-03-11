@@ -1,14 +1,41 @@
-import {useState, ReactNode} from "react";
+import {useState, ReactNode, FC, useMemo} from "react";
 
 interface TooltipProps {
    children: ReactNode;
    text: string;
-   customStyles?: string;
+   textStyles?: string;
+   containerStyles?: string;
+   placement?: 'top' | 'bottom';
    onClick?: () => void;
 }
 
-function Tooltip({children, text, customStyles, onClick}: TooltipProps) {
+export const Tooltip: FC<TooltipProps> = ({children, text, textStyles, containerStyles, placement, onClick}) => {
    const [showTooltip, setShowTooltip] = useState(false);
+
+   const positioningStyles = useMemo(() => {
+      switch (placement) {
+         case 'top' : {
+            return {
+               position: 'bottom-full',
+               animation: `${showTooltip ? "-translate-y-2 opacity-100 visible" : "delay-0 translate-y-2 opacity-0 invisible"}`
+            }
+         }
+         case 'bottom': {
+            return {
+               position: 'top-full',
+               animation: `${showTooltip ? "translate-y-2 opacity-100 visible" : "delay-0 -translate-y-2 opacity-0 invisible"}`
+            }
+         }
+         default: {
+            return {
+               position: 'top-full',
+               animation: `${showTooltip ? "translate-y-2 opacity-100 visible" : "delay-0 -translate-y-2 opacity-0 invisible"}`
+            }
+         }
+      }
+
+   }, [placement, showTooltip])
+
 
    const handleMouseEnter = () => {
       setShowTooltip(true)
@@ -20,7 +47,7 @@ function Tooltip({children, text, customStyles, onClick}: TooltipProps) {
 
    return (
        <div
-           className="relative inline-flex justify-center"
+           className={`relative inline-flex justify-center ${containerStyles}`}
            onMouseEnter={handleMouseEnter}
            onMouseLeave={handleMouseLeave}
            onClick={() => {
@@ -32,7 +59,7 @@ function Tooltip({children, text, customStyles, onClick}: TooltipProps) {
        >
           {children}
           <span onMouseEnter={handleMouseLeave}
-                className={`absolute z-30 top-full delay-300 whitespace-nowrap transform-all ${customStyles}  ${showTooltip ? "translate-y-2 opacity-100 visible" : "delay-0 -translate-y-2 opacity-0 invisible"}  duration-300 cursor-default bg-black bg-opacity-70 text-white text-base py-1 px-3 rounded-md`}>
+                className={`absolute z-30 ${positioningStyles.position} delay-300 whitespace-nowrap transform-all ${textStyles}  ${positioningStyles.animation}  duration-300 cursor-default bg-black bg-opacity-70 text-white text-base py-1 px-3 rounded-md`}>
                  {text}
               </span>
        </div>

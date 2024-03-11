@@ -10,4 +10,9 @@ gameRoutes.get(
     verifyToken,
     controllers.getUserGames
 );
+gameRoutes.get(
+    "/getGame/:id",
+    verifyToken,
+    controllers.getGame
+);
 

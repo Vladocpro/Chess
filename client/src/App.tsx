@@ -17,13 +17,6 @@ import {io} from "socket.io-client";
 import {useEffect} from "react";
 import {connectWithSocketServer} from "./websockets/socketConnection.ts";
 
-
-const socket = io("localhost:4444", {
-   auth: {
-      token: 'asda'
-   }
-});
-
 function App() {
 
    useEffect(() => {

@@ -5,6 +5,7 @@ import {IGameInvitation} from "../../../types.ts";
 import {postFetch} from "../../../utils/axios/fetcher.ts";
 import useToast, {ToastPositions, ToastType} from "../../../zustand/toastModalStore.tsx";
 import {FC} from "react";
+import {acceptGameInvitation} from "../../../websockets/socketConnection.ts";
 
 
 interface InvitationTabProps {
@@ -26,6 +27,7 @@ const InvitationTab: FC<InvitationTabProps> = ({
 
    const handleAcceptGameInvitation = (invitation: IGameInvitation) => {
       postFetch('/game-invitation/accept', {invitationID: invitation.invitationID}).then((data) => {
+         acceptGameInvitation({opponentID: invitation?.sender._id, gameID: data.gameID})
          navigate(`/play/${data.gameID}`)
       }).catch((error) => {
          openToast({message: error.response.data, type: ToastType.ERROR, position: ToastPositions.AUTH, duration: 1800})
@@ -40,7 +42,6 @@ const InvitationTab: FC<InvitationTabProps> = ({
          }
       }).catch((error) => {
          openToast({message: error.response.data, type: ToastType.ERROR, position: ToastPositions.AUTH, duration: 1800})
-
       })
    }
 
@@ -53,7 +54,6 @@ const InvitationTab: FC<InvitationTabProps> = ({
          }
       }).catch((error) => {
          openToast({message: error.response.data, type: ToastType.ERROR, position: ToastPositions.AUTH, duration: 1800})
-
       })
    }
 
@@ -65,7 +65,7 @@ const InvitationTab: FC<InvitationTabProps> = ({
           </div>
       )
    }
-   console.log(sentInvitations)
+
    return (
        <div className={'flex flex-col mt-3 px-3.5 sm:px-5 gap-3'}>
           <div className={`${sentInvitations.length > 0 ? 'flex' : 'hidden'} flex-col gap-2`}>
