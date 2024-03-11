@@ -6,7 +6,7 @@ export const rejectGame = async (req,res) => {
       // remove that invitation from friend invitations collection
       const invitationExists = await GameInvitation.exists({ _id: req.body.invitationID });
       if(!invitationExists) {
-         return res.status(404).send("Invitation does not exist")
+         return res.status(404).send("Opponent canceled game invitation!")
       }
 
       await GameInvitation.findByIdAndDelete(req.body.invitationID);

@@ -5,7 +5,7 @@ import {
    opponentMadeMove,
    redirectUserToGame,
    resignGame,
-   sendDrawOfferToOpponent,setGameDraw,setGameOver,
+   sendDrawOfferToOpponent,sendFriendInvitation,sendGameInvitation,setGameDraw,setGameOver,
    userAcceptedDrawOffer,userRejectedDrawOffer
 } from "./controllers/socket/socketHandler.js";
 import {getOnlineUsers,getUserByID,removeConnectedUser} from "./serverStore.js";
@@ -50,6 +50,7 @@ export const registerSocketServer = (server) => {
       socket.on("user-rejected-draw-offer",(drawPayload) => {
          userRejectedDrawOffer(socket,drawPayload)
       })
+      
       socket.on("user-made-move",(drawPayload) => {
          opponentMadeMove(socket,drawPayload)
       })
@@ -58,6 +59,13 @@ export const registerSocketServer = (server) => {
       })
       socket.on("set-game-draw",(payload) => {
          setGameDraw(socket,payload)
+      })
+
+      socket.on("send-game-invitation",(payload) => {
+         sendGameInvitation(socket,payload)
+      })
+      socket.on("send-friend-invitation",(payload) => {
+         sendFriendInvitation(socket,payload)
       })
 
       socket.on('disconnect',(data) => {

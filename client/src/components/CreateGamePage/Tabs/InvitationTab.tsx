@@ -4,7 +4,7 @@ import Tooltip from "../../Generic/Tooltip.tsx";
 import {IGameInvitation} from "../../../types.ts";
 import {postFetch} from "../../../utils/axios/fetcher.ts";
 import useToast, {ToastPositions, ToastType} from "../../../zustand/toastModalStore.tsx";
-import {FC} from "react";
+import {FC, useEffect} from "react";
 import {acceptGameInvitation} from "../../../websockets/socketConnection.ts";
 
 
@@ -13,13 +13,15 @@ interface InvitationTabProps {
    receivedInvitations: IGameInvitation[];
    setReceivedInvitations: (inivtations: IGameInvitation[]) => void;
    setSentInvitations: (inivtations: IGameInvitation[]) => void;
+   getGameInvitations: () => void;
 }
 
 const InvitationTab: FC<InvitationTabProps> = ({
                                                   sentInvitations,
                                                   receivedInvitations,
                                                   setSentInvitations,
-                                                  setReceivedInvitations
+                                                  setReceivedInvitations,
+                                                  getGameInvitations
                                                }) => {
    const navigate = useNavigate()
    const {openToast} = useToast()
@@ -30,6 +32,7 @@ const InvitationTab: FC<InvitationTabProps> = ({
          acceptGameInvitation({opponentID: invitation?.sender._id, gameID: data.gameID})
          navigate(`/play/${data.gameID}`)
       }).catch((error) => {
+         setReceivedInvitations(receivedInvitations.filter((currentInvitation) => currentInvitation.invitationID !== invitation.invitationID))
          openToast({message: error.response.data, type: ToastType.ERROR, position: ToastPositions.AUTH, duration: 1800})
       })
    }
@@ -41,6 +44,7 @@ const InvitationTab: FC<InvitationTabProps> = ({
             setSentInvitations(sentInvitations.filter((currentInvitation) => currentInvitation.invitationID !== data.invitationID))
          }
       }).catch((error) => {
+         setReceivedInvitations(receivedInvitations.filter((currentInvitation) => currentInvitation.invitationID !== invitation.invitationID))
          openToast({message: error.response.data, type: ToastType.ERROR, position: ToastPositions.AUTH, duration: 1800})
       })
    }
@@ -57,6 +61,9 @@ const InvitationTab: FC<InvitationTabProps> = ({
       })
    }
 
+   useEffect(() => {
+      getGameInvitations()
+   },[])
 
    if (sentInvitations?.length === 0 && receivedInvitations?.length === 0) {
       return (

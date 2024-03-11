@@ -131,6 +131,13 @@ export const connectWithSocketServer = (token: string) => {
       }
    });
 
+   socket.on("received-game-invitation", () => {
+      openNotificationToast('game')
+   })
+   socket.on("received-friend-invitation", () => {
+      openNotificationToast('friend')
+   })
+
 
    socket.on("opponent-accepted-game", (gameID: string) => {
       relocateToTheGame(gameID)
@@ -167,6 +174,23 @@ export const setGameOver = (payload: ISetGameOverPayload) => {
 }
 export const setGameDraw = (payload: string) => {
    socket.emit("set-game-draw", payload)
+}
+
+export const sendGameInvitation= (userID: string) => {
+   socket.emit("send-game-invitation", userID)
+};
+export const sendFriendInvitation= (userID: string) => {
+   socket.emit("send-friend-invitation", userID)
+};
+
+const openNotificationToast = (type: 'game' | 'friend') => {
+   const toastModal = useToast.getState()
+   toastModal.openToast({
+      message: `You received new ${type} invitation!`,
+      duration: 5000,
+      position: ToastPositions.AUTH,
+      type: ToastType.SUCCESS
+   })   
 }
 
 

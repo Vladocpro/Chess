@@ -18,21 +18,26 @@ const Tabs:FC<TabsProps> = ({currentTab, setCurrentTab}) => {
    const [sentInvitations, setSentInvitations] = useState<IGameInvitation[]>([])
    const {openToast} = useToast()
 
-
-   useEffect(() => {
+   const getGameInvitations = () => {
       getFetch('/game-invitation/getGameInvitations').then((data) => {
          setSentInvitations(data.sentInvitations)
          setReceivedInvitations(data.receivedInvitations)
       }).catch((error) => {
          openToast({message: error.response.data, type: ToastType.ERROR, position: ToastPositions.AUTH, duration: 1800})
       })
+   }
 
+   useEffect(() => {
+      getGameInvitations()
    }, []);
+   // useEffect(() => {
+   //    getGameInvitations()
+   // }, [currentTab]);
 
    switch (currentTab) {
       case "create game": return <CreateGameTab setCurrentTab={setCurrentTab}  setWaitingInvitation={setWaitingInvitation} sentInvitations={sentInvitations} setSentInvitations={setSentInvitations}/>
       case "waiting": return <WaitingTab setCurrentTab={setCurrentTab} waitingInvitation={waitingInvitation} setWaitingInvitation={setWaitingInvitation} sentInvitations={sentInvitations} setSentInvitations={setSentInvitations}  />
-      case "invitations":  return <InvitationTab receivedInvitations={receivedInvitations} setReceivedInvitations={setReceivedInvitations} sentInvitations={sentInvitations} setSentInvitations={setSentInvitations} />
+      case "invitations":  return <InvitationTab receivedInvitations={receivedInvitations} setReceivedInvitations={setReceivedInvitations} sentInvitations={sentInvitations} setSentInvitations={setSentInvitations} getGameInvitations={getGameInvitations} />
       default: return null;
    }
 };

@@ -63,12 +63,12 @@ const Home = () => {
              {/*TODO Redesign mobile version of current games section in home page (like profile) */}
              <div className={'flex flex-col sm:flex-row items-center gap-8 mb-7'}>
                 {
-                   user.gameHistory.slice(0, 3).map((currentGame) => (
+                  user.gameHistory.length > 0 ? user.gameHistory.slice(0, 3).map((currentGame) => (
                        <div className={'rounded-md  overflow-hidden'}>
                           <BoardPreview height={breakpoint === 'xs' ? 240 : 175} width={breakpoint === 'xs' ? 260 : 190}
                                         game={currentGame} enableTransparentBg={true}/>
                        </div>
-                   ))
+                   )) : <div className={'flex justify-center items-center bg-primary w-full h-32 font-semibold rounded-md text-lg sm:text-xl'}>No Games Found</div>
                 }
 
              </div>
@@ -80,8 +80,8 @@ const Home = () => {
              <span
                  className={'text-base sm:text-xl self-center mb-7 uppercase  font-semibold sm:font-bold'}>Profile</span>
              <Link to={`/profile/${user.userID}`}
-                   className={'flex bg-primary py-1.5 px-1.5 mb-7 rounded-md'}>
-                <ProfileIcon size={'md'} withText={true} isMyProfile={true}/>
+                   className={'flex bg-primary py-1.5 px-1.5 mb-7 rounded-md group'}>
+                <ProfileIcon size={'md'} withText={true} isMyProfile={true} textStyles={'transition-all duration-300 group-hover:underline group-hover:text-primaryGreen'}/>
              </Link>
 
              <div className={'flex flex-col bg-primary px-1 py-3.5 rounded-md'}>

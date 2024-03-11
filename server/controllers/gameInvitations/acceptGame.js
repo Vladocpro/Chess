@@ -9,7 +9,7 @@ export const acceptGame = async (req,res) => {
       const invitation = await GameInvitation.findById(req.body.invitationID);
 
       if (!invitation) {
-         return res.status(401).send("Invitation does not exist");
+         return res.status(401).send("Opponent canceled game invitation!");
       }
 
 

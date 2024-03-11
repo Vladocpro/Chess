@@ -187,6 +187,22 @@ export const setGameDraw = async (socket,payload) => {
    }
 }
 
+export const sendGameInvitation = async (socket,payload) => {
+   try {
+      socket.to(getUserByID(payload)).emit('received-game-invitation')
+   } catch (error) {
+      console.log(error)
+   }
+}
+
+export const sendFriendInvitation = async (socket,payload) => {
+   try {
+      socket.to(getUserByID(payload)).emit('received-friend-invitation')
+   } catch (error) {
+      console.log(error)
+   }
+}
+
 export const wonByTime = async (socket,payload) => {
    try {
       socket.to(getUserByID(payload.winnerUserID)).emit('won-by-time',(payload))

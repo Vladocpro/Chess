@@ -7,6 +7,7 @@ import {gameDurations, gameDurationType} from "../../../../utils/constants/game.
 import useToast, {ToastPositions, ToastType} from "../../../../zustand/toastModalStore.tsx";
 import {postFetch} from "../../../../utils/axios/fetcher.ts";
 import {useLocation, useNavigate} from "react-router-dom";
+import { sendGameInvitation } from "../../../../websockets/socketConnection.ts";
 
 interface CreateGameTab {
    setCurrentTab: (tab: 'create game' | 'waiting' | 'invitations') => void;
@@ -56,11 +57,12 @@ const CreateGameTab: FC<CreateGameTab> = ({
       }
 
       postFetch('/game-invitation/invite', requestData).then((data) => {
+         sendGameInvitation(data.receiverID)
          openToast({
             message: 'Game invitation has been sent',
             type: ToastType.SUCCESS,
             position: ToastPositions.AUTH,
-            duration: 1800
+            duration: 3800
          })
          setWaitingInvitation(data)
          setSentInvitations([...sentInvitations, data])

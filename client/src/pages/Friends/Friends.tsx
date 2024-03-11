@@ -12,6 +12,7 @@ import FriendInvitations from "../../components/FriendsPage/Friendinvitations.ts
 import MobileInvitations from "../../components/FriendsPage/MobileInvitations.tsx";
 import SearchInput from "../../components/Generic/SearchInput.tsx";
 import {FriendInvitation, UserFriend} from "../../types.ts";
+import { sendFriendInvitation } from "../../websockets/socketConnection.ts";
 
 const Friends = () => {
    const user = useUser()
@@ -33,6 +34,7 @@ const Friends = () => {
    const handleAddFriend = (user: UserFriend) => {
       postFetch('/friend-invitation/invite', {receiverID: user._id})
           .then((response) => {
+            sendFriendInvitation(user._id)
              openToast({message: response, type: ToastType.SUCCESS, position: ToastPositions.AUTH, duration: 3000})
           })
           .catch((error) => {

@@ -6,6 +6,7 @@ import useToast, {ToastPositions, ToastType} from "../../zustand/toastModalStore
 import {IGame, IProfileUser} from "../../types.ts";
 import GameRow from "../../components/ProfilePage/GameRow.tsx";
 import useUser from "../../zustand/userStore.tsx";
+import { sendFriendInvitation } from "../../websockets/socketConnection.ts";
 
 const Profile = () => {
    const [profileUser, setProfileUser] = useState<IProfileUser>()
@@ -20,6 +21,7 @@ const Profile = () => {
    const handleAddFriend = () => {
       postFetch('/friend-invitation/invite', {receiverID: profileUser?.userID})
           .then((response) => {
+            sendFriendInvitation(user._id)
              openToast({message: response, type: ToastType.SUCCESS, position: ToastPositions.AUTH, duration: 3000})
           })
           .catch((error) => {
@@ -160,7 +162,9 @@ const Profile = () => {
 
           {/* Game History */}
           <div>
-             <div
+            {profileUser?.gameHistory.length > 0 ?
+            (<>
+            <div
                  className={'flex px-3 lg:px-5 py-2.5 md:py-3.5 rounded-t-md w-[370px] md:w-[730px] lg:w-[900px] bg-primaryLight'}>
                 <span className={'hidden md:inline-block text-sm md:text-base w-[65px] text-center'}>Duration</span>
                 <span
@@ -177,6 +181,10 @@ const Profile = () => {
                    )
                 }
              </div>
+            </>) : 
+            (<div className={'flex justify-center items-center bg-primary w-[370px] md:w-[730px] lg:w-[900px] h-32 font-semibold rounded-md text-lg sm:text-xl'}>No Games Found</div>)
+         }
+             
           </div>
        </div>
    );
