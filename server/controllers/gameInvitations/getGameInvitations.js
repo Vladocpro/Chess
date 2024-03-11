@@ -9,7 +9,7 @@ export const getGameInvitations = async (req,res) => {
          return {
             invitationID: invitation._id,
             receiver: invitation.receiverID,
-            playerColor: invitation.senderColor === 'white' ? 'black' : 'white',
+            playerColor: invitation.senderColor,
             gameDuration: invitation.gameDuration,
             gameIncrement: invitation.gameIncrement,
          }

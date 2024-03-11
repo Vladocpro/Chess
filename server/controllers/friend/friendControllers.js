@@ -3,7 +3,7 @@ import {inviteFriend} from "./invitations/inviteFriend.js";
 import {rejectFriend} from "./invitations/rejectFriend.js";
 import {findFriend} from "./findFriend.js";
 import {removeFriend} from "./removeFriend.js";
-import {getUserInvitations} from "./getUserInvitations.js";
+import {getUserInvitations} from "./invitations/getUserInvitations.js";
 
 export const controllers = {
    acceptFriend,

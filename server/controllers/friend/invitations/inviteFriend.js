@@ -4,7 +4,7 @@ import FriendInvitation from "../../../models/FriendInvitation.js";
 export const inviteFriend = async (req,res) => {
    try {
       const friendID = req.body.receiverID;
-      const {userID } = req.user;
+      const {userID} = req.user;
 
       // Check if send it to yourself
       if (userID === friendID) {
@@ -26,7 +26,7 @@ export const inviteFriend = async (req,res) => {
              );
       }
 
-      // check if invitation is already sent
+      // check if invitation has already sent
       const invitationAlreadyReceived = await FriendInvitation.findOne({
          $or: [
             {
@@ -41,7 +41,7 @@ export const inviteFriend = async (req,res) => {
       });
 
       if (invitationAlreadyReceived) {
-         return res.status(409).send("Invitation is already sent");
+         return res.status(409).send("Invitation has already sent");
       }
 
       // check if the user which we would like to invite is already our friend

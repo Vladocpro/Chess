@@ -47,7 +47,8 @@ export const register = async (req,res) => {
             friends: user.friends,
             rating: user.rating,
             userID: user._id,
-            username: user.username
+            username: user.username,
+            gameHistory: user.gameHistory
          }
       })
    } catch (err) {

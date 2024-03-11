@@ -6,8 +6,12 @@ import {defaultCellColors} from "../../utils/constants/game.ts";
 
 const chess = new Chess()
 
-
-const BoardComponent = ({height, width}) => {
+interface BoardPreviewProps {
+   height: number;
+   width: number;
+   pgn: string;
+}
+const BoardComponent = ({height, width, pgn}) => {
 
    const [board, setBoard] = useState([])
    const [selected, setSelected] = useState('')

@@ -1,16 +1,16 @@
 import {Link, useLocation} from 'react-router-dom'
 import BurgerMenu from "./BurgerMenu.tsx";
-import {logout} from "../../utils/auth.ts";
 import Logo from "../Generic/Logo.tsx";
 import {COLORS} from "../../utils/constants/colors.ts";
-import ProfileIcon from "../Generic/ProfileIcon.tsx";
 import useUser from "../../zustand/userStore.tsx";
+import ProfileDropdown from "./ProfileDropDown.tsx";
+import {relocateToTheGame} from "../../websockets/socketConnection.ts";
 
 
 const Header = () => {
 
    const location = useLocation();
-   const {username} = useUser();
+   const {userID} = useUser();
    const isActive = (link: string) => {
       if (link === location.pathname) {
          return 'headerLinkActive'
@@ -25,9 +25,8 @@ const Header = () => {
    return (
        <div className={`sticky top-0 flex items-center  w-full  z-10 bg-header`}>
           <nav className={'flex items-center justify-between w-full py-[18px] ml-2 mr-6'}>
-             {/*LOGO*/}
-             {/*TODO remove logout from logo*/}
-             <div className={'flex items-center'} onClick={logout}>
+             {/* LOGO */}
+             <div className={'flex items-center'} onClick={() => relocateToTheGame('3441231231')}>
                 <Logo styles={'w-9 h-9 sm:w-11 sm:h-11'} fill={COLORS.primaryGreen}/>
                 <span className={'text-2xl sm:text-3xl'}>Chess</span>
              </div>
@@ -39,10 +38,8 @@ const Header = () => {
                 <Link to={'/clubs'} className={`headerLinks ${isActive('/clubs')}`}>Clubs</Link>
              </div>
 
-             <Link to={`/profile/${username}`} className={'hidden sm:block'}>
-                <ProfileIcon size={'md'} isMyProfile={true}/>
-             </Link>
-             <BurgerMenu/>
+             <ProfileDropdown userID={userID}/>
+             <BurgerMenu userID={userID}/>
           </nav>
        </div>
    );

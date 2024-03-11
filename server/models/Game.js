@@ -5,6 +5,7 @@ const userType = {
    outcome: String,
    userID: mongoose.Schema.Types.ObjectId,
    username: String,
+   rating: Number,
    color: String,
    startTurnDate: Date,
    timeLeft: Number
@@ -15,6 +16,7 @@ const GameSchema = new mongoose.Schema({
    user2: userType,
    pgn: String,
    durationType: String,
+   duration: Number,
    totalMoves: Number,
    increment: Number,
    isFinished: Boolean

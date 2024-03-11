@@ -7,6 +7,16 @@ export interface UserFriend {
    createdAt: Date | string,
 }
 
+export interface IProfileUser {
+   userID: string,
+   username: string,
+   friends: string[],
+   gameHistory: IGame[],
+   rating: number,
+   club: string,
+   createdAt: Date | string,
+}
+
 export interface FriendInvitation {
    _id: string,
    sender: UserFriend,
@@ -39,6 +49,58 @@ export interface IGameInvitation {
    gameDuration: number;
    gameIncrement: number;
    durationType: string;
+}
+
+interface IGameUser {
+   creator: boolean;
+   outcome: string;
+   userID: string;
+   username: string;
+   rating: number;
+   color: string;
+   startTurnDate: Date;
+   timeLeft: number;
+}
+
+export interface IGame {
+   user1: IGameUser;
+   user2: IGameUser;
+   _id: string;
+   pgn: string;
+   durationType: string;
+   duration: number;
+   totalMoves: number;
+   increment: number;
+   isFinished: boolean;
+   createdAt: Date;
+}
+
+export interface IOnlineActionsPayload {
+   gameID: string;
+   user: {
+      userID: string;
+      username: string;
+      playerTimeLeft?: number;
+      moveDate?: Date;
+   },
+   opponent: {
+      userID: string;
+      username: string;
+      playerTimeLeft?: number;
+   },
+   pgn: string;
+   error?: string;
+}
+
+export interface ISetGameOverPayload {
+   gameID: string,
+   winner: string,
+   loser: string,
+}
+
+export interface InvitationInfo {
+   opponentID: string;
+   gameID: string;
 }
 
 

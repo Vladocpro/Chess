@@ -1,5 +1,5 @@
 import create from "zustand";
-import {UserClub, UserFriend} from "../types.ts";
+import {IClub, IGame, UserClub, UserFriend} from "../types.ts";
 
 interface userData {
    userID: string,
@@ -7,14 +7,16 @@ interface userData {
    friends: UserFriend[],
    club: string,
    rating: number,
+   gameHistory: IGame[],
 }
 
 interface userStore {
    userID: string,
    username: string,
    friends: UserFriend[],
-   club:   null | UserClub,
+   club: null | UserClub,
    rating: number,
+   gameHistory: IGame[],
    setUser: (data: userData) => void,
    setFriends: (data: UserFriend[]) => void,
    setClub: (data: null | UserClub) => void,
@@ -26,18 +28,23 @@ const useUser = create<userStore>((set) => ({
    friends: [],
    club: null,
    rating: 0,
+   gameHistory: [],
    setUser: (payload: userData) => set({
       userID: payload.userID,
       username: payload.username,
       friends: payload.friends,
       club: payload.club,
       rating: payload.rating,
+      gameHistory: payload.gameHistory
    }),
-   setFriends: (payload) => set({
+   setFriends: (payload: UserFriend[]) => set({
       friends: payload,
    }),
-   setClub: (payload) => set({
+   setClub: (payload: UserClub | null) => set({
       club: payload,
+   }),
+   setGameHistory: (payload: IGame[]) => set({
+      gameHistory: payload,
    })
 }));
 

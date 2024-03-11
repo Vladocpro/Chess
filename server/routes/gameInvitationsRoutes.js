@@ -1,6 +1,6 @@
 import express from "express";
 import {verifyToken} from "../middleware/auth.js";
-import {controllers} from "../controllers/gameInvitations/gameControllers.js";
+import {controllers} from "../controllers/gameInvitations/gameInvitationsControllers.js";
 
 export const gameInvitationsRoutes = express.Router();
 

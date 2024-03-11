@@ -20,9 +20,15 @@ export default {
          borderWidth: {
             '1': '1px',
             '3': '3px',
+            '5': '5px',
+            '6': '6px',
+            '7': '7px',
          },
          outlineWidth: {
             '3': '3px'
+         },
+         strokeWidth: {
+            '1.5': '1.5px'
          }
 
       },

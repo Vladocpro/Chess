@@ -23,7 +23,7 @@ export enum ToastPositions {
 export enum ToastType {
    SUCCESS = 'bg-secondaryGreen',
    WARNING = 'bg-yellow-600',
-   ERROR = 'bg-red-500',
+   ERROR = 'bg-red-700',
    BLACK = 'bg-black',
 }
 
@@ -43,8 +43,10 @@ const useToast = create<ToastStore>((set) => ({
    duration: 3000,
    position: ToastPositions.AUTH,
    type: ToastType.SUCCESS,
-
    openToast: (payload: ToastOnOpen) => {
+      if (typeof payload.message !== 'string') {
+         return;
+      }
       let tempDuration = 3000
       if (payload.duration) {
          tempDuration = payload.duration;
