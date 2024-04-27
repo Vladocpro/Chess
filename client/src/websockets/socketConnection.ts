@@ -1,8 +1,17 @@
 import {io} from "socket.io-client";
 import useGameModal from "../zustand/gameModalStore.tsx";
-import {InvitationInfo, IOnlineActionsPayload, ISetGameOverPayload} from "../types.ts";
+import {
+   IGame,
+   IGameInvitation,
+   InvitationInfo,
+   IOnlineActionsPayload,
+   IPlayerLeftGame,
+   ISetGameOverPayload
+} from "../types.ts";
 import useToast, {ToastPositions, ToastType} from "../zustand/toastModalStore.tsx";
 import useGameState from "../zustand/gameState.tsx";
+import useRematch from "../zustand/rematchState.tsx";
+import useUser from "../zustand/userStore.tsx";
 
 let socket: any = null;
 
@@ -112,7 +121,8 @@ export const connectWithSocketServer = (token: string) => {
       }
    });
 
-   socket.on("opponent-made-move", (movePayload: IOnlineActionsPayload) => {
+   socket.on("user-made-move", (movePayload: IGame) => {
+      console.log(movePayload)
       const toastModal = useToast.getState()
       if ('error' in movePayload) {
          toastModal.openToast({
@@ -123,11 +133,21 @@ export const connectWithSocketServer = (token: string) => {
          })
       } else {
          const game = useGameState.getState()
-         game.setNextTurn({
-            pgn: movePayload.pgn,
-            playerTimeLeft: movePayload.user.playerTimeLeft,
-            opponentTimeLeft: movePayload.opponent.playerTimeLeft
-         })
+         const user = useUser.getState()
+         if (user.userID === movePayload.user1.userID) {
+            game.setNextTurn({
+               pgn: movePayload.pgn,
+               playerTimeLeft: movePayload.user1.timeLeft,
+               opponentTimeLeft: movePayload.user2.timeLeft,
+            })
+         } else {
+            game.setNextTurn({
+               pgn: movePayload.pgn,
+               playerTimeLeft: movePayload.user2.timeLeft,
+               opponentTimeLeft: movePayload.user1.timeLeft,
+            })
+         }
+
       }
    });
 
@@ -136,6 +156,36 @@ export const connectWithSocketServer = (token: string) => {
    })
    socket.on("received-friend-invitation", () => {
       openNotificationToast('friend')
+   })
+   socket.on("received-rematch", (payload) => {
+      if (window.location.href.includes('play')) {
+         const gameActionModal = useGameModal.getState()
+         const game = useRematch.getState()
+         game.setRematch(payload)
+         gameActionModal.openModal({
+            type: 'rematch',
+            outcomeText: `${payload.senderUsername} offered a rematch`
+         })
+      }
+   })
+
+
+   socket.on("opponent-time-expired", (payload) => {
+      const gameActionModal = useGameModal.getState()
+      const game = useGameState.getState()
+      gameActionModal.openModal({
+         type: 'regular',
+         leftPlayer: {
+            username: payload.user.username,
+            outcome: 'w'
+         },
+         rightPlayer: {
+            username: payload.opponent.username,
+            outcome: 'l'
+         },
+         outcomeText: payload.message,
+      })
+      game.setIsFinished(true)
    })
 
 
@@ -148,6 +198,12 @@ export const connectWithSocketServer = (token: string) => {
 export const sendResignition = (resignitionPayload: IOnlineActionsPayload) => {
    socket.emit("user-resigned-game", resignitionPayload)
 };
+
+export const connectUserToActiveGame = (payload: { gameID: string, userID: string, username: string }) => {
+   socket.emit("connect-user-to-active-game", payload)
+};
+
+
 export const sendDrawOffer = (drawPayload: IOnlineActionsPayload) => {
    socket.emit("user-sent-draw-offer", drawPayload)
 };
@@ -176,11 +232,23 @@ export const setGameDraw = (payload: string) => {
    socket.emit("set-game-draw", payload)
 }
 
-export const sendGameInvitation= (userID: string) => {
+export const sendGameInvitation = (userID: string) => {
    socket.emit("send-game-invitation", userID)
 };
-export const sendFriendInvitation= (userID: string) => {
+export const sendRematch = (payload: IGameInvitation) => {
+   socket.emit("send-rematch", payload)
+};
+export const sendFriendInvitation = (userID: string) => {
    socket.emit("send-friend-invitation", userID)
+};
+
+export const playerTimeExpired = (payload: IOnlineActionsPayload) => {
+   socket.emit("player-time-expired", payload)
+};
+
+export const playerLeftGame = (payload: IPlayerLeftGame) => {
+   console.log('SENTSOCKET')
+   socket.emit("player-left-game", payload)
 };
 
 const openNotificationToast = (type: 'game' | 'friend') => {
@@ -190,7 +258,7 @@ const openNotificationToast = (type: 'game' | 'friend') => {
       duration: 5000,
       position: ToastPositions.AUTH,
       type: ToastType.SUCCESS
-   })   
+   })
 }
 
 

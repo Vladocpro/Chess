@@ -24,6 +24,12 @@ const GameActionModal: FC<GameActionModalProps> = ({
                                                    }) => {
    const modal = useGameModal()
    const [rematchIsOffered, setRematchIsOffered] = useState<boolean>(false)
+
+   const handleCloseModal = () => {
+      modal.closeModal()
+      setRematchIsOffered(false)
+   }
+
    if (modal.leftPlayer?.username === '') return null
    const ModalFooter = () => {
       switch (modal.type) {
@@ -33,7 +39,7 @@ const GameActionModal: FC<GameActionModalProps> = ({
                    <button
                        className={'bg-primaryLight hover:bg-red-600 duration-200 text-sm w-full py-2 rounded-lg font-medium sm:text-base'}
                        onClick={() => {
-                          modal.closeModal()
+                          handleCloseModal()
                           if (declineRematch) {
                              declineRematch()
                           }
@@ -43,7 +49,7 @@ const GameActionModal: FC<GameActionModalProps> = ({
                    <button
                        className={'bg-primaryLight hover:bg-secondaryGreen duration-200 text-sm w-full py-2 rounded-lg font-medium sm:text-base'}
                        onClick={() => {
-                          modal.closeModal()
+                          handleCloseModal()
                           if (acceptRematch) {
                              acceptRematch()
                           }
@@ -60,7 +66,7 @@ const GameActionModal: FC<GameActionModalProps> = ({
                    <button
                        className={'bg-primaryLight hover:bg-red-600 duration-200 text-sm w-full py-2 rounded-lg font-medium sm:text-base'}
                        onClick={() => {
-                          modal.closeModal()
+                          handleCloseModal()
                           if (declineDraw) {
                              declineDraw()
                           }
@@ -70,7 +76,7 @@ const GameActionModal: FC<GameActionModalProps> = ({
                    <button
                        className={'bg-primaryLight hover:bg-secondaryGreen duration-200 text-sm w-full py-2 rounded-lg font-medium sm:text-base'}
                        onClick={() => {
-                          modal.closeModal()
+                          handleCloseModal()
                           if (acceptDraw) {
                              acceptDraw()
                           }
@@ -89,7 +95,7 @@ const GameActionModal: FC<GameActionModalProps> = ({
                           <button
                               className={'bg-primaryLight hover:bg-secondaryGreen duration-200 text-sm w-full py-2 rounded-lg font-medium sm:text-base'}
                               onClick={() => {
-                                 modal.closeModal()
+                                 setRematchIsOffered(false)
                                  if (declineRematch) {
                                     declineRematch()
                                  }
@@ -100,9 +106,9 @@ const GameActionModal: FC<GameActionModalProps> = ({
                           <button
                               className={'bg-primaryLight hover:bg-secondaryGreen duration-200 text-sm w-full py-2 rounded-lg font-medium sm:text-base'}
                               onClick={() => {
-                                 modal.closeModal()
                                  if (offerRematch) {
                                     offerRematch()
+                                    setRematchIsOffered(true)
                                  }
                               }}>
                              Rematch
@@ -112,7 +118,7 @@ const GameActionModal: FC<GameActionModalProps> = ({
                    <button
                        className={'bg-primaryLight hover:bg-secondaryGreen duration-200 text-sm w-full py-2 rounded-lg font-medium sm:text-base'}
                        onClick={() => {
-                          modal.closeModal()
+                          handleCloseModal()
                           if (newGame) {
                              newGame()
                           }
@@ -128,7 +134,7 @@ const GameActionModal: FC<GameActionModalProps> = ({
                 <button
                     className={'bg-primaryLight hover:bg-secondaryGreen duration-200 text-sm w-full py-2 rounded-lg font-medium sm:text-base'}
                     onClick={() => {
-                       modal.closeModal()
+                       handleCloseModal()
                        if (restartGame) {
                           restartGame()
                        }
@@ -146,14 +152,14 @@ const GameActionModal: FC<GameActionModalProps> = ({
            className={`flex items-center justify-center cartPage:items-end fixed inset-0 z-20 transition-all duration-300 ${modal.isOpen ? "visible" : "invisible opacity-0"}`}>
           <div
               className={`absolute inset-0 z-30 bg-[rgba(111,111,111,0.1)] transition-all duration-300 h-full w-full ${modal.isOpen ? "visible" : "invisible opacity-0"}`}
-              onClick={modal.closeModal}/>
+              onClick={handleCloseModal}/>
 
           <div
               className={`relative z-30 w-80 py-4 px-3 sm:p-6 bg-primary rounded-lg border-2 border-primaryGreen transition-all ${modal.isOpen ? "translate-y-0 scale-100 duration-300 pointer-events-auto" : "-translate-y-32 scale-50 opacity-0 duration-200 pointer-events-none"}`}
           >
 
              <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={2}
-                  onClick={modal.closeModal}
+                  onClick={handleCloseModal}
                   stroke="currentColor" className="absolute top-2 right-2 w-6 h-6 cursor-pointer">
                 <path strokeLinecap="round" strokeLinejoin="round" d="M6 18 18 6M6 6l12 12"/>
              </svg>

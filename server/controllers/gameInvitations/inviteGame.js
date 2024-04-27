@@ -58,10 +58,6 @@ export const inviteGame = async (req,res) => {
 
       let receiver = await User.findById(newInvitation.receiverID).select(['-friends','-gameHistory','-passwordHash','-updatedAt','-__v'])
 
-      // if invitation has been successfully created we would like to update friends invitations if other user is online
-      // send pending invitations update to specific user
-      // friendsUpdates.updateFriendsPendingInvitations(targetUser._id.toString());
-
       return res.status(200).json({
          invitationID: newInvitation._id,
          senderID: newInvitation.senderID,

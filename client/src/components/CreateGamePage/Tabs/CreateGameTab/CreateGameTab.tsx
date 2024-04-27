@@ -7,7 +7,7 @@ import {gameDurations, gameDurationType} from "../../../../utils/constants/game.
 import useToast, {ToastPositions, ToastType} from "../../../../zustand/toastModalStore.tsx";
 import {postFetch} from "../../../../utils/axios/fetcher.ts";
 import {useLocation, useNavigate} from "react-router-dom";
-import { sendGameInvitation } from "../../../../websockets/socketConnection.ts";
+import {sendGameInvitation} from "../../../../websockets/socketConnection.ts";
 
 interface CreateGameTab {
    setCurrentTab: (tab: 'create game' | 'waiting' | 'invitations') => void;

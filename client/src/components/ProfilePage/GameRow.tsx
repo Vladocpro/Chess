@@ -2,6 +2,7 @@ import GameDurationIcon from "../GameDuration/GameDurationIcon.tsx";
 import moment from "moment/moment";
 import {IGame, IProfileUser} from "../../types.ts";
 import {FC} from "react";
+import {Link} from "react-router-dom";
 
 const transformOutcome = (text: string): string => {
    switch (text) {
@@ -44,9 +45,10 @@ interface GameRowProps {
 
 const GameRow: FC<GameRowProps> = ({game, profileUser}) => {
 
+
    return (
-       <div
-           className={'flex px-3 lg:px-5 py-2 cursor-pointer hover:bg-primaryLight duration-300 transition-all'}>
+       <Link to={`/play/${game._id}`}
+             className={'flex px-3 lg:px-5 py-2 cursor-pointer hover:bg-primaryLight duration-300 transition-all'}>
           <div className={'flex justify-center items-center  md:w-[65px]'}>
              <GameDurationIcon type={game.durationType} iconStyles={'w-6 h-6 md:w-8 md:h-8 lg:w-10 lg:h-10'}/>
           </div>
@@ -83,7 +85,7 @@ const GameRow: FC<GameRowProps> = ({game, profileUser}) => {
           <div className={'flex justify-end items-center w-[105px] lg:w-[117px] ml-auto'}>
              <span className={'text-sm lg:text-base'}>{moment(game?.createdAt).format('MMM Do, YYYY')}</span>
           </div>
-       </div>
+       </Link>
    )
 };
 

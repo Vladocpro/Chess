@@ -1,11 +1,15 @@
 import Game from "../models/Game.js";
 import User from "../models/User.js";
 
-export const getUserGames = async (gameHistory) => {
+export const getUserGames = async (gameHistory,withLimit) => {
    try {
       let userGames = [];
       if (gameHistory.length > 0) {
-         userGames = await Game.find({_id: {$in: gameHistory}}).limit(3).sort({createdAt: 'desc'})
+         if (withLimit) {
+            userGames = await Game.find({_id: {$in: gameHistory}}).limit(3).sort({createdAt: 'desc'})
+         } else {
+            userGames = await Game.find({_id: {$in: gameHistory}}).sort({createdAt: 'desc'})
+         }
       }
       return userGames
    } catch (e) {
