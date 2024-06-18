@@ -4,7 +4,6 @@ import Game from "../../models/Game.js";
 
 export const getUserGames = async (req,res) => {
    try {
-      console.log('Work')
       const userID = req.params.id
       const user = await User.findById(userID)
       const games = await Game.find({_id: {$in: user.gameHistory}}).sort({createdAt: 'desc'})

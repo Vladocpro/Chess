@@ -21,7 +21,7 @@ const PlayerTimer: FC<PlayerTimerProps> = ({time, isYourTurn, gameIsFinished, on
       const intervalId = setInterval(() => {
          if (timeLeft <= 0 || !isYourTurn || gameIsFinished) {
             clearInterval(intervalId);
-            if (onTimeExpire) {
+            if (onTimeExpire !== undefined && timeLeft <= 0) {
                onTimeExpire();
             }
          } else {

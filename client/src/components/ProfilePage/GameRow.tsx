@@ -65,7 +65,7 @@ const GameRow: FC<GameRowProps> = ({game, profileUser}) => {
                 <div className={'h-3 w-3 md:h-4 md:w-4 rounded-full bg-black'}/>
                 <div
                     className={'text-sm lg:text-base max-w-[112px] md:max-w-[107px] lg:max-w-[117px]  truncate'}>{game.user2.username}</div>
-                <div className={'text-sm lg:text-base w-[47px] lg:w-[53px]'}>({game.user1.rating})</div>
+                <div className={'text-sm lg:text-base w-[47px] lg:w-[53px]'}>({game.user2.rating})</div>
              </div>
           </div>
 

@@ -4,7 +4,6 @@ import Logo from "../Generic/Logo.tsx";
 import {COLORS} from "../../utils/constants/colors.ts";
 import useUser from "../../zustand/userStore.tsx";
 import ProfileDropdown from "./ProfileDropDown.tsx";
-import {relocateToTheGame} from "../../websockets/socketConnection.ts";
 
 
 const Header = () => {
@@ -26,10 +25,10 @@ const Header = () => {
        <div className={`sticky top-0 flex items-center  w-full  z-10 bg-header`}>
           <nav className={'flex items-center justify-between w-full py-[18px] ml-2 mr-6'}>
              {/* LOGO */}
-             <div className={'flex items-center'} onClick={() => relocateToTheGame('3441231231')}>
+             <Link className={'flex items-center'} to={'/home'}>
                 <Logo styles={'w-9 h-9 sm:w-11 sm:h-11'} fill={COLORS.primaryGreen}/>
                 <span className={'text-2xl sm:text-3xl'}>Chess</span>
-             </div>
+             </Link>
 
              <div className={'hidden sm:flex sm:gap-10 md:gap-16'}>
                 <Link to={'/home'} className={`headerLinks ${isActive('/home')}`}>Home</Link>

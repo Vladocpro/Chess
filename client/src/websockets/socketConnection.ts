@@ -122,7 +122,6 @@ export const connectWithSocketServer = (token: string) => {
    });
 
    socket.on("user-made-move", (movePayload: IGame) => {
-      console.log(movePayload)
       const toastModal = useToast.getState()
       if ('error' in movePayload) {
          toastModal.openToast({
@@ -151,6 +150,24 @@ export const connectWithSocketServer = (token: string) => {
       }
    });
 
+   socket.on("player-abandoned-game", (payload) => {
+      const gameActionModal = useGameModal.getState()
+      const game = useGameState.getState()
+      gameActionModal.openModal({
+         type: 'regular',
+         leftPlayer: {
+            username: payload.winner.username,
+            outcome: 'w'
+         },
+         rightPlayer: {
+            username: payload.loser.username,
+            outcome: 'l'
+         },
+         outcomeText: `${payload.loser.username} abandoned the game`,
+      })
+      game.setIsFinished(true)
+   });
+
    socket.on("received-game-invitation", () => {
       openNotificationToast('game')
    })
@@ -170,20 +187,21 @@ export const connectWithSocketServer = (token: string) => {
    })
 
 
-   socket.on("opponent-time-expired", (payload) => {
+   socket.on("game-time-expired", (payload) => {
+      console.log(payload)
       const gameActionModal = useGameModal.getState()
       const game = useGameState.getState()
       gameActionModal.openModal({
          type: 'regular',
          leftPlayer: {
-            username: payload.user.username,
+            username: payload.winner.username,
             outcome: 'w'
          },
          rightPlayer: {
-            username: payload.opponent.username,
+            username: payload.loser.username,
             outcome: 'l'
          },
-         outcomeText: payload.message,
+         outcomeText: `${payload.loser.username} lost on time`,
       })
       game.setIsFinished(true)
    })
@@ -247,8 +265,11 @@ export const playerTimeExpired = (payload: IOnlineActionsPayload) => {
 };
 
 export const playerLeftGame = (payload: IPlayerLeftGame) => {
-   console.log('SENTSOCKET')
    socket.emit("player-left-game", payload)
+};
+
+export const playerReconnectedToGame = (payload: { gameID: string, userID: string }) => {
+   socket.emit("player-reconnected-to-game", payload)
 };
 
 const openNotificationToast = (type: 'game' | 'friend') => {

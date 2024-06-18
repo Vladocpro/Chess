@@ -1,5 +1,5 @@
 import Game from "./models/Game.js";
-import {playerAbandonedGame} from "./utils/gameUtils.js";
+import {playerAbandonedGame} from "./controllers/game/gameUtils.js";
 
 const connectedUsers = new Map();
 const activeGames = new Map();
@@ -99,19 +99,17 @@ export const connectUserToActiveGame = async (socket,data) => {
       console.log(e)
    }
 }
-export const playerLeftGame = (socket,payload) => {
+export const playerLeftGame = async (socket,payload) => {
 
    let game = activeGames.get(payload.gameID)
    if (game === undefined) {
       return
    }
-
    if (payload.userID === game.player1.userID) {
-      game.player1.timeout = setTimeout(() => playerAbandonedGame(data.gameID,game.player1.userID))
+      game.player1.timeout = setTimeout(() => playerAbandonedGame(payload.gameID,payload.userID,socket),15000)
    } else {
-      game.player2.timeout = setTimeout(() => playerAbandonedGame(data.gameID,game.player2.userID))
+      game.player2.timeout = setTimeout(() => playerAbandonedGame(payload.gameID,payload.userID,socket),15000)
    }
-
 }
 
 export const playerReconnectedToGame = (socket,payload) => {
@@ -119,12 +117,16 @@ export const playerReconnectedToGame = (socket,payload) => {
    let game = activeGames.get(payload.gameID)
    if (game === undefined) return
 
-   if (payload.userID === game.user1.userID) {
-      clearTimeout(game.user1.timeout)
-      game.user1.timeout = undefined
+   if (payload.userID === game.player1?.userID) {
+      if (game.player1 !== undefined) {
+         clearTimeout(game.player1?.timeout)
+         game.player1.timeout = undefined
+      }
    } else {
-      clearTimeout(game.user2.timeout)
-      game.user1.timeout = undefined
+      if (game.player2 !== undefined) {
+         clearTimeout(game.player2?.timeout)
+         game.player2.timeout = undefined
+      }
    }
 
 }
@@ -132,6 +134,10 @@ export const playerReconnectedToGame = (socket,payload) => {
 
 export const removeConnectedUser = (socketID) => {
    connectedUsers.delete(socketID)
+}
+
+export const removeActiveGame = (gameID) => {
+   activeGames.delete(gameID)
 }
 
 

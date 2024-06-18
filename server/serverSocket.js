@@ -11,7 +11,7 @@ import {
 import {
    connectUserToActiveGame,
    getOnlineGames,
-   getOnlineUsers,playerLeftGame,
+   getOnlineUsers,playerLeftGame,playerReconnectedToGame,
    removeConnectedUser
 } from "./serverStore.js";
 
@@ -31,16 +31,6 @@ export const registerSocketServer = (server) => {
 
 
    io.on("connection",(socket) => {
-      console.log("user connected");
-
-      // Clear the timer if the user reconnects before timeout (find active games and check for timeout clear it)
-      // socket.on('reconnect',() => {
-      //    console.log('Reconnected')
-      //    console.log(timeoutId)
-      //    clearTimeout(timeoutId);
-      //    console.log(timeoutId)
-      //
-      // });
 
       serverStore.addNewConnectedUser({
          socketID: socket.id,
@@ -52,8 +42,6 @@ export const registerSocketServer = (server) => {
       });
 
       socket.on("player-left-game",(data) => {
-         console.log("player-left-game")
-         console.log(data)
          playerLeftGame(socket,data)
       });
 
@@ -100,27 +88,16 @@ export const registerSocketServer = (server) => {
          playerTimerExpired(socket,payload)
       })
 
+      socket.on("player-reconnected-to-game",(payload) => {
+         playerReconnectedToGame(socket,payload)
+      })
+
       socket.on('disconnect',(data) => {
          removeConnectedUser(socket.id)
-
-         console.log('Disconnect')
-         console.log(socket.user)
-
-         // In active games find user and timeout, set timeout.
-
-         console.log('Disconnect event')
-         // Set a 15-second timer for reconnection
-         const timeoutId = setTimeout(() => {
-            // Mock writing to DB: User lost the game (replace with actual DB write logic)
-            console.log(`User ${socket.id} (Room: ) timed out and lost the game.`);
-            // Broadcast "user-lost" event to remaining players (if applicable)
-            // io.in(roomName).emit('user-lost',socket.id);
-         },15000); // 15 seconds in milliseconds
-
       });
-      setInterval(() => {
-         // console.log(getOnlineGames())
-      },4500)
+      // setInterval(() => {
+      //    console.log(getOnlineGames())
+      // },1000)
    });
 
 

@@ -98,7 +98,7 @@ const ThemeSettingsModal = () => {
                    <span className={'text-sm sm:text-base'}>Pieces</span>
                    <Dropdown title={theme.figuresThemeName} options={FiguresThemeOptions}
                              onChange={onFiguresChange}
-                             titleStyles={'w-[135px] sm:w-[240px]'}
+                             titleStyles={'w-[135px] sm:w-[240px] font-medium'}
                              containerStyles={'bg-[#51504C] pt-2 w-full'}
                              selectStyles={'bg-[#51504C] text-sm sm:text-base hover:bg-secondaryGreen duration-200 pl-3 pr-1.5 py-0.5 sm:py-1'}
                              itemStyles={' hover:bg-secondaryGreen text-sm sm:text-base px-3 py-1 sm:py-1.5 transition-all duration-200'}
@@ -107,7 +107,7 @@ const ThemeSettingsModal = () => {
                 <div className={'flex items-center justify-between'}>
                    <span className={'text-sm sm:text-base'}>Board</span>
                    <Dropdown title={theme.boardThemeName} options={BoardThemeOptions} onChange={onBoardChange}
-                             titleStyles={'w-[135px] sm:w-[240px]'}
+                             titleStyles={'w-[135px] sm:w-[240px] font-medium'}
                              containerStyles={'bg-[#51504C] pt-2 w-full'}
                              selectStyles={'bg-[#51504C] text-sm sm:text-base hover:bg-secondaryGreen duration-200 pl-3 pr-1.5 py-0.5 sm:py-1'}
                              itemStyles={' hover:bg-secondaryGreen text-sm sm:text-base px-3 py-1 sm:py-1.5 transition-all duration-200'}
@@ -118,7 +118,7 @@ const ThemeSettingsModal = () => {
                    <Dropdown title={PawnPromotionsLabels[theme.pawnPromotion]}
                              options={PawnPromotionsOptions}
                              onChange={onPawnPromotionChange}
-                             titleStyles={'w-[135px] sm:w-[240px]'}
+                             titleStyles={'w-[135px] sm:w-[240px] font-medium'}
                              containerStyles={'bg-[#51504C] pt-2 w-full'}
                              selectStyles={'bg-[#51504C] text-sm sm:text-base hover:bg-secondaryGreen duration-200 pl-3 pr-1.5 py-0.5 sm:py-1'}
                              itemStyles={' hover:bg-secondaryGreen text-sm sm:text-base px-3 py-1 sm:py-1.5 transition-all duration-200'}

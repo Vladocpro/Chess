@@ -1,4 +1,4 @@
-import {getUserByID} from "../../serverStore.js";
+import {getUserByID,removeActiveGame} from "../../serverStore.js";
 import Game from "../../models/Game.js";
 import User from "../../models/User.js";
 
@@ -19,17 +19,34 @@ export const resignGame = async (socket,resignitionInfo) => {
       let convertedData = Object.assign({},resignitionInfo)
       convertedData.user = resignitionInfo.opponent;
       convertedData.opponent = resignitionInfo.user;
+
       let game = await Game.findById(resignitionInfo.gameID)
+      if (game === undefined) {
+         return
+      }
+      let firstUser = await User.findById(game.user1.userID)
+      let secondUser = await User.findById(game.user2.userID)
       if (game.user1.userID.toString() === resignitionInfo.user.userID) {
          game.user1.outcome = 'l'
          game.user2.outcome = 'w'
+         const user1RatingChange = calculateRatingChange(firstUser.rating,secondUser.rating,"loss");
+         const user2RatingChane = calculateRatingChange(secondUser.rating,firstUser.rating,"win");
+         firstUser.rating += user1RatingChange
+         secondUser.rating += user2RatingChane
       } else {
          game.user2.outcome = 'l'
          game.user1.outcome = 'w'
+         const user1RatingChange = calculateRatingChange(firstUser.rating,secondUser.rating,"win");
+         const user2RatingChane = calculateRatingChange(secondUser.rating,firstUser.rating,"loss");
+         firstUser.rating += user1RatingChange
+         secondUser.rating += user2RatingChane
       }
       game.isFinished = true
       await game.save()
+      await firstUser.save()
+      await secondUser.save()
       socket.to(getUserByID(resignitionInfo.opponent.userID)).emit('opponent-resigned-game',(convertedData))
+      removeActiveGame(resignitionInfo.gameID)
    } catch (error) {
       socket.to(getUserByID(resignitionInfo.opponent.userID)).emit('opponent-resigned-game',({error: error}))
    }
@@ -58,6 +75,7 @@ export const userAcceptedDrawOffer = async (socket,drawPayload) => {
       game.isFinished = true
       await game.save()
       socket.to(getUserByID(drawPayload.opponent.userID)).emit('received-accepted-draw-offer',(convertedData))
+      removeActiveGame(drawPayload.gameID)
    } catch (error) {
       socket.to(getUserByID(drawPayload.opponent.userID)).emit('received-accepted-draw-offer',({error: error}))
    }
@@ -138,6 +156,7 @@ export const setGameOver = async (socket,payload) => {
          await game.save()
          await firstUser.save()
          await secondUser.save()
+         removeActiveGame(payload.gameID)
       }
    } catch (error) {
       console.log(error)
@@ -152,6 +171,7 @@ export const setGameDraw = async (socket,payload) => {
          game.user2.outcome = 'd'
          game.isFinished = true
          await game.save()
+         removeActiveGame(payload.gameID)
       }
    } catch (error) {
       console.log(error)
@@ -183,31 +203,44 @@ export const sendRematch = async (socket,payload) => {
 
 export const playerTimerExpired = async (socket,payload) => {
    try {
-      let convertedData = Object.assign({},payload)
-      convertedData.user = payload.opponent;
-      convertedData.opponent = payload.user;
       let game = await Game.findById(payload.gameID)
       if (game === null || game?.isFinished) return
-      if (game.user1.userID.toString() === payload.user.userID) {
+
+      let firstUser = await User.findById(game.user1.userID)
+      let secondUser = await User.findById(game.user2.userID)
+
+      if (game.user1.userID.toString() === payload.loser.userID) {
          game.user1.outcome = 'l'
          game.user2.outcome = 'w'
+         const user1RatingChange = calculateRatingChange(firstUser.rating,secondUser.rating,"loss");
+         const user2RatingChane = calculateRatingChange(secondUser.rating,firstUser.rating,"win");
+         firstUser.rating += user1RatingChange
+         secondUser.rating += user2RatingChane
       } else {
          game.user1.outcome = 'w'
          game.user2.outcome = 'l'
+         const user1RatingChange = calculateRatingChange(firstUser.rating,secondUser.rating,"win");
+         const user2RatingChane = calculateRatingChange(secondUser.rating,firstUser.rating,"loss");
+         firstUser.rating += user1RatingChange
+         secondUser.rating += user2RatingChane
       }
       game.isFinished = true
       await game.save()
-      socket.to(getUserByID(payload.opponent.userID)).emit('opponent-time-expired',({
-         ...convertedData,
-         message: `${convertedData.opponent.username} lost on time`
+      await firstUser.save()
+      await secondUser.save()
+      socket.to(getUserByID(payload.winner.userID)).emit('game-time-expired',({
+         ...payload,
       }))
+      socket.emit('game-time-expired',({
+         ...payload,
+      }))
+      removeActiveGame(payload.gameID)
    } catch (error) {
       console.log(error)
    }
 }
 
-
-const calculateRatingChange = (playerRating,opponentRating,result) => {
+export const calculateRatingChange = (playerRating,opponentRating,result) => {
    const expectedScore = 1 / (1 + Math.pow(10,(opponentRating - playerRating) / 400));
 
    // Adjust factor based on rating difference (more volatile for close ratings)

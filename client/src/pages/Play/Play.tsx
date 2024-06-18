@@ -22,12 +22,12 @@ import ThemeSettingsModal from "../../components/Modals/ThemeSettingsModal.tsx";
 import {useNavigate, useParams} from "react-router-dom";
 import {getFetch, postFetch} from "../../utils/axios/fetcher.ts";
 import useToast, {ToastPositions, ToastType} from "../../zustand/toastModalStore.tsx";
-import {IGame, IGameInvitation, UserFriend} from "../../types.ts";
+import {IGame, IGameInvitation} from "../../types.ts";
 import {
    acceptDrawOffer, acceptGameInvitation, connectUserToActiveGame,
-   makeMove, playerLeftGame, playerTimeExpired,
+   makeMove, playerLeftGame, playerReconnectedToGame, playerTimeExpired,
    rejectDrawOffer,
-   sendDrawOffer, sendGameInvitation, sendRematch,
+   sendDrawOffer, sendRematch,
    sendResignition, setGameDraw, setGameOver
 } from "../../websockets/socketConnection.ts";
 import useGameState from "../../zustand/gameState.tsx";
@@ -529,17 +529,17 @@ const Play = () => {
    }
 
    const onPlayerTimeExpired = () => {
-      // playerTimeExpired({
-      //    gameID: game?._id,
-      //    user: {
-      //       userID: user.userID,
-      //       username: user.username,
-      //    },
-      //    opponent: {
-      //       userID: gamePlayers.opponent?.userID,
-      //       username: gamePlayers.opponent?.username,
-      //    }
-      // })
+      playerTimeExpired({
+         gameID: game?._id,
+         loser: {
+            userID: user.userID,
+            username: user.username,
+         },
+         winner: {
+            userID: gamePlayers.opponent?.userID,
+            username: gamePlayers.opponent?.username,
+         }
+      })
    }
 
 
@@ -557,6 +557,19 @@ const Play = () => {
             } else {
                chess.loadPgn(response.pgn)
                updateChess()
+               window.localStorage.setItem("gameDetails", JSON.stringify({
+                  gameID: id,
+                  userID: user.userID,
+                  username: user.username,
+                  isFinished: response.isFinished
+               }))
+               if (!response.isFinished) {
+                  playerReconnectedToGame({
+                     gameID: id,
+                     userID: user.userID
+                  })
+               }
+
                if (response.isFinished) {
                   setGame({...response})
                   return
@@ -595,7 +608,6 @@ const Play = () => {
    useEffect(() => {
       // First Render
       if (game === undefined) return
-
       if (onlineGameState?.isFinished) {
          setGame({...game, isFinished: onlineGameState.isFinished})
       }
@@ -615,24 +627,20 @@ const Play = () => {
          updateChess()
          return
       }
-      return () => {
-         // TODO user disconnected 30 sec until lose send event with disconnect, add to array of disconnects, if user recconects find this timeout object, and stop it. Plus remove
-         console.log('HEheahah')
-
-      }
    }, [onlineGameState]);
 
    useEffect(() => {
+
       return () => {
          if (rematchInvitation !== undefined) {
             handleDeclineRematch()
          }
-         if (!game?.isFinished) {
-            console.log('SENT')
+         const gameDetails = JSON.parse(window.localStorage.getItem("gameDetails"))
+         if (id !== undefined && id !== null && !gameDetails?.isFinished) {
             playerLeftGame({
-               gameID: game?._id,
-               userID: user.userID,
-               username: user.username,
+               gameID: gameDetails.gameID,
+               userID: gameDetails.userID,
+               username: gameDetails.username,
             })
          }
       }

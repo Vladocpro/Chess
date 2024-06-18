@@ -13,7 +13,6 @@ import Club from "./pages/Clubs/Club.tsx";
 import Training from "./pages/Training/Training.tsx";
 import Play from "./pages/Play/Play.tsx";
 import Profile from "./pages/Profile/Profile.tsx";
-import {io} from "socket.io-client";
 import {useEffect} from "react";
 import {connectWithSocketServer} from "./websockets/socketConnection.ts";
 
