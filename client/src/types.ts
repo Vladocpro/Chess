@@ -43,6 +43,7 @@ export interface IClub {
 
 export interface IGameInvitation {
    invitationID: string;
+   senderID?: string;
    sender?: UserFriend;
    receiver?: UserFriend;
    playerColor: string;
@@ -90,6 +91,12 @@ export interface IOnlineActionsPayload {
    },
    pgn: string;
    error?: string;
+}
+
+export interface IPlayerLeftGame {
+   gameID: string;
+   userID: string;
+   username: string;
 }
 
 export interface ISetGameOverPayload {

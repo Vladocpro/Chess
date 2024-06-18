@@ -11,7 +11,6 @@ export const verifyToken = (req,res,next) => {
       const verifiedToken = jwt.verify(token,process.env.TOKEN_KEY);
       req.user = verifiedToken;
    } catch (err) {
-      console.log({invalidTokenError: true})
       return res.status(401).send({invalidTokenError: true});
    }
    return next();

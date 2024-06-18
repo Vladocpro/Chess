@@ -20,17 +20,18 @@ import GameHistory from "../../components/TrainingPage/GameHistory.tsx";
 import GameActionModal from "../../components/Modals/GameActionModal.tsx";
 import ThemeSettingsModal from "../../components/Modals/ThemeSettingsModal.tsx";
 import {useNavigate, useParams} from "react-router-dom";
-import {getFetch} from "../../utils/axios/fetcher.ts";
+import {getFetch, postFetch} from "../../utils/axios/fetcher.ts";
 import useToast, {ToastPositions, ToastType} from "../../zustand/toastModalStore.tsx";
-import {IGame} from "../../types.ts";
+import {IGame, IGameInvitation} from "../../types.ts";
 import {
-   acceptDrawOffer,
-   makeMove,
+   acceptDrawOffer, acceptGameInvitation, connectUserToActiveGame,
+   makeMove, playerLeftGame, playerReconnectedToGame, playerTimeExpired,
    rejectDrawOffer,
-   sendDrawOffer,
+   sendDrawOffer, sendRematch,
    sendResignition, setGameDraw, setGameOver
 } from "../../websockets/socketConnection.ts";
 import useGameState from "../../zustand/gameState.tsx";
+import useRematch from "../../zustand/rematchState.tsx";
 
 const Play = () => {
    const [game, setGame] = useState<IGame | undefined>(undefined)
@@ -45,6 +46,7 @@ const Play = () => {
    const [currentMoveGameHistory, setCurrentMoveGameHistory] = useState<IGameHistory[]>([])
    const [isLastMove, setIsLastMove] = useState<boolean>(true)
    const [kingInCheck, setKingInCheck] = useState<string | undefined>(undefined)
+   const [rematchInvitation, setRematchInvitation] = useState<IGameInvitation | undefined>(undefined)
    const [capturedPieces, setCapturedPieces] = useState<ICapturedPieces>({
       w: {p: 0, n: 0, b: 0, r: 0, q: 0},
       b: {p: 0, n: 0, b: 0, r: 0, q: 0}
@@ -58,6 +60,7 @@ const Play = () => {
    const navigate = useNavigate()
    const {openToast} = useToast()
    const onlineGameState = useGameState()
+   const rematchState = useRematch()
    const capturedPoints = useMemo(() => {
       const whitePoints = capturedPieces.b.p + (capturedPieces.b.n * 3) + (capturedPieces.b.b * 3) + (capturedPieces.b.r * 5) + (capturedPieces.b.q * 9)
       const blackPoints = capturedPieces.w.p + (capturedPieces.w.n * 3) + (capturedPieces.w.b * 3) + (capturedPieces.w.r * 5) + (capturedPieces.w.q * 9)
@@ -417,6 +420,8 @@ const Play = () => {
       }
 
    }
+
+
    const unHighlightBoard = () => {
       setSelectedCell(undefined)
       setAvailableMoves([])
@@ -478,6 +483,65 @@ const Play = () => {
       setCurrentMoveBoard(localCurrentMoveBoard)
    }
 
+   const handleRematch = () => {
+
+      let requestData = {
+         senderColor: gamePlayers.player?.color === 'white' ? 'black' : 'white',
+         gameDuration: game?.duration,
+         gameIncrement: game?.increment,
+         durationType: game?.durationType,
+         receiverID: gamePlayers.opponent?.userID,
+      }
+
+      postFetch('/game-invitation/invite', requestData).then((data) => {
+         sendRematch({...data, senderUsername: gamePlayers.player?.username})
+         openToast({
+            message: 'Game invitation has been sent',
+            type: ToastType.SUCCESS,
+            position: ToastPositions.AUTH,
+            duration: 3800
+         })
+         rematchState.setRematch(data)
+      }).catch((error) => {
+         openToast({message: error.response.data, type: ToastType.ERROR, position: ToastPositions.AUTH, duration: 1800})
+         console.log(error)
+      })
+   }
+
+   const handleDeclineRematch = () => {
+      if (rematchState?.rematch === undefined) return
+      postFetch('/game-invitation/reject', {invitationID: rematchState?.rematch.invitationID}).then(() => {
+         rematchState.setRematch(undefined)
+      }).catch((error) => {
+         openToast({message: error.response.data, type: ToastType.ERROR, position: ToastPositions.AUTH, duration: 1800})
+      }).finally(() => setRematchInvitation(undefined))
+   }
+   const handleAcceptRematch = () => {
+      if (rematchState?.rematch === undefined) return
+
+      postFetch('/game-invitation/accept', {invitationID: rematchState?.rematch.invitationID}).then((data) => {
+         rematchState.setRematch(undefined)
+         acceptGameInvitation({opponentID: rematchState?.rematch?.senderID, gameID: data.gameID})
+         window.location.assign(`/play/${data.gameID}`)
+      }).catch((error) => {
+         openToast({message: error.response.data, type: ToastType.ERROR, position: ToastPositions.AUTH, duration: 1800})
+      })
+   }
+
+   const onPlayerTimeExpired = () => {
+      playerTimeExpired({
+         gameID: game?._id,
+         loser: {
+            userID: user.userID,
+            username: user.username,
+         },
+         winner: {
+            userID: gamePlayers.opponent?.userID,
+            username: gamePlayers.opponent?.username,
+         }
+      })
+   }
+
 
    useEffect(() => {
       if (user.userID !== '') {
@@ -492,59 +556,96 @@ const Play = () => {
                navigate('/')
             } else {
                chess.loadPgn(response.pgn)
-               setGame(response)
                updateChess()
-               if (playSounds && !response.isFinished) playSound({sound: 'gameStart'})
+               window.localStorage.setItem("gameDetails", JSON.stringify({
+                  gameID: id,
+                  userID: user.userID,
+                  username: user.username,
+                  isFinished: response.isFinished
+               }))
+               if (!response.isFinished) {
+                  playerReconnectedToGame({
+                     gameID: id,
+                     userID: user.userID
+                  })
+               }
+
+               if (response.isFinished) {
+                  setGame({...response})
+                  return
+               }
+               connectUserToActiveGame({gameID: response?._id, userID: user.userID, username: user.username})
+               if (response?.user1.color[0] === chess.turn()) {
+                  const currentMoveTimestamp = new Date(Date.now()).getTime();
+                  const DBMoveTimestamp = new Date(response.user1.startTurnDate).getTime();
+                  const moveDifferenceInSeconds = Math.floor((currentMoveTimestamp - DBMoveTimestamp) / 1000);
+                  response.user1.timeLeft -= moveDifferenceInSeconds
+                  setGame({...response})
+               } else {
+                  const currentMoveTimestamp = new Date(Date.now()).getTime();
+                  const DBMoveTimestamp = new Date(response.user2.startTurnDate).getTime();
+                  const moveDifferenceInSeconds = Math.floor((currentMoveTimestamp - DBMoveTimestamp) / 1000);
+                  response.user2.timeLeft -= moveDifferenceInSeconds
+                  setGame({...response})
+               }
+
+               if (playSounds) playSound({sound: 'gameStart'})
+
             }
          }).catch((error) => {
+            console.log(error)
             openToast({
                message: error.response.data,
                type: ToastType.ERROR,
                position: ToastPositions.AUTH,
-               duration: 1800
+               duration: 3500
             })
             navigate('/')
          })
       }
-
-      // TODO add draw or checkmate on switch turns
-      // TODO add timer
-      // TODO add rematch functionalities for gameActionModal save gameInvitaionID and remove invitation with clean up function
-      // TODO add when timer is off request
-      // TODO add notification when rematch or game invitation arrive
-
-
    }, [user]);
 
    useEffect(() => {
+      // First Render
+      if (game === undefined) return
       if (onlineGameState?.isFinished) {
          setGame({...game, isFinished: onlineGameState.isFinished})
       }
       if (onlineGameState.pgn !== '') {
          setIsLastMove(true)
          chess.loadPgn(onlineGameState.pgn)
-         // TODO add time left for users
-         // let tempUser1 = 'asda'
-         console.log(gamePlayers.player)
-         console.log(gamePlayers.opponent)
-         // if(game?.user1.userID === user.userID) {
-         //    setGame({...game})
-         //
-         // }
+
+         if (game?.user1.userID === gamePlayers.player?.userID) {
+            let player = {...game.user1, timeLeft: onlineGameState.playerTimeLeft}
+            let opponent = {...game.user2, timeLeft: onlineGameState.opponentTimeLeft}
+            setGame({...game, user1: player, user2: opponent})
+         } else {
+            let player = {...game.user2, timeLeft: onlineGameState.playerTimeLeft}
+            let opponent = {...game.user1, timeLeft: onlineGameState.opponentTimeLeft}
+            setGame({...game, user2: player, user1: opponent})
+         }
          updateChess()
          return
       }
-      return () => {
-         // TODO user disconnected 30 sec until lose send event with disconnect, add to array of disconnects, if user recconects find this timeout object, and stop it. Plus remove
-         console.log('HEheahah')
-
-      }
    }, [onlineGameState]);
 
+   useEffect(() => {
 
-   // if (game === undefined) {
-   //    return null
-   // }
+      return () => {
+         if (rematchInvitation !== undefined) {
+            handleDeclineRematch()
+         }
+         const gameDetails = JSON.parse(window.localStorage.getItem("gameDetails"))
+         if (id !== undefined && id !== null && !gameDetails?.isFinished) {
+            playerLeftGame({
+               gameID: gameDetails.gameID,
+               userID: gameDetails.userID,
+               username: gameDetails.username,
+            })
+         }
+      }
+   }, []);
+
 
    return (
        <div className={'mt-5'}>
@@ -559,6 +660,8 @@ const Play = () => {
                         pieceColor={swapBoardColor ? (inverted ? 'w' : 'b') : (inverted ? 'b' : 'w')}
                         capturedPoints={inverted ? capturedPoints[gamePlayers.player?.color[0]] : capturedPoints[gamePlayers.opponent?.color[0]]}
                         capturedPieces={swapBoardColor ? (inverted ? capturedPieces['w'] : capturedPieces['b']) : (inverted ? capturedPieces['b'] : capturedPieces['w'])}
+                        isYourTurn={inverted ? gamePlayers.player?.color[0] === chess.turn() : gamePlayers.opponent?.color[0] === chess.turn()}
+                        gameIsFinished={game?.isFinished}
                     />
                 ) : (<div className={'w-full my-2 h-[44px]'}/>)}
 
@@ -614,6 +717,9 @@ const Play = () => {
                         pieceColor={swapBoardColor ? (inverted ? 'b' : 'w') : (inverted ? 'w' : 'b')}
                         capturedPoints={inverted ? capturedPoints[gamePlayers.opponent?.color[0]] : capturedPoints[gamePlayers.player?.color[0]]}
                         capturedPieces={swapBoardColor ? (inverted ? capturedPieces['b'] : capturedPieces['w']) : (inverted ? capturedPieces['w'] : capturedPieces['b'])}
+                        isYourTurn={inverted ? gamePlayers.opponent?.color[0] === chess.turn() : gamePlayers.player?.color[0] === chess.turn()}
+                        onTimeExpire={onPlayerTimeExpired}
+                        gameIsFinished={game?.isFinished}
                     />
                 ) : (<div className={'w-full my-2 h-[44px]'}/>)}
 
@@ -750,6 +856,9 @@ const Play = () => {
               acceptDraw={handleAcceptDrawOffer}
               declineDraw={handleRejectDrawOffer}
               newGame={() => navigate('/create-game')}
+              offerRematch={handleRematch}
+              declineRematch={handleDeclineRematch}
+              acceptRematch={handleAcceptRematch}
           />
           <ThemeSettingsModal/>
        </div>

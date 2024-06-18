@@ -7,6 +7,7 @@ import {useNavigate} from "react-router-dom";
 import Logo from "../../components/Generic/Logo.tsx";
 import {COLORS} from "../../utils/constants/colors.ts";
 import useUser from "../../zustand/userStore.tsx";
+import {connectWithSocketServer} from "../../websockets/socketConnection.ts";
 
 const LoginPage = () => {
    const [email, setEmail] = useState<string>('')
@@ -49,9 +50,13 @@ const LoginPage = () => {
 
    const handleLogin = async () => {
       postFetch("/auth/login", {email: email, password: password}).then((response) => {
+         if (response.token !== undefined && response.token !== '') {
+            openToast({message: "Internal Server Error", type: ToastType.ERROR, position: ToastPositions.AUTH})
+         }
          window.localStorage.setItem('token', response.token)
          user.setUser(response.userDetails)
          openToast({message: 'Authenticated', type: ToastType.SUCCESS, position: ToastPositions.AUTH, duration: 1000})
+         connectWithSocketServer(response.token)
          navigate('/home')
       }).catch((error) => {
          openToast({message: error.response.data, type: ToastType.ERROR, position: ToastPositions.AUTH})

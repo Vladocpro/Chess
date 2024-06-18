@@ -1,5 +1,3 @@
-import {IGameHistory} from "../../components/Board/GameTypes.ts";
-
 export const defaultCellColors = [
    'w', 'b', 'w', 'b', 'w', 'b', 'w', 'b',
    'b', 'w', 'b', 'w', 'b', 'w', 'b', 'w',

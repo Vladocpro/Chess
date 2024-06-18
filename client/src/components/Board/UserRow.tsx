@@ -1,5 +1,6 @@
 import {FC} from "react";
 import {userCapturedPieces} from "./GameTypes.ts";
+import PlayerTimer from "./PlayerTimer.tsx";
 
 interface UserRowProps {
    isTraining: boolean;
@@ -8,7 +9,10 @@ interface UserRowProps {
    timer?: number;
    pieceColor: string;
    capturedPoints: number;
+   isYourTurn: boolean;
+   gameIsFinished: boolean;
    capturedPieces: userCapturedPieces;
+   onTimeExpire?: () => void;
 }
 
 const UserRow: FC<UserRowProps> = ({
@@ -18,7 +22,10 @@ const UserRow: FC<UserRowProps> = ({
                                       timer,
                                       pieceColor,
                                       capturedPoints,
-                                      capturedPieces
+                                      isYourTurn,
+                                      capturedPieces,
+                                      onTimeExpire,
+                                      gameIsFinished
                                    }) => {
 
 
@@ -102,7 +109,6 @@ const UserRow: FC<UserRowProps> = ({
                     )
                 }
 
-
                 {
                     capturedPoints > 0 &&
                     <div
@@ -110,12 +116,8 @@ const UserRow: FC<UserRowProps> = ({
                 }
              </div>
           </div>
-          {timer !== undefined && (
-              <div
-                  className={'flex items-center justify-center font-bold h-full ml-auto bg-primaryDark border-[1.5px] px-4 border-primaryGreen rounded-lg'}>
-                 10:22
-              </div>
-          )}
+          <PlayerTimer time={timer} onTimeExpire={onTimeExpire} isYourTurn={isYourTurn}
+                       gameIsFinished={gameIsFinished}/>
        </div>
    );
 };

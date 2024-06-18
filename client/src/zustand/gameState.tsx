@@ -1,4 +1,5 @@
 import create from "zustand";
+import {IGameInvitation} from "../types.ts";
 
 
 export interface INextTurnPayload {
@@ -10,8 +11,8 @@ export interface INextTurnPayload {
 interface gameStore {
    isFinished: boolean;
    pgn: string;
-   playerTimeLeft: number,
-   opponentTimeLeft: number,
+   playerTimeLeft: number;
+   opponentTimeLeft: number;
    setIsFinished: (payload: boolean) => void;
    setNextTurn: (payload: INextTurnPayload) => void;
 }

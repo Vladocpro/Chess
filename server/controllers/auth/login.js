@@ -18,7 +18,7 @@ export const login = async (req,res) => {
 
       if (user && (await bcrypt.compare(password,user.passwordHash))) {
 
-         const userGames = await getUserGames(user.gameHistory)
+         const userGames = await getUserGames(user.gameHistory,true)
 
          let userClub = null
          if (user.club !== '') {

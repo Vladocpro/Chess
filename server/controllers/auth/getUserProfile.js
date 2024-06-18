@@ -9,7 +9,7 @@ export const getUserProfile = async (req,res) => {
       const user = await User.findById(req.params.id)
           .populate({path: "gameHistory",select: ['-passwordHash','-updatedAt','-__v']});
 
-      const userGames = await getUserGames(user.gameHistory)
+      const userGames = await getUserGames(user.gameHistory,false)
 
       let userClub;
       if (user.club !== '') {

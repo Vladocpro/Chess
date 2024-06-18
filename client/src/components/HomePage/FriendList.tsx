@@ -13,7 +13,7 @@ const FriendList: FC<FriendListProps> = ({friends}) => {
    if (friends.length === 0) {
       return (
           <Link to={'/friends'} className={'text-primaryGreen hover:underline pl-3 cursor-pointer'}>
-             Fancy making a new friend?
+             Fancy making new friend?
           </Link>
       )
    }
@@ -40,15 +40,15 @@ const FriendList: FC<FriendListProps> = ({friends}) => {
                    return ''
                 }
                 return (
-                    <div className={'overflow-x-hidden'}>
+                    <div className={'overflow-x-hidden group'}>
                        <Link to={`/profile/${currentFriend._id}`}
                              className={`flex bg-primary py-1.5 pl-3 ${roundedStyles()}`}>
                           <ProfileIcon size={'md'} withText={true} isMyProfile={false}
-                                       textValue={currentFriend.username}/>
+                                       textValue={currentFriend.username} textStyles={'transition-all duration-300 group-hover:underline group-hover:text-primaryGreen'}/>
                        </Link>
                        {
                           index === friends.length - 1 ? null : (
-                              <Divider styles={'h-[2px] w-full bg-primaryGreen'}/>
+                              <Divider styles={'h-[1.5px] w-full bg-primaryGreen'}/>
                           )
                        }
                     </div>

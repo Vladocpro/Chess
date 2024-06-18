@@ -25,7 +25,7 @@ const ProfileIcon: FC<ProfileIconProps> = ({
                                               withText,
                                               textValue,
                                               isMyProfile,
-                                              bgColor
+                                              bgColor,
                                            }) => {
 
    const user = useUser()

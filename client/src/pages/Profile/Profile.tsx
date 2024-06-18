@@ -6,9 +6,11 @@ import useToast, {ToastPositions, ToastType} from "../../zustand/toastModalStore
 import {IGame, IProfileUser} from "../../types.ts";
 import GameRow from "../../components/ProfilePage/GameRow.tsx";
 import useUser from "../../zustand/userStore.tsx";
+import {sendFriendInvitation} from "../../websockets/socketConnection.ts";
 
 const Profile = () => {
    const [profileUser, setProfileUser] = useState<IProfileUser>()
+   const [userGames, setUserGames] = useState<IGame[]>([])
    const [waiting, setWaiting] = useState<boolean>(true)
    const [userDoesNotExist, setUserDoesNotExist] = useState<boolean>(false)
    const {openToast} = useToast()
@@ -20,6 +22,7 @@ const Profile = () => {
    const handleAddFriend = () => {
       postFetch('/friend-invitation/invite', {receiverID: profileUser?.userID})
           .then((response) => {
+             sendFriendInvitation(user._id)
              openToast({message: response, type: ToastType.SUCCESS, position: ToastPositions.AUTH, duration: 3000})
           })
           .catch((error) => {
@@ -55,16 +58,19 @@ const Profile = () => {
    useEffect(() => {
       getFetch(`/auth/getUserProfile/${id}`).then((response) => {
          setProfileUser(response.userDetails)
-         setWaiting(false)
          setUserDoesNotExist(false)
       }).catch((error) => {
          openToast({message: error.response.data, type: ToastType.ERROR, position: ToastPositions.AUTH, duration: 2500})
-         setWaiting(false)
          setUserDoesNotExist(true)
       })
+      getFetch(`/game/getUserGames/${id}`).then((response) => {
+         setUserGames(response)
+      }).catch((error) => {
+         console.log(error)
+         // openToast({message: error.response.data, type: ToastType.ERROR, position: ToastPositions.AUTH, duration: 2500})
+      }).finally(() => setWaiting(false))
    }, []);
 
-   console.log(profileUser?.club)
 
    if (waiting) {
       return null
@@ -129,54 +135,67 @@ const Profile = () => {
              </div>
 
              {/* Buttons */}
-             <div className={'flex gap-5'}>
-                {
-                   user.friends.some(friend => friend._id === profileUser?.userID) ? (
-                       <div onClick={handleRemoveFriend}
-                            className={'flex gap-3 w-full bg-primaryLight hover:bg-red-700 transition-all duration-300 py-3 px-4 cursor-pointer rounded-lg'}>
-                          <img src={'/friend-remove.png'} alt={'friend-remove'}
-                               className={'h-5 w-5 md:h-7 md:w-7'}/>
-                          <button className={'text-sm md:text-lg'}>Remove Friend</button>
-                       </div>
+             {profileUser?.userID !== user.userID && (
+                 <div className={'flex gap-5'}>
+                    {
+                       user.friends.some(friend => friend._id === profileUser?.userID) ? (
+                           <div onClick={handleRemoveFriend}
+                                className={'flex gap-3 w-full bg-primaryLight hover:bg-red-700 transition-all duration-300 py-3 px-4 cursor-pointer rounded-lg'}>
+                              <img src={'/friend-remove.png'} alt={'friend-remove'}
+                                   className={'h-5 w-5 md:h-7 md:w-7'}/>
+                              <button className={'text-sm md:text-lg'}>Remove Friend</button>
+                           </div>
 
-                   ) : (
-                       <div onClick={handleAddFriend}
-                            className={'flex gap-3 w-full bg-primaryLight hover:bg-secondaryGreen transition-all duration-300 py-3 px-4 cursor-pointer rounded-lg'}>
-                          <img src={'/friend-add.png'} alt={'friend-add'} className={'h-5 w-5 md:h-7 md:w-7'}/>
-                          <button className={'text-sm md:text-lg'}>Add Friend</button>
-                       </div>
-                   )
-                }
+                       ) : (
+                           <div onClick={handleAddFriend}
+                                className={'flex gap-3 w-full bg-primaryLight hover:bg-secondaryGreen transition-all duration-300 py-3 px-4 cursor-pointer rounded-lg'}>
+                              <img src={'/friend-add.png'} alt={'friend-add'} className={'h-5 w-5 md:h-7 md:w-7'}/>
+                              <button className={'text-sm md:text-lg'}>Add Friend</button>
+                           </div>
+                       )
+                    }
 
-                <div
-                    className={'flex gap-3 w-full bg-primaryLight hover:bg-secondaryGreen transition-all duration-300 py-3 px-4 cursor-pointer rounded-lg'}
-                    onClick={() => navigate('/create-game', {state: {gameOpponent: profileUser}})}>
-                   <img src={'/chess-invite.png'} alt={'chess-invite'}
-                        className={'h-5 w-5 md:h-7 md:w-7'}/>
-                   <button className={'text-sm md:text-lg'}>Challenge</button>
-                </div>
-             </div>
+                    <div
+                        className={'flex gap-3 w-full bg-primaryLight hover:bg-secondaryGreen transition-all duration-300 py-3 px-4 cursor-pointer rounded-lg'}
+                        onClick={() => navigate('/create-game', {state: {gameOpponent: profileUser}})}>
+                       <img src={'/chess-invite.png'} alt={'chess-invite'}
+                            className={'h-5 w-5 md:h-7 md:w-7'}/>
+                       <button className={'text-sm md:text-lg'}>Challenge</button>
+                    </div>
+                 </div>
+             )}
+
           </div>
 
           {/* Game History */}
           <div>
-             <div
-                 className={'flex px-3 lg:px-5 py-2.5 md:py-3.5 rounded-t-md w-[370px] md:w-[730px] lg:w-[900px] bg-primaryLight'}>
-                <span className={'hidden md:inline-block text-sm md:text-base w-[65px] text-center'}>Duration</span>
-                <span
-                    className={'text-sm md:text-base ml-[59px] md:ml-[74px] lg:ml-28 md:w-[183px] lg:w-[200px]'}>Players</span>
-                <span className={'hidden md:inline-block ml-[20px] lg:ml-[66px] w-[55px] text-center'}>Results</span>
-                <span className={'hidden md:inline-block ml-[70px] lg:ml-20 w-[50px]'}>Moves</span>
-                <span className={'text-sm md:text-base ml-auto w-[105px] lg:w-[117px] text-center'}>Date</span>
-             </div>
-             <div className={'flex flex-col bg-primary rounded-b-md w-[370px] md:w-[730px] lg:w-[900px]'}>
-                {
-                   profileUser?.gameHistory.map((game: IGame) => (
-                           <GameRow game={game} profileUser={profileUser}/>
-                       )
-                   )
-                }
-             </div>
+             {profileUser?.gameHistory.length > 0 ?
+                 (<>
+                    <div
+                        className={'flex px-3 lg:px-5 py-2.5 md:py-3.5 rounded-t-md w-[370px] md:w-[730px] lg:w-[900px] bg-primaryLight'}>
+                       <span
+                           className={'hidden md:inline-block text-sm md:text-base w-[65px] text-center'}>Duration</span>
+                       <span
+                           className={'text-sm md:text-base ml-[59px] md:ml-[74px] lg:ml-28 md:w-[183px] lg:w-[200px]'}>Players</span>
+                       <span
+                           className={'hidden md:inline-block ml-[20px] lg:ml-[66px] w-[55px] text-center'}>Results</span>
+                       <span className={'hidden md:inline-block ml-[70px] lg:ml-20 w-[50px]'}>Moves</span>
+                       <span className={'text-sm md:text-base ml-auto w-[105px] lg:w-[117px] text-center'}>Date</span>
+                    </div>
+                    <div className={'flex flex-col bg-primary rounded-b-md w-[370px] md:w-[730px] lg:w-[900px]'}>
+                       {
+                          profileUser?.gameHistory.map((game: IGame) => (
+                                  <GameRow game={game} profileUser={profileUser}/>
+                              )
+                          )
+                       }
+                    </div>
+                 </>) :
+                 (<div
+                     className={'flex justify-center items-center bg-primary w-[370px] md:w-[730px] lg:w-[900px] h-32 font-semibold rounded-md text-lg sm:text-xl'}>No
+                    Games Found</div>)
+             }
+
           </div>
        </div>
    );

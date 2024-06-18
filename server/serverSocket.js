@@ -2,13 +2,18 @@ import * as serverStore from "./serverStore.js";
 import {Server} from "socket.io";
 import {verifyTokenSocket} from "./middleware/authSocket.js";
 import {
-   opponentMadeMove,
+   playerTimerExpired,
    redirectUserToGame,
    resignGame,
-   sendDrawOfferToOpponent,setGameDraw,setGameOver,
-   userAcceptedDrawOffer,userRejectedDrawOffer
+   sendDrawOfferToOpponent,sendFriendInvitation,sendGameInvitation,sendRematch,setGameDraw,setGameOver,
+   userAcceptedDrawOffer,userMadeMove,userRejectedDrawOffer
 } from "./controllers/socket/socketHandler.js";
-import {getOnlineUsers,getUserByID,removeConnectedUser} from "./serverStore.js";
+import {
+   connectUserToActiveGame,
+   getOnlineGames,
+   getOnlineUsers,playerLeftGame,playerReconnectedToGame,
+   removeConnectedUser
+} from "./serverStore.js";
 
 export const registerSocketServer = (server) => {
    const io = new Server(server,{
@@ -26,11 +31,18 @@ export const registerSocketServer = (server) => {
 
 
    io.on("connection",(socket) => {
-      console.log("user connected");
 
       serverStore.addNewConnectedUser({
          socketID: socket.id,
          userID: socket.user.userID,
+      });
+
+      socket.on("connect-user-to-active-game",(data) => {
+         connectUserToActiveGame(socket,data)
+      });
+
+      socket.on("player-left-game",(data) => {
+         playerLeftGame(socket,data)
       });
 
       socket.on("user-accepted-game",(data) => {
@@ -50,8 +62,9 @@ export const registerSocketServer = (server) => {
       socket.on("user-rejected-draw-offer",(drawPayload) => {
          userRejectedDrawOffer(socket,drawPayload)
       })
+
       socket.on("user-made-move",(drawPayload) => {
-         opponentMadeMove(socket,drawPayload)
+         userMadeMove(socket,drawPayload)
       })
       socket.on("set-game-over",(payload) => {
          setGameOver(socket,payload)
@@ -60,12 +73,31 @@ export const registerSocketServer = (server) => {
          setGameDraw(socket,payload)
       })
 
+      socket.on("send-game-invitation",(payload) => {
+         sendGameInvitation(socket,payload)
+      })
+      socket.on("send-friend-invitation",(payload) => {
+         sendFriendInvitation(socket,payload)
+      })
+
+      socket.on("send-rematch",(payload) => {
+         sendRematch(socket,payload)
+      })
+
+      socket.on("player-time-expired",(payload) => {
+         playerTimerExpired(socket,payload)
+      })
+
+      socket.on("player-reconnected-to-game",(payload) => {
+         playerReconnectedToGame(socket,payload)
+      })
+
       socket.on('disconnect',(data) => {
          removeConnectedUser(socket.id)
       });
       // setInterval(() => {
-      //    console.log(getOnlineUsers())
-      // },[2000])
+      //    console.log(getOnlineGames())
+      // },1000)
    });
 
 

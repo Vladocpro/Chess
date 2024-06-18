@@ -4,7 +4,6 @@ import {Link} from "react-router-dom";
 const MyClub = () => {
 
    const {club} = userStore()
-   console.log(club)
    if (club === null) {
       return null
    }
