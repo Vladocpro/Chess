@@ -1,8 +1,8 @@
-import React, {FC, useMemo} from 'react';
+import {FC} from 'react';
 import GameDurationIcon from "./GameDurationIcon.tsx";
 
 interface GameDurationProps {
-   type: 'blitz' | 'bullet' | 'rapid';
+   type: string;
    isWithLabel: boolean;
    isLabelBottom?: boolean;
    labelText?: string;
@@ -27,12 +27,4 @@ const GameDuration: FC<GameDurationProps> = ({
        </div>
    )
 };
-
-const sizes = {
-   sm: {
-      iconSize: '32px',
-      labelSize: 'lg'
-   },
-}
-
 export default GameDuration;

@@ -19,8 +19,8 @@ const OpponentSearch: FC<OpponentSearchProps> = ({chosenOpponent, setChosenOppon
    const location = useLocation()
    const user = useUser()
 
-   const dropdownRef = useRef(undefined);
-   const inputRef = useRef(null);
+   const dropdownRef = useRef<HTMLDivElement | null>(null);
+   const inputRef = useRef<HTMLInputElement | null>(null);
 
 
    useClickOutside(dropdownRef, () => {
@@ -35,7 +35,7 @@ const OpponentSearch: FC<OpponentSearchProps> = ({chosenOpponent, setChosenOppon
       debouncedSearch(e.target.value);
    }
 
-   const handleChooseOpponent = (opponent) => {
+   const handleChooseOpponent = (opponent: UserFriend) => {
       if (inputRef.current) {
          inputRef.current.value = '';
       }
@@ -114,8 +114,9 @@ const OpponentSearch: FC<OpponentSearchProps> = ({chosenOpponent, setChosenOppon
              {/*Dropdown Options*/}
              <div
                  className={`absolute z-10 right-0 top-10  ${isOpen ? "  opacity-100 visible" : " opacity-0 invisible "} ${users?.length > 0 ? 'pt-4' : ''}  transition-all duration-300  rounded-b-lg select-none w-full bg-primaryLight  space-y-1`}>
-                {users.slice(0, 5).map((opponent, index) => (
+                {users.slice(0, 5).map((opponent) => (
                     <div
+                        key={opponent.username}
                         onClick={() => handleChooseOpponent(opponent)}
                         className={'flex bg-primaryLight items-center gap-2 hover:bg-secondaryGreen text-white cursor-pointer h-12 px-2 rounded-sm'}>
                        <ProfileIcon size={'sm'} withText={true} isMyProfile={false} textValue={opponent.username}

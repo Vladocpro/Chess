@@ -12,7 +12,7 @@ interface ProfileDropdownProps {
 const ProfileDropdown: FC<ProfileDropdownProps> = ({userID}) => {
 
    const [isOpen, setIsOpen] = useState(false)
-   const dropdownRef = useRef(undefined);
+   const dropdownRef = useRef<HTMLDivElement | null>(null);
    useClickOutside(dropdownRef, () => {
       setIsOpen(false);
    });

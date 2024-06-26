@@ -1,5 +1,5 @@
 import Divider from "../Generic/Divider.tsx";
-import React, {FC} from "react";
+import {FC} from "react";
 import {IGameHistory} from "../Board/GameTypes.ts";
 import Tooltip from "../Generic/Tooltip.tsx";
 
@@ -19,7 +19,7 @@ const GameHistory: FC<GameHistoryProps> = ({gameHistory, handleGameHistory}) => 
           <div className={'pt-1 pb-2 overflow-y-auto'}>
              {gameHistory.map((currentMove) => (
                  <div
-                     className={`grid grid-cols-[auto,1fr,1fr] gap-2 items-center ${currentMove.turn % 2 === 0 ? 'bg-primaryLight' : 'bg-primary'} px-3`}>
+                     className={`grid grid-cols-[auto,1fr,1fr] gap-2 items-center ${Number(currentMove.turn) % 2 === 0 ? 'bg-primaryLight' : 'bg-primary'} px-3`}>
                     <span className={'font-medium w-[26px]'}>{currentMove.turn}.</span>
                     <span className={'py-1 '}>{currentMove.whiteMove}</span>
                     <span className={'py-1 '}>{currentMove.blackMove}</span>

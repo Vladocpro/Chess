@@ -7,6 +7,8 @@ import {IGame} from "../../types.ts";
 const LeftSection = () => {
    const user = useUser()
 
+   console.log(user)
+
    return (
        <div className={'hidden xl:flex flex-col'}>
           {
@@ -37,11 +39,12 @@ const LeftSection = () => {
                  className={'bg-primary mt-2.5 pb-1 flex items-center rounded-md justify-between gap-5 max-w-[205px] group'}
                  key={user?.club?._id}>
                 {
-                   user?.club !== null && user?.club !== '' ? (
+                   user?.club !== null ? (
                        <Link className={'flex flex-[1] items-center gap-3'} to={`/club/${user?.club?._id}`}>
                           <img className={'w-9 h-9'} src={'club.png'}
                                alt={'chess club'}/>
-                          <span className={'max-w-[148px] line-clamp-2 transition-all duration-300 group-hover:underline group-hover:text-primaryGreen'}>{user?.club?.clubname}</span>
+                          <span
+                              className={'max-w-[148px] line-clamp-2 transition-all duration-300 group-hover:underline group-hover:text-primaryGreen'}>{user?.club?.clubname}</span>
                        </Link>
                    ) : (
                        <Link to={'/clubs'} className={'text-primaryGreen hover:underline cursor-pointer'}>
@@ -68,8 +71,6 @@ const botGame: IGame = {
    increment: 5,
    isFinished: false,
    createdAt: "2024-02-02T19:30:17.079Z",
-   updatedAt: "2024-02-02T19:30:17.079Z",
-   __v: 0,
    user1: {
       creator: true,
       outcome: "going",

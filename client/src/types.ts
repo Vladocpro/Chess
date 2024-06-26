@@ -52,6 +52,17 @@ export interface IGameInvitation {
    durationType: string;
 }
 
+export interface IRematchInvitation {
+   invitationID?: string;
+   senderColor: string;
+   gameDuration: number;
+   gameIncrement: number;
+   durationType: string;
+   receiverID: string;
+   senderID?: string;
+   senderUsername: string;
+}
+
 interface IGameUser {
    creator: boolean;
    outcome: string;
@@ -59,7 +70,7 @@ interface IGameUser {
    username: string;
    rating: number;
    color: string;
-   startTurnDate: Date;
+   startTurnDate: Date | string;
    timeLeft: number;
 }
 
@@ -73,7 +84,20 @@ export interface IGame {
    totalMoves: number;
    increment: number;
    isFinished: boolean;
-   createdAt: Date;
+   createdAt: Date | string;
+   error?: string;
+}
+
+export interface GameModelPayload {
+   gameID?: string,
+   winner: {
+      userID: string,
+      username: string
+   },
+   loser: {
+      userID: string,
+      username: string
+   },
 }
 
 export interface IOnlineActionsPayload {
@@ -82,14 +106,14 @@ export interface IOnlineActionsPayload {
       userID: string;
       username: string;
       playerTimeLeft?: number;
-      moveDate?: Date;
+      moveDate?: Date | string;
    },
    opponent: {
       userID: string;
       username: string;
       playerTimeLeft?: number;
    },
-   pgn: string;
+   pgn?: string;
    error?: string;
 }
 
@@ -108,6 +132,13 @@ export interface ISetGameOverPayload {
 export interface InvitationInfo {
    opponentID: string;
    gameID: string;
+}
+
+export interface ICell {
+   type: string;
+   square: string;
+   color: string;
+   cellColor: string;
 }
 
 

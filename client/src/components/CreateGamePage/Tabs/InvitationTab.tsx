@@ -29,7 +29,7 @@ const InvitationTab: FC<InvitationTabProps> = ({
 
    const handleAcceptGameInvitation = (invitation: IGameInvitation) => {
       postFetch('/game-invitation/accept', {invitationID: invitation.invitationID}).then((data) => {
-         acceptGameInvitation({opponentID: invitation?.sender._id, gameID: data.gameID})
+         acceptGameInvitation({opponentID: invitation.sender?._id!, gameID: data.gameID})
          navigate(`/play/${data.gameID}`)
       }).catch((error) => {
          setReceivedInvitations(receivedInvitations.filter((currentInvitation) => currentInvitation.invitationID !== invitation.invitationID))
@@ -63,7 +63,7 @@ const InvitationTab: FC<InvitationTabProps> = ({
 
    useEffect(() => {
       getGameInvitations()
-   },[])
+   }, [])
 
    if (sentInvitations?.length === 0 && receivedInvitations?.length === 0) {
       return (

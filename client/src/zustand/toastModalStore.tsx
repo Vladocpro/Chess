@@ -9,7 +9,7 @@ export interface ToastNotificationType {
 }
 
 export interface ToastOnOpen {
-   message: string;
+   message?: string;
    duration?: number;
    type: ToastType;
    position: ToastPositions;

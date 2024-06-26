@@ -1,4 +1,4 @@
-import React, {useEffect, useState} from 'react';
+import {useState} from 'react';
 import FormInput from "../../components/Forms/FormInput.tsx";
 import useToast, {ToastPositions, ToastType} from "../../zustand/toastModalStore.tsx";
 import {validateEmail, validatePassword, validateUsername} from "../../utils/validations.ts";

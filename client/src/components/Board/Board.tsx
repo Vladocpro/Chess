@@ -1,4 +1,5 @@
-import {useEffect, useState} from 'react'
+// @ts-nocheck
+import {FC, useEffect, useState} from 'react'
 import CellComponent from './CellComponent';
 import {Chess} from 'chess.js'
 import {defaultCellColors} from "../../utils/constants/game.ts";
@@ -11,10 +12,10 @@ interface BoardPreviewProps {
    width: number;
    pgn: string;
 }
-const BoardComponent = ({height, width, pgn}) => {
+
+const BoardComponent: FC<BoardPreviewProps> = ({height, width, pgn}) => {
 
    const [board, setBoard] = useState([])
-   const [selected, setSelected] = useState('')
 
 
    useEffect(() => {

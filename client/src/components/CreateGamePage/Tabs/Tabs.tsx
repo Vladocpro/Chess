@@ -8,10 +8,10 @@ import useToast, {ToastPositions, ToastType} from "../../../zustand/toastModalSt
 
 interface TabsProps {
    currentTab: string;
-   setCurrentTab: (tab: string) => void;
+   setCurrentTab: (tab: 'create game' | 'waiting' | 'invitations') => void;
 }
 
-const Tabs:FC<TabsProps> = ({currentTab, setCurrentTab}) => {
+const Tabs: FC<TabsProps> = ({currentTab, setCurrentTab}) => {
 
    const [waitingInvitation, setWaitingInvitation] = useState<IGameInvitation | null>(null)
    const [receivedInvitations, setReceivedInvitations] = useState<IGameInvitation[]>([])
@@ -35,10 +35,17 @@ const Tabs:FC<TabsProps> = ({currentTab, setCurrentTab}) => {
    // }, [currentTab]);
 
    switch (currentTab) {
-      case "create game": return <CreateGameTab setCurrentTab={setCurrentTab}  setWaitingInvitation={setWaitingInvitation} sentInvitations={sentInvitations} setSentInvitations={setSentInvitations}/>
-      case "waiting": return <WaitingTab setCurrentTab={setCurrentTab} waitingInvitation={waitingInvitation} setWaitingInvitation={setWaitingInvitation} sentInvitations={sentInvitations} setSentInvitations={setSentInvitations}  />
-      case "invitations":  return <InvitationTab receivedInvitations={receivedInvitations} setReceivedInvitations={setReceivedInvitations} sentInvitations={sentInvitations} setSentInvitations={setSentInvitations} getGameInvitations={getGameInvitations} />
-      default: return null;
+      case "create game":
+         return <CreateGameTab setCurrentTab={setCurrentTab} setWaitingInvitation={setWaitingInvitation} sentInvitations={sentInvitations}
+                               setSentInvitations={setSentInvitations}/>
+      case "waiting":
+         return <WaitingTab setCurrentTab={setCurrentTab} waitingInvitation={waitingInvitation} setWaitingInvitation={setWaitingInvitation}
+                            sentInvitations={sentInvitations} setSentInvitations={setSentInvitations}/>
+      case "invitations":
+         return <InvitationTab receivedInvitations={receivedInvitations} setReceivedInvitations={setReceivedInvitations} sentInvitations={sentInvitations}
+                               setSentInvitations={setSentInvitations} getGameInvitations={getGameInvitations}/>
+      default:
+         return null;
    }
 };
 

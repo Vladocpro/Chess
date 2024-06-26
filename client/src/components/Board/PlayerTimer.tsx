@@ -3,12 +3,12 @@ import {FC, useEffect, useState} from "react";
 interface PlayerTimerProps {
    time?: number
    isYourTurn: boolean;
-   gameIsFinished: boolean;
+   gameIsFinished?: boolean;
    onTimeExpire?: () => void
 }
 
 const PlayerTimer: FC<PlayerTimerProps> = ({time, isYourTurn, gameIsFinished, onTimeExpire}) => {
-   const [timeLeft, setTimeLeft] = useState<number>(time);
+   const [timeLeft, setTimeLeft] = useState<number>(time!);
 
    const getFormattedTime = (seconds: number): string => {
       const minutes = Math.floor(seconds / 60);
@@ -34,7 +34,7 @@ const PlayerTimer: FC<PlayerTimerProps> = ({time, isYourTurn, gameIsFinished, on
 
 
    useEffect(() => {
-      setTimeLeft(time)
+      setTimeLeft(time!)
    }, [time]);
 
    if (time === undefined) return null

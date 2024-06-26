@@ -17,7 +17,7 @@ interface DropDownProps {
    dropdownStyles?: string,
    svgBox?: string,
    options: OptionType[],
-   onChange: (title: string) => void,
+   onChange: (title: OptionType) => void,
 }
 
 const Dropdown: FC<DropDownProps> = ({
@@ -35,7 +35,7 @@ const Dropdown: FC<DropDownProps> = ({
 
    const [isOpen, setIsOpen] = useState(false)
    const [selectedTitle, setSelectedTitle] = useState(title)
-   const dropdownRef = useRef(undefined);
+   const dropdownRef = useRef<HTMLDivElement | null>(null);
    useClickOutside(dropdownRef, () => {
       setIsOpen(false);
    });

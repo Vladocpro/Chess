@@ -9,7 +9,7 @@ export const defaultCellColors = [
    'b', 'w', 'b', 'w', 'b', 'w', 'b', 'w',
 ]
 
-export interface gameDurationType {
+export interface GameDurationType {
    label: string,
    value: {
       duration: number,
@@ -18,7 +18,7 @@ export interface gameDurationType {
    type: 'blitz' | 'bullet' | 'rapid',
 }
 
-export const gameDurations: gameDurationType[] = [
+export const gameDurations: GameDurationType[] = [
    {label: '1 min', value: {duration: 60, increment: 0}, type: 'bullet'},
    {label: '2 | 1 mins', value: {duration: 120, increment: 1}, type: 'bullet'},
    {label: '3 mins', value: {duration: 180, increment: 0}, type: 'blitz'},
