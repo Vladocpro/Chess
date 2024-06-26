@@ -40,11 +40,12 @@ const FriendList: FC<FriendListProps> = ({friends}) => {
                    return ''
                 }
                 return (
-                    <div className={'overflow-x-hidden group'}>
+                    <div className={'overflow-x-hidden group'} key={currentFriend?.username}>
                        <Link to={`/profile/${currentFriend._id}`}
                              className={`flex bg-primary py-1.5 pl-3 ${roundedStyles()}`}>
                           <ProfileIcon size={'md'} withText={true} isMyProfile={false}
-                                       textValue={currentFriend.username} textStyles={'transition-all duration-300 group-hover:underline group-hover:text-primaryGreen'}/>
+                                       textValue={currentFriend.username}
+                                       textStyles={'transition-all duration-300 group-hover:underline group-hover:text-primaryGreen'}/>
                        </Link>
                        {
                           index === friends.length - 1 ? null : (

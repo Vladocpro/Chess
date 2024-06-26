@@ -10,7 +10,7 @@ interface UserRowProps {
    pieceColor: string;
    capturedPoints: number;
    isYourTurn: boolean;
-   gameIsFinished: boolean;
+   gameIsFinished?: boolean;
    capturedPieces: userCapturedPieces;
    onTimeExpire?: () => void;
 }

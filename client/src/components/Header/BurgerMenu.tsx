@@ -1,10 +1,9 @@
 import {useState} from 'react';
 import {Link} from "react-router-dom";
 import {logout} from "../../utils/auth.ts";
-import Logo from "../Generic/Logo.tsx";
 
 
-const BurgerMenu = ({userID}) => {
+const BurgerMenu = ({userID}: { userID: string }) => {
    const [burgerVisible, setBurgerVisible] = useState<boolean>(false)
 
 

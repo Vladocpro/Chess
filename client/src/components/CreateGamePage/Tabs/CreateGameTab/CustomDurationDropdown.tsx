@@ -1,11 +1,16 @@
-import {useRef, useState} from "react";
+import {FC, useRef, useState} from "react";
 import useClickOutside from "../../../../hooks/useClickOutside.tsx";
-import {gameDurations} from "../../../../utils/constants/game.ts";
+import {gameDurations, GameDurationType} from "../../../../utils/constants/game.ts";
 import GameDuration from "../../../GameDuration/GameDuration.tsx";
 
-const CustomDurationDropdown = ({selectedGameDuration, onChange}) => {
+interface CustomDurationDropdownProps {
+   selectedGameDuration: GameDurationType;
+   onChange: (gameDurationItem: GameDurationType) => void;
+}
+
+const CustomDurationDropdown: FC<CustomDurationDropdownProps> = ({selectedGameDuration, onChange}) => {
    const [isOpen, setIsOpen] = useState(false)
-   const dropdownRef = useRef(undefined);
+   const dropdownRef = useRef<HTMLDivElement | null>(null);
    useClickOutside(dropdownRef, () => {
       setIsOpen(false);
    });
@@ -27,6 +32,7 @@ const CustomDurationDropdown = ({selectedGameDuration, onChange}) => {
               className={`${isOpen ? "translate-y-0  opacity-100 visible duration-300 pointer-events-auto" : "-translate-y-5 opacity-0 invisible pointer-events-none duration-150"}  transition-all rounded-b-lg select-none  absolute z-10 right-0 w-full bg-primaryLight pt-4 space-y-1`}>
              {gameDurations.map((item, index) => (
                  <div
+                     key={index}
                      className={'cursor-pointer hover:bg-secondaryGreen rounded-sm  py-1.5 sm:py-2 px-2.5 sm:px-3'}
                      onClick={() => {
                         setIsOpen(!isOpen)

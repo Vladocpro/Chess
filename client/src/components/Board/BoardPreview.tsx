@@ -38,6 +38,7 @@ const BoardPreview: FC<BoardPreviewProps> = ({height, width, game, enableTranspa
       const chess = new Chess()
       chess.loadPgn(game.pgn)
       let tempArray = chess.board().flat()
+      // @ts-ignore
       setBoard(tempArray)
    }, []);
 
@@ -54,6 +55,7 @@ const BoardPreview: FC<BoardPreviewProps> = ({height, width, game, enableTranspa
           <div className={`grid grid-cols-8 grid-rows-[8] relative`}
                style={{height: height + 'px', width: width + 'px'}}>
              {board.map((cell, index) =>
+                 // @ts-ignore
                  <CellComponent
                      // click={null}
                      cell={cell}

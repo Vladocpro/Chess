@@ -6,7 +6,6 @@ import CreateGamePanel from "../../components/CreateGamePage/CreateGamePanel.tsx
 import {useState} from "react";
 import BoardCreateGame from "../../components/Board/BoardCreateGame.tsx";
 import UserRow from "../../components/Board/UserRow.tsx";
-import {ICapturedPieces} from "../../components/Board/GameTypes.ts";
 
 
 const capturedPieces = {
@@ -38,6 +37,8 @@ const CreateGame = () => {
                     pieceColor={inverted ? 'b' : 'w'}
                     capturedPoints={0}
                     capturedPieces={inverted ? capturedPieces.b : capturedPieces.w}
+                    isYourTurn={false}
+                    gameIsFinished={true}
                 />
 
                 <BoardCreateGame height={600} width={600} pgn={''} inverted={inverted}/>
@@ -50,6 +51,8 @@ const CreateGame = () => {
                     pieceColor={inverted ? 'w' : 'b'}
                     capturedPoints={0}
                     capturedPieces={inverted ? capturedPieces.w : capturedPieces.b}
+                    isYourTurn={false}
+                    gameIsFinished={true}
                 />
              </div>
 

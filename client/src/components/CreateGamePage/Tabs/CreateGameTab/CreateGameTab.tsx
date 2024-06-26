@@ -3,7 +3,7 @@ import OpponentSearch from "./OpponentSearch.tsx";
 import Tooltip from "../../../Generic/Tooltip.tsx";
 import {FC, useEffect, useState} from "react";
 import {IGameInvitation, UserFriend} from "../../../../types.ts";
-import {gameDurations, gameDurationType} from "../../../../utils/constants/game.ts";
+import {gameDurations, GameDurationType} from "../../../../utils/constants/game.ts";
 import useToast, {ToastPositions, ToastType} from "../../../../zustand/toastModalStore.tsx";
 import {postFetch} from "../../../../utils/axios/fetcher.ts";
 import {useLocation, useNavigate} from "react-router-dom";
@@ -23,12 +23,12 @@ const CreateGameTab: FC<CreateGameTab> = ({
                                              setSentInvitations
                                           }) => {
    const [chosenOpponent, setChosenOpponent] = useState<UserFriend | null>(null)
-   const [selectedGameDuration, setSelectedGameDuration] = useState<gameDurationType>(gameDurations[0])
+   const [selectedGameDuration, setSelectedGameDuration] = useState<GameDurationType>(gameDurations[0])
    const [chosenColor, setChosenColor] = useState<string>('random')
    const {openToast} = useToast();
    const location = useLocation()
    const navigate = useNavigate()
-   const gameDurationOnChange = (option: gameDurationType) => {
+   const gameDurationOnChange = (option: GameDurationType) => {
       setSelectedGameDuration(option)
    }
    const handleSendGameInvitation = () => {

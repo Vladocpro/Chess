@@ -1,4 +1,4 @@
-import {FC} from 'react';
+import {FC, useMemo} from 'react';
 import useUser from "../../zustand/userStore.tsx";
 
 interface ProfileIconProps {
@@ -29,7 +29,15 @@ const ProfileIcon: FC<ProfileIconProps> = ({
                                            }) => {
 
    const user = useUser()
-   const defineStyles = sizes[size]
+
+   const defineStyles = useMemo(() => {
+      if (size !== undefined) {
+         return sizes[size]
+      } else {
+         return ""
+      }
+   }, [size])
+
    const providedText = () => {
       if (isMyProfile) {
          return {

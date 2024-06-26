@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import {useState} from 'react';
 import FormInput from "../../components/Forms/FormInput.tsx";
 import {postFetch} from "../../utils/axios/fetcher.ts";
 import {validateEmail, validatePassword} from "../../utils/validations.ts";

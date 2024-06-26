@@ -30,7 +30,7 @@ function useWindowSize() {
    useEffect(() => {
       //a handler which will be called on change of the screen resize
       function setSize() {
-         setWindowSize(getBreakPoint(window.innerWidth)); //👈
+         setWindowSize(getBreakPoint(window.innerWidth));
       }
 
       if (isWindowClient) {

@@ -4,7 +4,6 @@ import {FC, useState} from "react";
 interface GameActionModalProps {
    restartGame?: () => void
    newGame?: () => void
-   offerDraw?: () => void
    acceptDraw?: () => void;
    declineDraw?: () => void;
    offerRematch?: () => void
@@ -15,7 +14,6 @@ interface GameActionModalProps {
 const GameActionModal: FC<GameActionModalProps> = ({
                                                       restartGame,
                                                       newGame,
-                                                      offerDraw,
                                                       acceptDraw,
                                                       declineDraw,
                                                       offerRematch,

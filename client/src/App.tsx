@@ -20,7 +20,7 @@ function App() {
 
    useEffect(() => {
       const token = localStorage.getItem('token')
-      if (token !== undefined && token !== '') {
+      if (token !== undefined && token !== null && token !== '') {
          connectWithSocketServer(token)
       }
    }, []);

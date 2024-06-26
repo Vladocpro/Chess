@@ -17,7 +17,7 @@ const ThemeSettingsModal = () => {
    const {openToast} = useToast()
    const windowSize = useWindowSize();
 
-   const onFiguresChange = (item) => {
+   const onFiguresChange = (item: { label: string, value: string }) => {
       // @ts-ignore
       let figureTheme = FigureThemes[item.value];
       figureTheme.figuresThemeName = item.label;
@@ -30,7 +30,7 @@ const ThemeSettingsModal = () => {
       })
 
    }
-   const onBoardChange = (item) => {
+   const onBoardChange = (item: { label: string, value: string }) => {
       // @ts-ignore
       let boardTheme = BoardThemes[item.value];
       boardTheme.boardThemeName = item.label;
@@ -43,7 +43,7 @@ const ThemeSettingsModal = () => {
       })
 
    }
-   const onPawnPromotionChange = (item) => {
+   const onPawnPromotionChange = (item: { label: string, value: string }) => {
       theme.setPawnPromotion(item.value)
       openToast({
          message: 'Pawn Promotion Updated Successfully',
@@ -66,6 +66,7 @@ const ThemeSettingsModal = () => {
       }
    }, [windowSize])
 
+   // @ts-ignore
    return (
        <div
            className={`flex items-center justify-center cartPage:items-end fixed inset-0 z-20 transition-all duration-300 ${theme.themeSettingsOpen ? "visible" : "invisible opacity-0"}`}>
@@ -82,10 +83,12 @@ const ThemeSettingsModal = () => {
                 <div className='grid grid-cols-8 grid-rows-2 mb-2 rounded-sm overflow-hidden'
                      style={{height: boardSize.height + 'px', width: boardSize.width + 'px'}}>
                    {boardPreviewCells.map((cell, index) =>
+                       // @ts-ignore
                        <CellComponent
                            // click={click}
                            cell={cell}
                            cellColor={cell.cellColor}
+                           // @ts-ignore
                            key={index}
                            width={boardSize.width / 8}
                            height={boardSize.height / 2}
@@ -115,6 +118,7 @@ const ThemeSettingsModal = () => {
                 </div>
                 <div className={'flex items-center justify-between'}>
                    <span className={'text-sm sm:text-base'}>Pawn Promotion</span>
+                   {/* @ts-ignore */}
                    <Dropdown title={PawnPromotionsLabels[theme.pawnPromotion]}
                              options={PawnPromotionsOptions}
                              onChange={onPawnPromotionChange}

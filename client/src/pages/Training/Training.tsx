@@ -5,7 +5,6 @@ import ThemeSettingsModal from "../../components/Modals/ThemeSettingsModal.tsx";
 import {useEffect, useMemo, useState} from "react";
 import {Chess} from "chess.js";
 import {Cell, ICapturedPieces, IGameHistory, IMove} from "../../components/Board/GameTypes.ts";
-import {defaultBoard} from "../../utils/constants/game.ts";
 import CellComponent from "../../components/Board/CellComponent.tsx";
 import {
    boardUpdate,
@@ -72,10 +71,10 @@ const Training = () => {
 
       const tempCapturedPieces = history.reduce(function (acc, move) {
          if ('captured' in move) {
-            let piece = move.captured;
+            let piece = move.captured as 'p' | 'n' | 'b' | 'r' | 'q';
             // switch colors since the history stores the color of the player doing the
             // capturing, not the color of the captured piece
-            let color = move.color == 'w' ? 'b' : 'w';
+            let color: 'w' | 'b' = move.color == 'w' ? 'b' : 'w';
             acc[color][piece] += 1;
             return acc;
          } else {
@@ -97,7 +96,7 @@ const Training = () => {
       let tempChess = new Chess()
       tempChess.loadPgn(chess.pgn())
       try {
-         tempChess.move({from: selectedCell?.square, to: cell.square, promotion: 'q'})
+         tempChess.move({from: selectedCell?.square!, to: cell.square, promotion: 'q'})
          return true
       } catch (e) {
          return false
@@ -201,6 +200,7 @@ const Training = () => {
       // set selected cell
       if (turn === cell?.color) {
          setSelectedCell(cell)
+         // @ts-ignore
          setAvailableMoves(chess.moves({square: cell.square, verbose: true}))
          return;
       }
@@ -294,6 +294,7 @@ const Training = () => {
        <div className={'mt-5'}>
           <div className={'flex flex-col lg:flex-row justify-center items-center lg:items-stretch'}>
              <div className={'flex flex-col'}>
+                {/* @ts-ignore */}
                 <UserRow
                     isTraining={!inverted}
                     username={inverted ? user.username : 'Opponent'}
@@ -301,6 +302,8 @@ const Training = () => {
                     pieceColor={inverted ? 'b' : 'w'}
                     capturedPoints={inverted ? capturedPoints.w : capturedPoints.b}
                     capturedPieces={inverted ? capturedPieces.b : capturedPieces.w}
+                    // isYourTurn={inverted ? gamePlayers.player?.color[0] === chess.turn() : gamePlayers.opponent?.color[0] === chess.turn()}
+
                 />
 
                 {/* Board */}
@@ -308,7 +311,6 @@ const Training = () => {
                     className={`grid grid-cols-8 grid-rows-[8] rounded-md overflow-hidden ${inverted ? 'rotate-180' : 'rotate-0'}`}
                     style={{height: boardSize + 'px', width: boardSize + 'px'}}>
                    {currentMoveBoard.map((cell: Cell, index) => {
-
                           const activeSquare = () => {
                              for (const tempCell of availableMoves) {
                                 if (tempCell.to === cell.square) {
@@ -344,7 +346,7 @@ const Training = () => {
                    )}
                 </div>
 
-                {/* User row  */}
+                {/* @ts-ignore */}
                 <UserRow
                     isTraining={inverted}
                     username={inverted ? 'Opponent' : user.username}

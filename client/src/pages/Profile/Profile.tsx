@@ -10,7 +10,6 @@ import {sendFriendInvitation} from "../../websockets/socketConnection.ts";
 
 const Profile = () => {
    const [profileUser, setProfileUser] = useState<IProfileUser>()
-   const [userGames, setUserGames] = useState<IGame[]>([])
    const [waiting, setWaiting] = useState<boolean>(true)
    const [userDoesNotExist, setUserDoesNotExist] = useState<boolean>(false)
    const {openToast} = useToast()
@@ -22,6 +21,7 @@ const Profile = () => {
    const handleAddFriend = () => {
       postFetch('/friend-invitation/invite', {receiverID: profileUser?.userID})
           .then((response) => {
+             //@ts-ignore
              sendFriendInvitation(user._id)
              openToast({message: response, type: ToastType.SUCCESS, position: ToastPositions.AUTH, duration: 3000})
           })
@@ -40,6 +40,7 @@ const Profile = () => {
           .then((response) => {
              setProfileUser({
                 ...profileUser,
+                // @ts-ignore
                 friends: profileUser?.friends.filter((friend) => friend !== user?.userID)
              })
              user.setFriends(user?.friends.filter((friend) => friend._id !== profileUser?.userID))
@@ -62,12 +63,6 @@ const Profile = () => {
       }).catch((error) => {
          openToast({message: error.response.data, type: ToastType.ERROR, position: ToastPositions.AUTH, duration: 2500})
          setUserDoesNotExist(true)
-      })
-      getFetch(`/game/getUserGames/${id}`).then((response) => {
-         setUserGames(response)
-      }).catch((error) => {
-         console.log(error)
-         // openToast({message: error.response.data, type: ToastType.ERROR, position: ToastPositions.AUTH, duration: 2500})
       }).finally(() => setWaiting(false))
    }, []);
 
@@ -169,7 +164,7 @@ const Profile = () => {
 
           {/* Game History */}
           <div>
-             {profileUser?.gameHistory.length > 0 ?
+             {profileUser !== undefined && profileUser.gameHistory?.length > 0 ?
                  (<>
                     <div
                         className={'flex px-3 lg:px-5 py-2.5 md:py-3.5 rounded-t-md w-[370px] md:w-[730px] lg:w-[900px] bg-primaryLight'}>

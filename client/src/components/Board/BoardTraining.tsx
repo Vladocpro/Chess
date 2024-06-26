@@ -1,9 +1,10 @@
-import React, {FC, useEffect, useState} from 'react';
+import {FC, useEffect, useState} from 'react';
 import CellComponent from "./CellComponent.tsx";
 import {Chess} from "chess.js";
 import {defaultBoard} from "../../utils/constants/game.ts";
 import {Cell} from "./GameTypes.ts";
 import useTheme from "../../zustand/themeStore.tsx";
+import {ICell} from "../../types.ts";
 
 interface BoardTrainingProps {
    height: number;
@@ -12,7 +13,7 @@ interface BoardTrainingProps {
    inverted: boolean;
 }
 
-const BoardTraining: FC<BoardTrainingProps> = ({height, width, pgn, inverted,}) => {
+const BoardTraining: FC<BoardTrainingProps> = ({height, width, inverted}) => {
    const [board, setBoard] = useState([]);
    const [chess, setChess] = useState(new Chess());
    const [selectedCell, setSelectedCell] = useState<Cell | undefined>(undefined)
@@ -30,6 +31,7 @@ const BoardTraining: FC<BoardTrainingProps> = ({height, width, pgn, inverted,}) 
          }
       })
       setChess(tempChess)
+      // @ts-ignore
       setBoard(tempBoard)
    }
 
@@ -37,14 +39,14 @@ const BoardTraining: FC<BoardTrainingProps> = ({height, width, pgn, inverted,}) 
       let tempChess = new Chess()
       tempChess.loadPgn(chess.pgn())
       try {
-         tempChess.move({from: selectedCell?.square, to: cell.square, promotion: 'q'})
+         tempChess.move({from: selectedCell?.square!, to: cell.square, promotion: 'q'})
          return true
       } catch (e) {
          return false
       }
    }
 
-   const handleClick = (cell) => {
+   const handleClick = (cell: ICell) => {
 
       // If it's illegal move
       if (selectedCell === undefined && cell?.type === undefined) return
@@ -54,6 +56,7 @@ const BoardTraining: FC<BoardTrainingProps> = ({height, width, pgn, inverted,}) 
       // set selected cell
       if (playerColor === cell?.color) {
          setSelectedCell(cell)
+         // @ts-ignore
          setAvailableMoves(chess.moves({square: cell.square}))
          return;
       }
@@ -102,19 +105,21 @@ const BoardTraining: FC<BoardTrainingProps> = ({height, width, pgn, inverted,}) 
                     };
                  };
 
-                 return (<CellComponent
-                     click={(cell) => handleClick(cell)}
-                     cell={cell}
-                     cellColor={cell.cellColor}
-                     key={cell.square + index}
-                     width={width / 8}
-                     height={height / 8}
-                     inverted={inverted}
-                     selected={cell.square === selectedCell?.square}
-                     showNotations={true}
-                     available={activeSquare().available}
-                     attacked={activeSquare().attacked}
-                 />)
+                 return (
+                     // @ts-ignore
+                     <CellComponent
+                         click={(cell) => handleClick(cell)}
+                         cell={cell}
+                         cellColor={cell.cellColor}
+                         key={cell.square + index}
+                         width={width / 8}
+                         height={height / 8}
+                         inverted={inverted}
+                         selected={cell.square === selectedCell?.square}
+                         showNotations={true}
+                         available={activeSquare().available}
+                         attacked={activeSquare().attacked}
+                     />)
               }
           )}
        </div>

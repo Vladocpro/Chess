@@ -1,11 +1,12 @@
 import {io} from "socket.io-client";
 import useGameModal from "../zustand/gameModalStore.tsx";
 import {
+   GameModelPayload,
    IGame,
    IGameInvitation,
    InvitationInfo,
    IOnlineActionsPayload,
-   IPlayerLeftGame,
+   IPlayerLeftGame, IRematchInvitation,
    ISetGameOverPayload
 } from "../types.ts";
 import useToast, {ToastPositions, ToastType} from "../zustand/toastModalStore.tsx";
@@ -150,7 +151,7 @@ export const connectWithSocketServer = (token: string) => {
       }
    });
 
-   socket.on("player-abandoned-game", (payload) => {
+   socket.on("player-abandoned-game", (payload: GameModelPayload) => {
       const gameActionModal = useGameModal.getState()
       const game = useGameState.getState()
       gameActionModal.openModal({
@@ -174,7 +175,7 @@ export const connectWithSocketServer = (token: string) => {
    socket.on("received-friend-invitation", () => {
       openNotificationToast('friend')
    })
-   socket.on("received-rematch", (payload) => {
+   socket.on("received-rematch", (payload: IRematchInvitation) => {
       if (window.location.href.includes('play')) {
          const gameActionModal = useGameModal.getState()
          const game = useRematch.getState()
@@ -187,8 +188,7 @@ export const connectWithSocketServer = (token: string) => {
    })
 
 
-   socket.on("game-time-expired", (payload) => {
-      console.log(payload)
+   socket.on("game-time-expired", (payload: GameModelPayload) => {
       const gameActionModal = useGameModal.getState()
       const game = useGameState.getState()
       gameActionModal.openModal({
@@ -260,7 +260,7 @@ export const sendFriendInvitation = (userID: string) => {
    socket.emit("send-friend-invitation", userID)
 };
 
-export const playerTimeExpired = (payload: IOnlineActionsPayload) => {
+export const playerTimeExpired = (payload: GameModelPayload) => {
    socket.emit("player-time-expired", payload)
 };
 

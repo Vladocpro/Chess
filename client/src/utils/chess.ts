@@ -32,6 +32,7 @@ export const gameHistoryToPgn = (gameHistory: IGameHistory[]) => {
 }
 
 export const boardUpdate = (board: any[]): Cell[] => {
+// @ts-ignore
    return board.map((cell, index) => {
       if (cell !== null) {
          return {...defaultBoard[index], type: cell.type, color: cell.color}

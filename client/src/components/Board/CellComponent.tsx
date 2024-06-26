@@ -1,9 +1,9 @@
 import {FC, useMemo} from 'react'
-import {Cell, CellComponentProps} from "./GameTypes.ts";
+import {Cell} from "./GameTypes.ts";
 import useTheme from "../../zustand/themeStore.tsx";
 
 interface CellComponentProps {
-   key: string;
+   key: string | number;
    cell: Cell;
    selected?: boolean;
    cellColor: string;
@@ -49,11 +49,16 @@ const CellComponent: FC<CellComponentProps> = ({
    }, [theme, cellColor, selected, inCheck])
 
 
+   // @ts-ignore
    return (
        <div
            className={`relative flex justify-center items-center  select-none`}
            style={{backgroundColor: calculatedCellColor, width: width + 'px', height: height + 'px'}}
-           onClick={() => click(cell)} key={key}>
+           onClick={() => {
+              if (click !== undefined) {
+                 click(cell)
+              }
+           }} key={key}>
 
           {/* Available cell to move */}
           {available && !cell?.type && <div className={`absolute z-10 rounded-full h-4 w-4 sm:h-[22px] sm:w-[22px]`}
@@ -68,7 +73,9 @@ const CellComponent: FC<CellComponentProps> = ({
                                           }}/>}
 
           {/* Piece Icon */}
+
           {cell?.color !== undefined &&
+              // @ts-ignore
               <img src={theme[`${cell?.color}${cell.type}`]}
                    className={`h-full w-full pointer-events-none select-none ${inverted ? 'rotate-180' : 'rotate-0'}`}
                    alt=""/>}

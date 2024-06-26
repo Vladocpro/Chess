@@ -1,11 +1,11 @@
 import create from "zustand";
-import {IClub, IGame, UserClub, UserFriend} from "../types.ts";
+import {IGame, UserClub, UserFriend} from "../types.ts";
 
 interface userData {
    userID: string,
    username: string,
    friends: UserFriend[],
-   club: string,
+   club: UserClub,
    rating: number,
    gameHistory: IGame[],
 }

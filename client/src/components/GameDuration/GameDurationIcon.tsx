@@ -1,7 +1,7 @@
 import {FC} from 'react';
 
 interface GameDurationIconProps {
-   type: 'blitz' | 'bullet' | 'rapid';
+   type: string;
    iconStyles?: string;
 }
 

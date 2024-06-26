@@ -116,10 +116,10 @@ const Play = () => {
 
       const tempCapturedPieces = history.reduce(function (acc, move) {
          if ('captured' in move) {
-            let piece = move.captured;
+            let piece = move.captured as 'p' | 'n' | 'b' | 'r' | 'q';
             // switch colors since the history stores the color of the player doing the
             // capturing, not the color of the captured piece
-            let color = move.color == 'w' ? 'b' : 'w';
+            let color: 'w' | 'b' = move.color == 'w' ? 'b' : 'w';
             acc[color][piece] += 1;
             return acc;
          } else {
@@ -141,7 +141,7 @@ const Play = () => {
       let tempChess = new Chess()
       tempChess.loadPgn(chess.pgn())
       try {
-         tempChess.move({from: selectedCell?.square, to: cell.square, promotion: 'q'})
+         tempChess.move({from: selectedCell?.square!, to: cell.square, promotion: 'q'})
          return true
       } catch (e) {
          return false
@@ -179,7 +179,7 @@ const Play = () => {
                leftPlayerOutcome = 'l'
                rightPlayerOutcome = 'w'
                setGameOver({
-                  gameID: game?._id,
+                  gameID: game?._id!,
                   loser: gamePlayers.player?.userID,
                   winner: gamePlayers.opponent?.userID,
                })
@@ -188,7 +188,7 @@ const Play = () => {
                leftPlayerOutcome = 'w'
                rightPlayerOutcome = 'l'
                setGameOver({
-                  gameID: game?._id,
+                  gameID: game?._id!,
                   winner: gamePlayers.player?.userID,
                   loser: gamePlayers.opponent?.userID
                })
@@ -215,11 +215,11 @@ const Play = () => {
             openModal({
                type: 'regular',
                leftPlayer: {
-                  username: gamePlayers.player?.username,
+                  username: gamePlayers.player?.username!,
                   outcome: 'd'
                },
                rightPlayer: {
-                  username: gamePlayers.opponent?.username,
+                  username: gamePlayers.opponent?.username!,
                   outcome: 'd'
                },
                outcomeText: 'Stalemate!',
@@ -234,11 +234,11 @@ const Play = () => {
             openModal({
                type: 'regular',
                leftPlayer: {
-                  username: gamePlayers.player?.username,
+                  username: gamePlayers.player?.username!,
                   outcome: 'd'
                },
                rightPlayer: {
-                  username: gamePlayers.opponent?.username,
+                  username: gamePlayers.opponent?.username!,
                   outcome: 'd'
                },
                outcomeText: 'Draw By Repetition!',
@@ -253,11 +253,11 @@ const Play = () => {
             openModal({
                type: 'regular',
                leftPlayer: {
-                  username: gamePlayers.player?.username,
+                  username: gamePlayers.player?.username!,
                   outcome: 'd'
                },
                rightPlayer: {
-                  username: gamePlayers.opponent?.username,
+                  username: gamePlayers.opponent?.username!,
                   outcome: 'd'
                },
                outcomeText: 'Draw!',
@@ -280,6 +280,7 @@ const Play = () => {
       // set selected cell
       if (turn === cell?.color) {
          setSelectedCell(cell)
+         // @ts-ignore
          setAvailableMoves(chess.moves({square: cell.square, verbose: true}))
          return;
       }
@@ -295,15 +296,15 @@ const Play = () => {
          const currentMove = chess.move({from: selectedCell.square, to: cell.square, promotion: pawnPromotion})
          if (playSounds && !chess.isGameOver()) playSound({move: currentMove})
          makeMove({
-            gameID: game?._id,
+            gameID: game?._id!,
             user: {
                userID: user.userID,
                username: user.username,
                moveDate: new Date(Date.now()).toISOString(),
             },
             opponent: {
-               userID: gamePlayers.opponent?.userID,
-               username: gamePlayers.opponent?.username,
+               userID: gamePlayers.opponent?.userID!,
+               username: gamePlayers.opponent?.username!,
             },
             pgn: chess?.pgn()
          })
@@ -316,14 +317,14 @@ const Play = () => {
    const handleResign = () => {
       try {
          sendResignition({
-            gameID: game?._id,
+            gameID: game?._id!,
             user: {
                userID: user.userID,
                username: user.username,
             },
             opponent: {
-               userID: gamePlayers.opponent?.userID,
-               username: gamePlayers.opponent?.username,
+               userID: gamePlayers.opponent?.userID!,
+               username: gamePlayers.opponent?.username!,
             },
          })
          openModal({
@@ -333,28 +334,30 @@ const Play = () => {
                outcome: 'l'
             },
             rightPlayer: {
-               username: gamePlayers.opponent?.username,
+               username: gamePlayers.opponent?.username!,
                outcome: 'w'
             },
             outcomeText: `You Resigned`,
          })
+
+         // @ts-ignore
          setGame({...game, isFinished: true})
       } catch (error) {
-         openToast({message: error, type: ToastType.ERROR, position: ToastPositions.AUTH, duration: 4000})
+         openToast({message: error as string, type: ToastType.ERROR, position: ToastPositions.AUTH, duration: 4000})
       }
    }
 
    const handleSendDrawOffer = () => {
       try {
          sendDrawOffer({
-            gameID: game?._id,
+            gameID: game?._id!,
             user: {
                userID: user.userID,
                username: user.username,
             },
             opponent: {
-               userID: gamePlayers.opponent?.userID,
-               username: gamePlayers.opponent?.username,
+               userID: gamePlayers.opponent?.userID!,
+               username: gamePlayers.opponent?.username!,
             },
          })
          openToast({
@@ -364,21 +367,21 @@ const Play = () => {
             duration: 3000
          })
       } catch (error) {
-         openToast({message: error, type: ToastType.ERROR, position: ToastPositions.AUTH, duration: 4000})
+         openToast({message: error as string, type: ToastType.ERROR, position: ToastPositions.AUTH, duration: 4000})
       }
    }
 
    const handleAcceptDrawOffer = () => {
       try {
          acceptDrawOffer({
-            gameID: game?._id,
+            gameID: game?._id!,
             user: {
                userID: user.userID,
                username: user.username,
             },
             opponent: {
-               userID: gamePlayers.opponent?.userID,
-               username: gamePlayers.opponent?.username,
+               userID: gamePlayers.opponent?.userID!,
+               username: gamePlayers.opponent?.username!,
             },
          })
          setTimeout(() => {
@@ -389,34 +392,34 @@ const Play = () => {
                   outcome: 'd'
                },
                rightPlayer: {
-                  username: gamePlayers.opponent?.username,
+                  username: gamePlayers.opponent?.username!,
                   outcome: 'd'
                },
                outcomeText: `Draw`,
             })
          }, 400)
-
+         // @ts-ignore
          setGame({...game, isFinished: true})
       } catch (error) {
-         openToast({message: error, type: ToastType.ERROR, position: ToastPositions.AUTH, duration: 4000})
+         openToast({message: error as string, type: ToastType.ERROR, position: ToastPositions.AUTH, duration: 4000})
       }
 
    }
    const handleRejectDrawOffer = () => {
       try {
          rejectDrawOffer({
-            gameID: game?._id,
+            gameID: game?._id!,
             user: {
                userID: user.userID,
                username: user.username,
             },
             opponent: {
-               userID: gamePlayers.opponent?.userID,
-               username: gamePlayers.opponent?.username,
+               userID: gamePlayers.opponent?.userID!,
+               username: gamePlayers.opponent?.username!,
             },
          })
       } catch (error) {
-         openToast({message: error, type: ToastType.ERROR, position: ToastPositions.AUTH, duration: 4000})
+         openToast({message: error as string, type: ToastType.ERROR, position: ToastPositions.AUTH, duration: 4000})
       }
 
    }
@@ -519,9 +522,9 @@ const Play = () => {
    const handleAcceptRematch = () => {
       if (rematchState?.rematch === undefined) return
 
-      postFetch('/game-invitation/accept', {invitationID: rematchState?.rematch.invitationID}).then((data) => {
+      postFetch('/game-invitation/accept', {invitationID: rematchState?.rematch?.invitationID}).then((data) => {
          rematchState.setRematch(undefined)
-         acceptGameInvitation({opponentID: rematchState?.rematch?.senderID, gameID: data.gameID})
+         acceptGameInvitation({opponentID: rematchState?.rematch?.senderID!, gameID: data.gameID})
          window.location.assign(`/play/${data.gameID}`)
       }).catch((error) => {
          openToast({message: error.response.data, type: ToastType.ERROR, position: ToastPositions.AUTH, duration: 1800})
@@ -530,14 +533,14 @@ const Play = () => {
 
    const onPlayerTimeExpired = () => {
       playerTimeExpired({
-         gameID: game?._id,
+         gameID: game?._id!,
          loser: {
             userID: user.userID,
             username: user.username,
          },
          winner: {
-            userID: gamePlayers.opponent?.userID,
-            username: gamePlayers.opponent?.username,
+            userID: gamePlayers.opponent?.userID!,
+            username: gamePlayers.opponent?.username!,
          }
       })
    }
@@ -565,7 +568,7 @@ const Play = () => {
                }))
                if (!response.isFinished) {
                   playerReconnectedToGame({
-                     gameID: id,
+                     gameID: id!,
                      userID: user.userID
                   })
                }
@@ -635,7 +638,7 @@ const Play = () => {
          if (rematchInvitation !== undefined) {
             handleDeclineRematch()
          }
-         const gameDetails = JSON.parse(window.localStorage.getItem("gameDetails"))
+         const gameDetails = JSON.parse(window.localStorage.getItem("gameDetails")!)
          if (id !== undefined && id !== null && !gameDetails?.isFinished) {
             playerLeftGame({
                gameID: gameDetails.gameID,
@@ -658,6 +661,7 @@ const Play = () => {
                         rating={inverted ? gamePlayers.player?.rating : gamePlayers.opponent?.rating}
                         timer={inverted ? gamePlayers.player?.timeLeft : gamePlayers.opponent?.timeLeft}
                         pieceColor={swapBoardColor ? (inverted ? 'w' : 'b') : (inverted ? 'b' : 'w')}
+                        // @ts-ignore
                         capturedPoints={inverted ? capturedPoints[gamePlayers.player?.color[0]] : capturedPoints[gamePlayers.opponent?.color[0]]}
                         capturedPieces={swapBoardColor ? (inverted ? capturedPieces['w'] : capturedPieces['b']) : (inverted ? capturedPieces['b'] : capturedPieces['w'])}
                         isYourTurn={inverted ? gamePlayers.player?.color[0] === chess.turn() : gamePlayers.opponent?.color[0] === chess.turn()}
@@ -715,6 +719,7 @@ const Play = () => {
                         rating={inverted ? gamePlayers.opponent?.rating : gamePlayers.player?.rating}
                         timer={inverted ? gamePlayers.opponent?.timeLeft : gamePlayers.player?.timeLeft}
                         pieceColor={swapBoardColor ? (inverted ? 'b' : 'w') : (inverted ? 'w' : 'b')}
+                        // @ts-ignore
                         capturedPoints={inverted ? capturedPoints[gamePlayers.opponent?.color[0]] : capturedPoints[gamePlayers.player?.color[0]]}
                         capturedPieces={swapBoardColor ? (inverted ? capturedPieces['b'] : capturedPieces['w']) : (inverted ? capturedPieces['w'] : capturedPieces['b'])}
                         isYourTurn={inverted ? gamePlayers.opponent?.color[0] === chess.turn() : gamePlayers.player?.color[0] === chess.turn()}
