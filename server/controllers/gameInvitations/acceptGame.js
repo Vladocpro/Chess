@@ -18,7 +18,7 @@ export const acceptGame = async (req,res) => {
       const receiver = await User.findById(invitation.receiverID)
 
 
-      const gameStartDate = new Date(Date.now() + 2000).toISOString();
+      const gameStartDate = new Date(Date.now() + 400).toISOString();
       let newGame;
       if (invitation.senderColor === 'white') {
          newGame = await Game.create({
