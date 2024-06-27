@@ -29,16 +29,20 @@ export const resignGame = async (socket,resignitionInfo) => {
          game.user1.outcome = 'l'
          game.user2.outcome = 'w'
          const user1RatingChange = calculateRatingChange(firstUser.rating,secondUser.rating,"loss");
-         const user2RatingChane = calculateRatingChange(secondUser.rating,firstUser.rating,"win");
+         const user2RatingChange = calculateRatingChange(secondUser.rating,firstUser.rating,"win");
          firstUser.rating += user1RatingChange
-         secondUser.rating += user2RatingChane
+         game.user1.rating += user1RatingChange
+         secondUser.rating += user2RatingChange
+         game.user2.rating += user2RatingChange
       } else {
          game.user2.outcome = 'l'
          game.user1.outcome = 'w'
          const user1RatingChange = calculateRatingChange(firstUser.rating,secondUser.rating,"win");
-         const user2RatingChane = calculateRatingChange(secondUser.rating,firstUser.rating,"loss");
+         const user2RatingChange = calculateRatingChange(secondUser.rating,firstUser.rating,"loss");
          firstUser.rating += user1RatingChange
-         secondUser.rating += user2RatingChane
+         game.user1.rating += user1RatingChange
+         secondUser.rating += user2RatingChange
+         game.user2.rating += user2RatingChange
       }
       game.isFinished = true
       await game.save()
@@ -140,16 +144,20 @@ export const setGameOver = async (socket,payload) => {
             game.user1.outcome = 'w'
             game.user2.outcome = 'l'
             const user1RatingChange = calculateRatingChange(firstUser.rating,secondUser.rating,"win");
-            const user2RatingChane = calculateRatingChange(secondUser.rating,firstUser.rating,"loss");
+            const user2RatingChange = calculateRatingChange(secondUser.rating,firstUser.rating,"loss");
             firstUser.rating += user1RatingChange
-            secondUser.rating += user2RatingChane
+            game.user1.rating += user1RatingChange
+            secondUser.rating += user2RatingChange
+            game.user2.rating += user2RatingChange
          } else {
             game.user1.outcome = 'l'
             game.user2.outcome = 'w'
             const user1RatingChange = calculateRatingChange(firstUser.rating,secondUser.rating,"loss");
-            const user2RatingChane = calculateRatingChange(secondUser.rating,firstUser.rating,"win");
+            const user2RatingChange = calculateRatingChange(secondUser.rating,firstUser.rating,"win");
             firstUser.rating += user1RatingChange
-            secondUser.rating += user2RatingChane
+            game.user1.rating += user1RatingChange
+            secondUser.rating += user2RatingChange
+            game.user2.rating += user2RatingChange
          }
          game.isFinished = true
          await game.save()
@@ -212,16 +220,20 @@ export const playerTimerExpired = async (socket,payload) => {
          game.user1.outcome = 'l'
          game.user2.outcome = 'w'
          const user1RatingChange = calculateRatingChange(firstUser.rating,secondUser.rating,"loss");
-         const user2RatingChane = calculateRatingChange(secondUser.rating,firstUser.rating,"win");
+         const user2RatingChange = calculateRatingChange(secondUser.rating,firstUser.rating,"win");
          firstUser.rating += user1RatingChange
-         secondUser.rating += user2RatingChane
+         game.user1.rating += user1RatingChange
+         secondUser.rating += user2RatingChange
+         game.user2.rating += user2RatingChange
       } else {
          game.user1.outcome = 'w'
          game.user2.outcome = 'l'
          const user1RatingChange = calculateRatingChange(firstUser.rating,secondUser.rating,"win");
-         const user2RatingChane = calculateRatingChange(secondUser.rating,firstUser.rating,"loss");
+         const user2RatingChange = calculateRatingChange(secondUser.rating,firstUser.rating,"loss");
          firstUser.rating += user1RatingChange
-         secondUser.rating += user2RatingChane
+         game.user1.rating += user1RatingChange
+         secondUser.rating += user2RatingChange
+         game.user2.rating += user2RatingChange
       }
       game.isFinished = true
       await game.save()

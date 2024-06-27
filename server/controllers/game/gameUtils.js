@@ -23,9 +23,11 @@ export const playerAbandonedGame = async (gameID,userID,socket) => {
          eventPayload.loser = {userID: game.user1.userID,username: game.user1.username}
          eventPayload.winner = {userID: game.user2.userID,username: game.user2.username}
          const user1RatingChange = calculateRatingChange(firstUser.rating,secondUser.rating,"loss");
-         const user2RatingChane = calculateRatingChange(secondUser.rating,firstUser.rating,"win");
+         const user2RatingChange = calculateRatingChange(secondUser.rating,firstUser.rating,"win");
          firstUser.rating += user1RatingChange
-         secondUser.rating += user2RatingChane
+         game.user1.rating += user1RatingChange
+         secondUser.rating += user2RatingChange
+         game.user2.rating += user2RatingChange
       } else {
          game.user1.outcome = 'w'
          game.user2.outcome = 'l'
@@ -33,9 +35,11 @@ export const playerAbandonedGame = async (gameID,userID,socket) => {
          eventPayload.winner = {userID: game.user1.userID,username: game.user1.username}
          eventPayload.loser = {userID: game.user2.userID,username: game.user2.username}
          const user1RatingChange = calculateRatingChange(firstUser.rating,secondUser.rating,"win");
-         const user2RatingChane = calculateRatingChange(secondUser.rating,firstUser.rating,"loss");
+         const user2RatingChange = calculateRatingChange(secondUser.rating,firstUser.rating,"loss");
          firstUser.rating += user1RatingChange
-         secondUser.rating += user2RatingChane
+         game.user1.rating += user1RatingChange
+         secondUser.rating += user2RatingChange
+         game.user2.rating += user2RatingChange
       }
       await game.save()
       await firstUser.save()
