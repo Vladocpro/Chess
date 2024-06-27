@@ -4,7 +4,6 @@ import User from "../../models/User.js";
 
 export const redirectUserToGame = (socket,data) => {
    try {
-      console.log(data)
       socket.to(getUserByID(data.opponentID)).emit("opponent-accepted-game",(data.gameID));
    } catch (e) {
       // TODO handle errors like game does not exist

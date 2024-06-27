@@ -26,7 +26,6 @@ export const connectWithSocketServer = (token: string) => {
    });
 
    socket.on("connect", () => {
-      console.log(socket.id)
    });
 
    socket.on("opponent-resigned-game", (resignitionInfo: IOnlineActionsPayload) => {

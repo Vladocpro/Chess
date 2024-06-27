@@ -49,7 +49,6 @@ const OpponentSearch: FC<OpponentSearchProps> = ({chosenOpponent, setChosenOppon
       } else {
          postFetch('/friend-invitation/find', {searchedName: searchValue})
              .then((response) => {
-                console.log(response)
                 setUsers([response.friends, response.users].flat().map(item => (Array.isArray(item) ? item[0] : item)))
              })
              .catch((error) => {

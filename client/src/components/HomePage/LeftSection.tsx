@@ -7,8 +7,6 @@ import {IGame} from "../../types.ts";
 const LeftSection = () => {
    const user = useUser()
 
-   console.log(user)
-
    return (
        <div className={'hidden xl:flex flex-col'}>
           {
