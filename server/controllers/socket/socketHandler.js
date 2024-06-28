@@ -1,6 +1,7 @@
 import {getUserByID,removeActiveGame} from "../../serverStore.js";
 import Game from "../../models/Game.js";
 import User from "../../models/User.js";
+import {countGameTotalMoves} from "../../utils/gameUtils.js";
 
 export const redirectUserToGame = (socket,data) => {
    try {
@@ -124,6 +125,7 @@ export const userMadeMove = async (socket,movePayload) => {
          // Assign current user startTurnDate
          game.user2.startTurnDate = new Date(Date.now()).toISOString()
       }
+      game.totalMoves = countGameTotalMoves(game.pgn)
       await game.save()
       socket.to(getUserByID(movePayload.opponent.userID)).emit('user-made-move',(game))
       socket.emit('user-made-move',(game))
@@ -236,6 +238,7 @@ export const playerTimerExpired = async (socket,payload) => {
          game.user2.rating += user2RatingChange
       }
       game.isFinished = true
+      game.totalMoves = countGameTotalMoves(game.pgn)
       await game.save()
       await firstUser.save()
       await secondUser.save()
