@@ -43,7 +43,7 @@ export const register = async (req,res) => {
       return res.status(200).json({
          token: token,
          userDetails: {
-            club: user.club,
+            club: null,
             friends: user.friends,
             rating: user.rating,
             userID: user._id,
